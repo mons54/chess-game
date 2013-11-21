@@ -1,0 +1,20 @@
+{
+	"name": "Chess",
+	"version": "0.0.3-7",
+	"dependencies": {
+		"express": "3.4.x",
+		"connect": "2.11.x",
+		"fbgraph": "0.2.x",
+		"stylus": "0.40.x",
+		"jade": "0.35.x",
+		"mongoose": "3.8.x",
+		"socket.io": "0.9.x"
+	},
+	"engines": {
+		"node": "0.10.x"
+	},
+	"subdomain": "fb-chess",
+	"scripts": {
+		"start": "app/app.js"
+	}
+}
