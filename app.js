@@ -22,14 +22,14 @@ global.socket.set('origins', global.host + ':*');
 global.mongoose = require('mongoose');
 global.mongoose.connect('mongodb://mons54:jsOL160884@lafleur.mongohq.com:10055/chessGame');
 
-require('./server/modules/mongoose');
-require('./server/modules/socket');
+require('./app/server/modules/mongoose');
+require('./app/server/modules/socket');
 
-require('./config')(app, express, connect);
+require('./app/config')(app, express, connect);
 
-require('./server/payments')(app);
-require('./server/sponsorpay')(app);
-require('./server/tokenads')(app);
-require('./server/router')(app);
+require('./app/server/payments')(app);
+require('./app/server/sponsorpay')(app);
+require('./app/server/tokenads')(app);
+require('./app/server/router')(app);
 
 
