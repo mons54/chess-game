@@ -14,7 +14,9 @@ global.root = path.resolve('/');
 
 global.graph = require('fbgraph');
 
-global.socket = require('socket.io').listen(app.listen(8080));
+var port = process.env.PORT || 3000;
+
+global.socket = require('socket.io').listen(app.listen(port));
 
 global.socket.set('log level', 1);
 global.socket.set('origins', global.host + ':*');
