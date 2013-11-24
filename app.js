@@ -8,7 +8,7 @@ app.root = __dirname;
 
 global.appId = '459780557396952';
 global.secret = 'ffba6ba90d75f0e2ffd73d946fd5f1bd';
-global.host = 'chess-game.herokuapp.com';
+global.host = 'murmuring-dusk-1987.herokuapp.com';
 global.redirectUri = 'https://apps.facebook.com/the-chess-game/';
 global.root = path.resolve('/');
 

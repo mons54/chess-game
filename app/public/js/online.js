@@ -47,7 +47,7 @@
 			that._clock();
 			that._free();
 			
-			that.socket = io.connect('https://fb-chess.jit.su/chess');
+			that.socket = io.connect('http://murmuring-dusk-1987.herokuapp.com/chess');
 			
 			if(!$('#audio #move')[0].play || !$('#audio #time')[0].play) that.options.sound = false;
 			
