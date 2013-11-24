@@ -47,7 +47,7 @@
 			that._clock();
 			that._free();
 			
-			that.socket = io.connect('/chess');
+			that.socket = $.socket;
 			
 			if(!$('#audio #move')[0].play || !$('#audio #time')[0].play) that.options.sound = false;
 			

@@ -23,6 +23,10 @@
 				that.error_browser();
 				return;
 			}
+			
+			if (!this.socket) {
+				this.socket = io.connect('/chess');
+			}
 		
 			$('<button class="play online online-' + lang + '">' + that.options.lang[lang].online + '</button>').appendTo(start)
 			.click(function(){
