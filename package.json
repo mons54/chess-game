@@ -1,6 +1,6 @@
 {
 	"name": "Chess",
-	"version": "0.0.3-5",
+	"version": "0.0.3-7",
 	"dependencies": {
 		"express": "3.4.x",
 		"connect": "2.11.x",
@@ -15,6 +15,6 @@
 	},
 	"subdomain": "fb-chess",
 	"scripts": {
-		"start": "app/app.js"
+		"start": "app.js"
 	}
 }

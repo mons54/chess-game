@@ -1,0 +1,35 @@
+extends layout
+
+block body
+
+	#fb-root
+			
+	script(src='/js/fb.js')
+
+	div.fb-like(data-href="https://www.facebook.com/pages/Chess-online/190798497710589", data-send="false", data-layout="button_count", data-width="450", data-show-faces="false")			
+
+	div#fade
+	
+	div#header
+		iframe#top_banner(src="//admin.appnext.com/htmlBar/index.html?id=69ca33b1-bfeb-4897-a416-a48882bf5d0d", width="760", height="72", marginwidth="0", marginheight="0", hspace="0", vspace="0", scrolling="no")
+
+	div#content
+
+	footer
+		div#footer
+			div#pub 
+				
+			div.fb-like-box(data-href="https://www.facebook.com/ChessCommunity", data-width="460", data-height="250", data-show-faces="false", data-stream="true", data-header="false")
+			
+			div.link 
+				a#fanpage(href="https://www.facebook.com/ChessCommunity", target="_blank") Fan Page
+				|
+				a#terms-service(href="http://apps.solutionsweb.pro/jeux/fb-chess/chess", target="_blank") Terms of Service
+				|
+				a#privacy-policy(href="http://apps.solutionsweb.pro/jeux/fb-chess/chess", target="_blank") Privacy Policy
+				
+	div#pub-footer
+		
+	div#audio
+		audio#move(src="/mp3/mouv.mp3")
+		audio#time(src="/mp3/time.mp3")
