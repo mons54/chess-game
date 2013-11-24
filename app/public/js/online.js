@@ -51,7 +51,7 @@
 				that.socket = io.connect('/chess');
 			}
 			else if(navigator.userAgent.indexOf("Safari") > 0) {
-				that.socket = io.connect('wss://chess-game.jit.su/chess');
+				that.socket = io.connect('wss://guarded-dusk-4860.herokuapp.com/chess');
 			}
 			else {
 				that.socket = io.connect('/chess');
