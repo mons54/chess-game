@@ -1,6 +1,7 @@
 ﻿var appId = '394212277368771',
 	redirectUri = 'https://apps.facebook.com/the-chess-game/',
 	url = 'https://www.facebook.com/dialog/oauth?client_id=' + appId + '&redirect_uri=' + redirectUri,
+	userAccessToken,
 	uid,
 	name,
 	lang,
@@ -23,6 +24,8 @@ window.fbAsyncInit = function() {
 	});
 	
 	FB.getLoginStatus(function(response) {
+		
+		userAccessToken = response.authResponse.accessToken;
 		
 		if (response.status !== 'connected') {
 			top.location.href = url;
