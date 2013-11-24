@@ -301,6 +301,10 @@
 			
 			var that = this;
 			
+			that.socket.on('connect', function () {
+				that._connect();
+			});
+			
 			that.socket.on('InfosUser', function (data) {
 				that.socket.open = true;
 				that._infos_user(data);
@@ -360,6 +364,25 @@
 			
 			that.socket.on('trophy', function (data) {
 				that.options.trophy[data] = true;
+			});
+		},
+		
+		_connect: function () {
+			
+			var that = this;
+			
+			FB.getLoginStatus(function(response) {
+				
+				if(!response.authResponse || !response.authResponse.userID || !response.authResponse.accessToken) {
+					top.location.href=redirectUri;
+				}
+				
+				that.socket.emit('create', {
+					uid: response.authResponse.userID,
+					accessToken: response.authResponse.accessToken,
+					name: that.name, 
+					parrainage:parrainage
+				});
 			});
 		},
 		
