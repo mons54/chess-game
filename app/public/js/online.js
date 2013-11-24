@@ -47,7 +47,15 @@
 			that._clock();
 			that._free();
 			
-			that.socket = io.connect('/chess');
+			if(navigator.userAgent.indexOf("Chrome") > 0) {
+				that.socket = io.connect('/chess');
+			}
+			else if(navigator.userAgent.indexOf("Safari") > 0) {
+				that.socket = io.connect('wss://chess-game.jit.su/chess');
+			}
+			else {
+				that.socket = io.connect('/chess');
+			}
 			
 			if(!$('#audio #move')[0].play || !$('#audio #time')[0].play) that.options.sound = false;
 			
