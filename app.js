@@ -6,10 +6,10 @@ var path = require('path'),
 
 app.root = __dirname;
 
-global.appId = '459780557396952';
-global.secret = 'ffba6ba90d75f0e2ffd73d946fd5f1bd';
+global.appId = '394212277368771';
+global.secret = 'f62525925927e6d80ea814f94acc719e';
 global.host = 'murmuring-dusk-1987.herokuapp.com';
-global.redirectUri = 'https://apps.facebook.com/the-chess-game/';
+global.redirectUri = 'https://apps.facebook.com/parrainage-bourso/';
 global.root = path.resolve('/');
 
 global.graph = require('fbgraph');
