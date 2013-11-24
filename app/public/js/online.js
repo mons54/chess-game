@@ -47,11 +47,8 @@
 			that._clock();
 			that._free();
 			
-			if(navigator.userAgent.indexOf("Chrome") > 0) {
-				that.socket = io.connect('/chess');
-			}
-			else if(navigator.userAgent.indexOf("Safari") > 0) {
-				that.socket = io.connect('wss://guarded-dusk-4860.herokuapp.com/chess');
+			if(navigator.userAgent.indexOf('Safari') > 1 && navigator.userAgent.indexOf('Chrome') == -1) {
+				that.socket = io.connect('wss://' + host + '/chess');
 			}
 			else {
 				that.socket = io.connect('/chess');

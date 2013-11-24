@@ -1,6 +1,7 @@
 ﻿var appId = '394212277368771',
 	redirectUri = 'https://apps.facebook.com/the-chess-game/',
 	url = 'https://www.facebook.com/dialog/oauth?client_id=' + appId + '&redirect_uri=' + redirectUri,
+	host = 'chess-game.herokuapp.com',
 	uid,
 	name,
 	lang,

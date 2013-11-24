@@ -8,8 +8,8 @@ app.root = __dirname;
 
 global.appId = '394212277368771';
 global.secret = 'f62525925927e6d80ea814f94acc719e';
-global.host = 'guarded-dusk-4860.herokuapp.com';
-global.redirectUri = 'https://apps.facebook.com/parrainage-bourso/';
+global.host = 'chess-game.herokuapp.com';
+global.redirectUri = 'https://apps.facebook.com/the-chess-game/';
 global.root = path.resolve('/');
 
 global.graph = require('fbgraph');
