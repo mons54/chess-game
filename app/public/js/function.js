@@ -128,41 +128,42 @@
 		
 		pub: function () {
 			
-			if(LSM_Slot) {
+			if (typeof(LSM_Slot) === 'undefined') {
+				return;
+			}
 				
-				if(gender == 'female') {
-					LSM_Slot({
-						adkey: '571',
-						ad_size: '300x250',
-						slot: 'slot68172',
-						_render_div_id: "pub"
-					});
-				}
-				else {
-					LSM_Slot({
-						adkey: 'd87',
-						ad_size: '300x250',
-						slot: 'slot60359',
-						_render_div_id: "pub"
-					});
-				}
-				
-				if(gender == 'female') {
-					 LSM_Slot({
-						adkey: '87b',
-						ad_size: '728x90',
-						slot: 'slot68173',
-						_render_div_id: "pub-footer"
-					});
-				}
-				else {
-					LSM_Slot({
-						adkey: '826',
-						ad_size: '728x90',
-						slot: 'slot64668',
-						_render_div_id: "pub-footer"
-					});
-				}
+			if(gender == 'female') {
+				LSM_Slot({
+					adkey: '571',
+					ad_size: '300x250',
+					slot: 'slot68172',
+					_render_div_id: "pub"
+				});
+			}
+			else {
+				LSM_Slot({
+					adkey: 'd87',
+					ad_size: '300x250',
+					slot: 'slot60359',
+					_render_div_id: "pub"
+				});
+			}
+			
+			if(gender == 'female') {
+				 LSM_Slot({
+					adkey: '87b',
+					ad_size: '728x90',
+					slot: 'slot68173',
+					_render_div_id: "pub-footer"
+				});
+			}
+			else {
+				LSM_Slot({
+					adkey: '826',
+					ad_size: '728x90',
+					slot: 'slot64668',
+					_render_div_id: "pub-footer"
+				});
 			}
 		}
 	});
