@@ -22,7 +22,7 @@ global.socket.set('log level', 1);
 global.socket.set('origins', global.host + ':*');
 
 global.mongoose = require('mongoose');
-global.mongoose.connect('mongodb://mons54:jsOL160884@lafleur.mongohq.com:10055/chessGame');
+global.mongoose.connect('mongodb://mons54:jsOL160884@jack.mongohq.com:10019/chess');
 
 require('./app/server/modules/mongoose');
 require('./app/server/modules/socket');
