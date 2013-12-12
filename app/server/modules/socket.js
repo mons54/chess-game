@@ -36,7 +36,7 @@ module.exports = function() {
 		
 		socket.on('create', function(data) {
 			
-			if(!data.uid || !data.accessToken) {
+			if (!data.uid || !data.accessToken) {
 				socket.disconnect();
 				return;
 			}
@@ -48,15 +48,13 @@ module.exports = function() {
 					return;
 				}
 				
-				if (connections[data.uid]) {
-					connections[data.uid].disconnect();
-					delete connections[data.uid];
-					connections.nb--;
+				if (checkConnection(data.uid)) {
+					allSockets.socket(connections[data.uid]).disconnect();
 				}
 				
 				socket.uid = data.uid;
 				socket.name = data.name;
-				connections[data.uid] = socket;
+				connections[data.uid] = socket.id;
 				connections.nb++;
 				
 				users.count({uid: data.uid}, function (err, nb) {
@@ -96,12 +94,14 @@ module.exports = function() {
 		});
 		
 		socket.on('AnnulerPartie', function() {
-			if(verifUser()) supprimerPartie(socket.uid);
+			if (checkSocketUid()) {
+				supprimerPartie(socket.uid);
+			}
 		});
 		
 		socket.on('CreerPartie', function(data) {
 			
-			if(verifUser()) {
+			if (checkSocketUid()) {
 				
 				if(parties_proposition.parties[socket.uid]) {
 					delete parties_proposition.parties[socket.uid];
@@ -126,19 +126,20 @@ module.exports = function() {
 		
 		socket.on('Defis', function(data) {
 			
-			if(verifUser() && connections[data.uid]) {
+			if (checkSocketUid() && checkConnection(data.uid)) {
 			
-				if(!connections[data.uid].defis) {
-					connections[data.uid].defis = {
+				if (!allSockets.socket(connections[data.uid]).defis) {
+					allSockets.socket(connections[data.uid]).defis = {
 						nb:0,
 						defis: {}
 					};
 				}
 				
-				if(!connections[data.uid].defis.defis[socket.uid])
-					connections[data.uid].defis.nb ++;
+				if (!allSockets.socket(connections[data.uid]).defis.defis[socket.uid]) {
+					allSockets.socket(connections[data.uid]).defis.nb ++;
+				}
 					
-				connections[data.uid].defis.defis[socket.uid] = {
+				allSockets.socket(connections[data.uid]).defis.defis[socket.uid] = {
 					type: 'reponse',
 					name:socket.name,
 					points:socket.points,
@@ -154,29 +155,30 @@ module.exports = function() {
 					};
 				}
 				
-				if(!socket.defis.defis[data.uid])
+				if(!socket.defis.defis[data.uid]) {
 					socket.defis.nb ++;
+				}
 					
 				socket.defis.defis[data.uid] = {
 					type: 'demande',
-					name:connections[data.uid].name,
-					points:connections[data.uid].points,
-					classement:connections[data.uid].classement,
-					color:data.color,
-					time:data.time
+					name: allSockets.socket(connections[data.uid]).name,
+					points: allSockets.socket(connections[data.uid]).points,
+					classement: allSockets.socket(connections[data.uid]).classement,
+					color: data.color,
+					time: data.time
 				};
 				
-				connections[data.uid].emit('Defis', connections[data.uid].defis);
+				allSockets.socket(connections[data.uid]).emit('Defis', allSockets.socket(connections[data.uid]).defis);
 				socket.emit('Defis', socket.defis);
 			}
 		});
 		
 		socket.on('AnnulerDefi', function(uid) {
 			
-			if(verifUser() && connections[uid] && connections[uid].defis && connections[uid].defis.defis && connections[uid].defis.defis[socket.uid]) {
-				delete connections[uid].defis.defis[socket.uid];
-				connections[uid].defis.nb --;
-				connections[uid].emit('Defis', connections[uid].defis);
+			if(checkSocketUid() && checkConnection(uid) && allSockets.socket(connections[uid]).defis && allSockets.socket(connections[uid]).defis.defis && allSockets.socket(connections[uid]).defis.defis[socket.uid]) {
+				delete allSockets.socket(connections[uid]).defis.defis[socket.uid];
+				allSockets.socket(connections[uid]).defis.nb --;
+				allSockets.socket(connections[uid]).emit('Defis', allSockets.socket(connections[uid]).defis);
 			}
 				
 			if(socket.defis && socket.defis.defis && socket.defis.defis[uid]) {
@@ -188,9 +190,9 @@ module.exports = function() {
 		
 		socket.on('NouvellePartie', function(uid) {
 			
-			if(!socket.jeu && verifUser() && socket.uid != uid) {
+			if (!socket.jeu && checkSocketUid() && socket.uid != uid) {
 			
-				if(parties_proposition.parties[uid] && connections[uid] && !connections[uid].jeu) {
+				if(parties_proposition.parties[uid] && checkConnection(uid) && !allSockets.socket(connections[uid]).jeu) {
 					
 					var partie = parties_proposition.parties[uid];
 					
@@ -205,15 +207,15 @@ module.exports = function() {
 		
 		socket.on('NouvellePartieDefi', function(uid) {
 			
-			if(!socket.jeu && verifUser() && socket.uid != uid) {
+			if (!socket.jeu && checkSocketUid() && socket.uid != uid) {
 				
-				if(connections[uid]) {
+				if (checkConnection(uid)) {
 					
-					if(!connections[uid].jeu) {
+					if(!allSockets.socket(connections[uid]).jeu) {
 						
-						if(connections[uid].defis && connections[uid].defis.defis && connections[uid].defis.defis[socket.uid]) {
+						if(allSockets.socket(connections[uid]).defis && allSockets.socket(connections[uid]).defis.defis && allSockets.socket(connections[uid]).defis.defis[socket.uid]) {
 					
-							var partie = connections[uid].defis.defis[socket.uid];
+							var partie = allSockets.socket(connections[uid]).defis.defis[socket.uid];
 							demarrerPartie(uid, partie);
 						}
 					}
@@ -232,7 +234,7 @@ module.exports = function() {
 		
 		socket.on('ChargerPartie', function(data) {
 			
-			if(verifUser() && parties.jeu[data.id]) {
+			if (checkSocketUid() && parties.jeu[data.id]) {
 				
 				var uid = 0;
 				
@@ -245,7 +247,7 @@ module.exports = function() {
 				
 				if(uid) {
 					
-					if(connections[uid]) {
+					if (checkConnection(uid)) {
 						
 						var _data = {
 							uid:socket.uid,
@@ -260,7 +262,7 @@ module.exports = function() {
 							}
 						};
 							
-						connections[uid].emit('ChargerPartie', _data);
+						allSockets.socket(connections[uid]).emit('ChargerPartie', _data);
 					}
 				}
 			}
@@ -268,7 +270,7 @@ module.exports = function() {
 		
 		socket.on('ProposerNul', function(data) {
 			
-			if(verifUser() && parties.jeu[data.id]) {
+			if (checkSocketUid() && parties.jeu[data.id]) {
 				
 				var uid = 0;
 						
@@ -279,15 +281,15 @@ module.exports = function() {
 					uid = parties.jeu[data.id].blanc;
 				}
 				
-				if(uid && connections[uid]) {
-					connections[uid].emit('ProposerNul', {uid:socket.uid, name:socket.name});
+				if(uid && checkConnection(uid)) {
+					allSockets.socket(connections[uid]).emit('ProposerNul', {uid:socket.uid, name:socket.name});
 				}
 			}
 		});
 		
 		socket.on('JeuTerminer', function(data) {
 			
-			if(verifUser()) {
+			if (checkSocketUid()) {
 				
 				var nom = data.nom ? data.nom : "";
 				var vainqueur = data.vainqueur ? data.vainqueur : 0;
@@ -310,9 +312,9 @@ module.exports = function() {
 						
 						resultatPartie(vainqueur, nom, data.blanc, data.noir);
 						
-						if(connections[uid]) {
-							connections[uid].jeu = false;
-							connections[uid].emit('JeuTerminer', { uid:socket.uid, vainqueur: vainqueur, nom: nom });
+						if (checkConnection(uid)) {
+							allSockets.socket(connections[uid]).jeu = false;
+							allSockets.socket(connections[uid]).emit('JeuTerminer', { uid:socket.uid, vainqueur: vainqueur, nom: nom });
 						}
 					}
 				}
@@ -321,7 +323,7 @@ module.exports = function() {
 		
 		socket.on('Profil', function(uid, name) {
 			
-			if(verifUser() && uid > 0) {
+			if (checkSocketUid() && uid > 0) {
 			
 				var data = {};
 				
@@ -408,14 +410,14 @@ module.exports = function() {
 				return;
 			}
 			
-			if((verifUser() && messages.data[id].uid == socket.uid) || socket.moderateur) {
+			if ((checkSocketUid() && messages.data[id].uid == socket.uid) || socket.moderateur) {
 				delete messages.data[id];
 			}
 		});
 		
 		socket.on('EnvoyerMessageJeu', function(data) {
 			
-			if(verifUser() && socket.name && parties.jeu[data.id]) {
+			if (checkSocketUid() && socket.name && parties.jeu[data.id]) {
 				
 				var uid = 0;
 						
@@ -426,15 +428,15 @@ module.exports = function() {
 					uid = parties.jeu[data.id].blanc;
 				}
 				
-				if(uid && connections[uid]) {
-					connections[uid].emit('NouveauMessageJeu', {uid:socket.uid, name:socket.name, message:data.message.substr(0, 500)});
+				if(uid && checkConnection(uid)) {
+					allSockets.socket(connections[uid]).emit('NouveauMessageJeu', {uid:socket.uid, name:socket.name, message:data.message.substr(0, 500)});
 				}
 			}
 		});
 		
 		socket.on('Classement', function(data) {
 			
-			if(verifUser()) {
+			if (checkSocketUid()) {
 			
 				var uid = socket.uid ? socket.uid : 0;
 				var limit = 8;
@@ -491,7 +493,7 @@ module.exports = function() {
 		
 		socket.on('share_trophy', function() {
 			
-			if(verifUser()) {
+			if (checkSocketUid()) {
 			
 				var uid = socket.uid ? socket.uid : 0;
 				
@@ -508,7 +510,7 @@ module.exports = function() {
 		
 		socket.on('Quit', function() {
 			
-			if(verifUser()) {
+			if (checkSocketUid()) {
 			
 				socket.leave('home');
 				
@@ -526,8 +528,9 @@ module.exports = function() {
 		
 		socket.on('payment', function(data) {
 		
-			if(!verifUser() || !data || !data.id || !data.token || !data.signed_request)
+			if (!checkSocketUid() || !data || !data.id || !data.token || !data.signed_request) {
 				return;
+			}
 			
 			var id = data.id,
 				_token = data.token,
@@ -560,35 +563,30 @@ module.exports = function() {
 			});
 		});
 		
-		socket.on('disconnect', function(err) {
+		socket.on('disconnect', function () {
 			
-			if (verifUser()) {
-				
-				if (err != 'booted' && connections[socket.uid]) {
-					delete connections[socket.uid];
-					connections.nb--;
-				}
-				
-				if (connecter.user[socket.uid]) {
-					connecter.nb--;
-					delete connecter.user[socket.uid];
-					connected();
-				}
-			
-				if (parties_proposition.parties[socket.uid]) {
-					delete parties_proposition.parties[socket.uid];
-					parties_proposition.nb--;
-					listerParties();
-				}
-				
-				if (socket.jeu && parties.jeu[socket.jeu]) {
-					disconnectJeu();
-				}
-				
-				annulerAllDefi(socket);
+			if (socket.uid && connections[socket.uid]) {
+				delete connections[socket.uid];
+				connections.nb--;
 			}
 			
-			delete socket;
+			if (socket.uid && connecter.user[socket.uid]) {
+				connecter.nb--;
+				delete connecter.user[socket.uid];
+				connected();
+			}
+		
+			if (socket.uid && parties_proposition.parties[socket.uid]) {
+				delete parties_proposition.parties[socket.uid];
+				parties_proposition.nb--;
+				listerParties();
+			}
+			
+			if (socket.jeu && parties.jeu[socket.jeu]) {
+				disconnectJeu();
+			}
+				
+			annulerAllDefi(socket);
 		});
 		
 		function disconnectJeu() {
@@ -614,25 +612,35 @@ module.exports = function() {
 				delete parties.jeu[socket.jeu];
 				resultatPartie(vainqueur, nom, blanc, noir);
 				
-				if(connections[uid]) {
-					connections[uid].jeu = false;
-					connections[uid].emit('JeuTerminer', { uid:socket.uid, vainqueur: vainqueur, nom: nom });
+				if (checkConnection(uid)) {
+					allSockets.socket(connections[uid]).jeu = false;
+					allSockets.socket(connections[uid]).emit('JeuTerminer', { uid:socket.uid, vainqueur: vainqueur, nom: nom });
 				}
 			}
 		}
 		
-		function verifUser() {
+		function checkSocketUid () {
 			
-			if(socket.uid > 0) {
-				return true;
+			if (!socket.uid) {
+				socket.disconnect();
+				return false;
 			}
 			
-			return false;
+			return true;
+		}
+		
+		function checkConnection (uid) {
+			
+			if (!allSockets.socket(connections[uid]).id) {
+				return false;
+			}
+			
+			return true;
 		}
 		
 		function autoriseTchat() {
 			
-			if(verifUser()) {
+			if (checkSocketUid()) {
 			
 				switch(socket.uid) {
 					case '100004539253808':
@@ -646,7 +654,7 @@ module.exports = function() {
 		
 		function initUser(parrainage) {
 			
-			if(verifUser()) {
+			if (checkSocketUid()) {
 			
 				var uid = socket.uid ? socket.uid : 0;
 				
@@ -752,7 +760,6 @@ module.exports = function() {
 		}
 		
 		function connected() {
-		
 			sendHome('Connected', connecter);
 			allSockets.emit('NbConnected', connections.nb );
 		}
@@ -760,10 +767,10 @@ module.exports = function() {
 		function annulerAllDefi (_socket) {
 			if(_socket.uid && _socket.defis && _socket.defis.defis) {
 				for(var uid in _socket.defis.defis) {
-					if(connections[uid] && connections[uid].defis && connections[uid].defis.defis && connections[uid].defis.defis[_socket.uid]) {
-						delete connections[uid].defis.defis[_socket.uid];
-						connections[uid].defis.nb --;
-						connections[uid].emit('Defis', connections[uid].defis);
+					if(checkConnection(uid) && allSockets.socket(connections[uid]).defis && allSockets.socket(connections[uid]).defis.defis && allSockets.socket(connections[uid]).defis.defis[_socket.uid]) {
+						delete allSockets.socket(connections[uid]).defis.defis[_socket.uid];
+						allSockets.socket(connections[uid]).defis.nb --;
+						allSockets.socket(connections[uid]).emit('Defis', allSockets.socket(connections[uid]).defis);
 					}
 				}
 				delete _socket.defis;
@@ -775,7 +782,7 @@ module.exports = function() {
 			var id = parties.id ++;
 			
 			socket.jeu = id;
-			connections[uid].jeu = id;
+			allSockets.socket(connections[uid]).jeu = id;
 			
 			if(parties_proposition.parties[uid]) {
 				delete parties_proposition.parties[uid];
@@ -790,12 +797,14 @@ module.exports = function() {
 			listerParties();
 			
 			socket.leave('home');
+			
 			if(connecter.user[socket.uid]) {
 				connecter.nb --;
 				delete connecter.user[socket.uid];
 			}
 			
-			connections[uid].leave('home');
+			allSockets.socket(connections[uid]).leave('home');
+			
 			if(connecter.user[uid]) {
 				connecter.nb --;
 				delete connecter.user[uid];
@@ -804,29 +813,29 @@ module.exports = function() {
 			connected();
 			
 			annulerAllDefi(socket);
-			annulerAllDefi(connections[uid]);
+			annulerAllDefi(allSockets.socket(connections[uid]));
 			
 			if(partie.color == 'blanc'){
 						
 				var blanc = {
 					uid: uid,
-					name: connections[uid].name
+					name: allSockets.socket(connections[uid]).name
 				};
 				
 				var noir = {
 					uid: socket.uid,
-					name: connections[socket.uid].name
+					name: socket.name
 				};
 			}
 			else{
 				var blanc = {
 					uid: socket.uid,
-					name: connections[socket.uid].name
+					name: socket.name
 				};
 				
 				var noir = {
 					uid: uid,
-					name: connections[uid].name
+					name: allSockets.socket(connections[uid]).name
 				};
 			}
 			
@@ -840,7 +849,7 @@ module.exports = function() {
 			var jeu = newJeu(id, blanc, noir, time);
 			
 			socket.emit('NouvellePartie', jeu);
-			connections[uid].emit('NouvellePartie', jeu);
+			allSockets.socket(connections[uid]).emit('NouvellePartie', jeu);
 		}
 		
 		function supprimerPartie(uid) {
@@ -1169,8 +1178,8 @@ module.exports = function() {
 					badge.badge = trophy;
 					badge.save();
 					
-					if(connections[uid]) {
-						connections[uid].emit('trophy', trophy);
+					if (checkConnection(uid)) {
+						allSockets.socket(connections[uid]).emit('trophy', trophy);
 					}
 				}
 			});
