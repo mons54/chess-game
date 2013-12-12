@@ -2,12 +2,7 @@
 var path = require('path'),
 	express = require('express'),
 	app = express(),
-	connect = require('connect'),
-	RedisStore = require('socket.io/lib/stores/redis'), 
-	redis  = require('socket.io/node_modules/redis'), 
-	pub = redis.createClient(), 
-	sub = redis.createClient(), 
-	client = redis.createClient();
+	connect = require('connect');
 
 app.root = __dirname;
 
@@ -22,12 +17,6 @@ global.graph = require('fbgraph');
 var port = process.env.PORT || 3000;
 
 global.socket = require('socket.io').listen(app.listen(port));
-
-global.socket.set('store', new RedisStore({
-	redisPub : pub, 
-	redisSub : sub, 
-	redisClient : client
-}));
 
 global.socket.set('log level', 1);
 global.socket.set('origins', global.host + ':*');
