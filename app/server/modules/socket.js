@@ -42,7 +42,8 @@ module.exports = function () {
 				}
 				
 				if (checkConnection(data.uid)) {
-					io.sockets.socket(connections[data.uid]).disconnect();
+					var socketId = connections[data.uid];
+					io.sockets.socket(socketId).disconnect();
 				}
 				
 				socket.uid = data.uid;
