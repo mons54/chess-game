@@ -48,10 +48,10 @@
 			that._free();
 			
 			if(navigator.userAgent.indexOf('Safari') > 1 && navigator.userAgent.indexOf('Chrome') == -1) {
-				that.socket = io.connect('wss://' + host + '/chess');
+				that.socket = io.connect('wss://' + host + '/');
 			}
 			else {
-				that.socket = io.connect('/chess');
+				that.socket = io.connect('/');
 			}
 			
 			if(!$('#audio #move')[0].play || !$('#audio #time')[0].play) that.options.sound = false;
@@ -1193,7 +1193,7 @@
 			
 			for(var uid in data.user){
 				
-				if(that.uid != uid) {
+				if (uid > 0 && that.uid != uid) {
 					
 					if(that.menu_game == "connected") {
 						that._afficher("connected", i, uid, data.user[uid]);
@@ -1276,6 +1276,10 @@
 		
 		_afficher: function(type, i, uid, data) {
 		
+			if (!data.name || !data.points || !data.classement) {
+				return;
+			}
+			
 			var that = this;
 			
 			if(type == "parties" && that.uid != uid) {
