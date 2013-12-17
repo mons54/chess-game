@@ -1500,12 +1500,11 @@ table.classement tr td.images img{padding-top:3px;}
 	display:none;
 	position:absolute;
 	color:#fff;
-	left:30px;
-	top:-130px;
+	left:15px;
+	top:-135px;
 	height:200px;
 	width:200px;
 	background:url(../img/trophees/description.png) no-repeat;
-	z-index:999999;
 }
 
 #trophy .description h4{
@@ -1517,90 +1516,6 @@ table.classement tr td.images img{padding-top:3px;}
 #trophy .description p{
 	text-align:center;
 	margin: 0 20px;
-}
-
-#trophy .description_1{ 
-	left:30px;
-	top:-50px;
-}
-#trophy .description_2{  
-	left:130px;
-	top:-50px;
-}
-#trophy .description_3{  
-	left:230px;
-	top:-50px;
-}
-#trophy .description_4{  
-	left:330px;
-	top:-50px;
-}
-#trophy .description_5{
-	left:430px;
-	top:-50px;
-}
-
-#trophy .description_6{ 
-	left:30px;
-	top:50px;
-}
-#trophy .description_7{  
-	left:130px;
-	top:50px;
-}
-#trophy .description_8{  
-	left:230px;
-	top:50px;
-}
-#trophy .description_9{  
-	left:330px;
-	top:50px;
-}
-#trophy .description_10{  
-	left:430px;
-	top:50px;
-}
-
-#trophy .description_11{ 
-	left:30px;
-	top:150px;
-}
-#trophy .description_12{  
-	left:130px;
-	top:150px;
-}
-#trophy .description_13{ 
-	left:230px;
-	top:150px;
-}
-#trophy .description_14{  
-	left:330px;
-	top:150px;
-}
-#trophy .description_15{  
-	left:430px;
-	top:150px;
-}
-
-#trophy .description_16{ 
-	left:30px;
-	top:250px;
-}
-#trophy .description_17{  
-	left:130px;
-	top:250px;
-}
-#trophy .description_18{ 
-	left:230px;
-	top:250px;
-}
-#trophy .description_19{  
-	left:330px;
-	top:250px;
-}
-#trophy .description_20{  
-	left:430px;
-	top:250px;
 }
 
 #trophy .no-trophy{ background-image:url(../img/trophees/no-trophee.png); }
@@ -1629,29 +1544,29 @@ table.classement tr td.images img{padding-top:3px;}
 ._20_wins_cons{ background-image:url(../img/trophees/_20_wins_cons.png) ; }
 ._3_loses_cons{ background-image:url(../img/trophees/_3_loses_cons.png); }
 
-#trophy ._1:hover + .description_1 { display:block;}
-#trophy ._2:hover + .description_2{ display:block; }
-#trophy ._3:hover + .description_3{ display:block; }
-#trophy ._4:hover + .description_4{ display:block; }
-#trophy ._5:hover + .description_5{ display:block; }
+#trophy ._1:hover > .description_1 { display:block;}
+#trophy ._2:hover > .description_2{ display:block; }
+#trophy ._3:hover > .description_3{ display:block; }
+#trophy ._4:hover > .description_4{ display:block; }
+#trophy ._5:hover > .description_5{ display:block; }
 
-#trophy ._6:hover + .description_6{ display:block;}
-#trophy ._7:hover + .description_7{ display:block; }
-#trophy ._8:hover + .description_8{ display:block; }
-#trophy ._9:hover + .description_9{ display:block; }
-#trophy ._10:hover + .description_10{ display:block; }
+#trophy ._6:hover > .description_6{ display:block;}
+#trophy ._7:hover > .description_7{ display:block; }
+#trophy ._8:hover > .description_8{ display:block; }
+#trophy ._9:hover > .description_9{ display:block; }
+#trophy ._10:hover > .description_10{ display:block; }
 
-#trophy ._11:hover + .description_11{ display:block;}
-#trophy ._12:hover + .description_12{ display:block; }
-#trophy ._13:hover + .description_13{ display:block; }
-#trophy ._14:hover + .description_14{ display:block; }
-#trophy ._15:hover + .description_15{ display:block; }
+#trophy ._11:hover > .description_11{ display:block;}
+#trophy ._12:hover > .description_12{ display:block; }
+#trophy ._13:hover > .description_13{ display:block; }
+#trophy ._14:hover > .description_14{ display:block; }
+#trophy ._15:hover > .description_15{ display:block; }
 
-#trophy ._16:hover + .description_16{ display:block;}
-#trophy ._17:hover + .description_17{ display:block; }
-#trophy ._18:hover + .description_18{ display:block; }
-#trophy ._19:hover + .description_19{ display:block; }
-#trophy ._20:hover + .description_20{ display:block; }
+#trophy ._16:hover > .description_16{ display:block;}
+#trophy ._17:hover > .description_17{ display:block; }
+#trophy ._18:hover > .description_18{ display:block; }
+#trophy ._19:hover > .description_19{ display:block; }
+#trophy ._20:hover > .description_20{ display:block; }
 
 /**********Facebook************/
 
