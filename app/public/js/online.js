@@ -638,8 +638,8 @@
 					var _class= "no-trophy";
 				}
 				
-				$('<div class="trophy _' + i + ' ' + _class +'"></div>').appendTo(trophy);
-				var desc = $('<div class="description description_' + i +'"></div>').appendTo(trophy);
+				var contentTrophy = $('<div class="trophy _' + i + ' ' + _class +'"></div>').appendTo(trophy);
+				var desc = $('<div class="description description_' + i +'"></div>').appendTo(contentTrophy);
 				$('<h4>' + $.options.lang[lang].trophy.content[i].title + '</h4>').appendTo(desc);
 				$('<p>' + $.options.lang[lang].trophy.content[i].description + '<p>').appendTo(desc);
 			}
