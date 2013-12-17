@@ -1,15 +1,8 @@
 
 
-module.exports = function() {
+module.exports = function () {
 	
-	var connections = {
-		nb:0
-	};
-	
-	var connecter = {
-		nb:0,
-		user: {}
-	};
+	var connections = {};
 	
 	var parties_proposition = {
 		nb:0,
@@ -26,13 +19,13 @@ module.exports = function() {
 		data: {}
 	};
 	
-	var users = mongoose.model('users', global.usersSchema),
-		games = mongoose.model('parties', global.partiesSchema),
-		badges = mongoose.model('user_badges', global.usersBadgesSchema),
-		free_tokens = mongoose.model('free_tokens', global.freeTokenSchema),
-		paiements = mongoose.model('paiements', global.paiementsSchema);
+	var users = mongoose.collections.users,
+		games = mongoose.collections.games,
+		badges = mongoose.collections.badges,
+		free_tokens = mongoose.collections.free_tokens,
+		payments = mongoose.collections.payments;
 	
-	var allSockets = global.socket.of('/chess').on('connection', function(socket) {
+	io.sockets.on('connection', function (socket) {
 		
 		socket.on('create', function(data) {
 			
@@ -41,7 +34,7 @@ module.exports = function() {
 				return;
 			}
 			
-			global.graph.post('/' + data.uid + '?access_token=' + data.accessToken, function (err, res) {
+			fbgraph.post('/' + data.uid + '?access_token=' + data.accessToken, function (err, res) {
 				
 				if(err || !res.data) {
 					socket.disconnect();
@@ -49,13 +42,12 @@ module.exports = function() {
 				}
 				
 				if (checkConnection(data.uid)) {
-					allSockets.socket(connections[data.uid]).disconnect();
+					io.sockets.socket(connections[data.uid]).disconnect();
 				}
 				
 				socket.uid = data.uid;
 				socket.name = data.name;
 				connections[data.uid] = socket.id;
-				connections.nb++;
 				
 				users.count({uid: data.uid}, function (err, nb) {
 					
@@ -128,18 +120,18 @@ module.exports = function() {
 			
 			if (checkSocketUid() && checkConnection(data.uid)) {
 			
-				if (!allSockets.socket(connections[data.uid]).defis) {
-					allSockets.socket(connections[data.uid]).defis = {
+				if (!io.sockets.socket(connections[data.uid]).defis) {
+					io.sockets.socket(connections[data.uid]).defis = {
 						nb:0,
 						defis: {}
 					};
 				}
 				
-				if (!allSockets.socket(connections[data.uid]).defis.defis[socket.uid]) {
-					allSockets.socket(connections[data.uid]).defis.nb ++;
+				if (!io.sockets.socket(connections[data.uid]).defis.defis[socket.uid]) {
+					io.sockets.socket(connections[data.uid]).defis.nb ++;
 				}
 					
-				allSockets.socket(connections[data.uid]).defis.defis[socket.uid] = {
+				io.sockets.socket(connections[data.uid]).defis.defis[socket.uid] = {
 					type: 'reponse',
 					name:socket.name,
 					points:socket.points,
@@ -161,24 +153,24 @@ module.exports = function() {
 					
 				socket.defis.defis[data.uid] = {
 					type: 'demande',
-					name: allSockets.socket(connections[data.uid]).name,
-					points: allSockets.socket(connections[data.uid]).points,
-					classement: allSockets.socket(connections[data.uid]).classement,
+					name: io.sockets.socket(connections[data.uid]).name,
+					points: io.sockets.socket(connections[data.uid]).points,
+					classement: io.sockets.socket(connections[data.uid]).classement,
 					color: data.color,
 					time: data.time
 				};
 				
-				allSockets.socket(connections[data.uid]).emit('Defis', allSockets.socket(connections[data.uid]).defis);
+				io.sockets.socket(connections[data.uid]).emit('Defis', io.sockets.socket(connections[data.uid]).defis);
 				socket.emit('Defis', socket.defis);
 			}
 		});
 		
 		socket.on('AnnulerDefi', function(uid) {
 			
-			if(checkSocketUid() && checkConnection(uid) && allSockets.socket(connections[uid]).defis && allSockets.socket(connections[uid]).defis.defis && allSockets.socket(connections[uid]).defis.defis[socket.uid]) {
-				delete allSockets.socket(connections[uid]).defis.defis[socket.uid];
-				allSockets.socket(connections[uid]).defis.nb --;
-				allSockets.socket(connections[uid]).emit('Defis', allSockets.socket(connections[uid]).defis);
+			if(checkSocketUid() && checkConnection(uid) && io.sockets.socket(connections[uid]).defis && io.sockets.socket(connections[uid]).defis.defis && io.sockets.socket(connections[uid]).defis.defis[socket.uid]) {
+				delete io.sockets.socket(connections[uid]).defis.defis[socket.uid];
+				io.sockets.socket(connections[uid]).defis.nb --;
+				io.sockets.socket(connections[uid]).emit('Defis', io.sockets.socket(connections[uid]).defis);
 			}
 				
 			if(socket.defis && socket.defis.defis && socket.defis.defis[uid]) {
@@ -192,7 +184,7 @@ module.exports = function() {
 			
 			if (!socket.jeu && checkSocketUid() && socket.uid != uid) {
 			
-				if(parties_proposition.parties[uid] && checkConnection(uid) && !allSockets.socket(connections[uid]).jeu) {
+				if(parties_proposition.parties[uid] && checkConnection(uid) && !io.sockets.socket(connections[uid]).jeu) {
 					
 					var partie = parties_proposition.parties[uid];
 					
@@ -211,11 +203,11 @@ module.exports = function() {
 				
 				if (checkConnection(uid)) {
 					
-					if(!allSockets.socket(connections[uid]).jeu) {
+					if(!io.sockets.socket(connections[uid]).jeu) {
 						
-						if(allSockets.socket(connections[uid]).defis && allSockets.socket(connections[uid]).defis.defis && allSockets.socket(connections[uid]).defis.defis[socket.uid]) {
+						if(io.sockets.socket(connections[uid]).defis && io.sockets.socket(connections[uid]).defis.defis && io.sockets.socket(connections[uid]).defis.defis[socket.uid]) {
 					
-							var partie = allSockets.socket(connections[uid]).defis.defis[socket.uid];
+							var partie = io.sockets.socket(connections[uid]).defis.defis[socket.uid];
 							demarrerPartie(uid, partie);
 						}
 					}
@@ -262,7 +254,7 @@ module.exports = function() {
 							}
 						};
 							
-						allSockets.socket(connections[uid]).emit('ChargerPartie', _data);
+						io.sockets.socket(connections[uid]).emit('ChargerPartie', _data);
 					}
 				}
 			}
@@ -282,7 +274,7 @@ module.exports = function() {
 				}
 				
 				if(uid && checkConnection(uid)) {
-					allSockets.socket(connections[uid]).emit('ProposerNul', {uid:socket.uid, name:socket.name});
+					io.sockets.socket(connections[uid]).emit('ProposerNul', {uid:socket.uid, name:socket.name});
 				}
 			}
 		});
@@ -313,8 +305,8 @@ module.exports = function() {
 						resultatPartie(vainqueur, nom, data.blanc, data.noir);
 						
 						if (checkConnection(uid)) {
-							allSockets.socket(connections[uid]).jeu = false;
-							allSockets.socket(connections[uid]).emit('JeuTerminer', { uid:socket.uid, vainqueur: vainqueur, nom: nom });
+							io.sockets.socket(connections[uid]).jeu = false;
+							io.sockets.socket(connections[uid]).emit('JeuTerminer', { uid:socket.uid, vainqueur: vainqueur, nom: nom });
 						}
 					}
 				}
@@ -325,53 +317,47 @@ module.exports = function() {
 			
 			if (checkSocketUid() && uid > 0) {
 			
-				var data = {};
-				
-				games.count({$or : [{blanc:uid}, {noir:uid}]}, function (err, nb) {
+				users.findOne({ uid: uid }, 'points', function (err, data) {
 					
-					if (err) return;
+					if (err || !data || !data.points) {
+						return;
+					}
 					
-					data.games = nb;
+					var points = data.points,
+						data = {};
 					
-					games.count({blanc:uid, resultat:1}, function (err, nb) {
+					users.count({ actif: 1, points: { $gt : points } }, function (err, nb) {
 						
-						if (err) return;
-						
-						data.win = nb;
-						
-						games.count({noir:uid, resultat:2}, function (err, nb) {
-						
-							if (err) return;
+						if (err) {
+							return;
+						}
+	
+						var classement = nb + 1;
+					
+						games.count({ $or : [ { blanc:uid }, { noir:uid } ] }, function (err, nb) {
 							
-							data.win += nb;
+							if (err) {
+								return;
+							}
 							
-							games.count({blanc:uid, resultat:0}, function (err, nb) {
-						
-								if (err) return;
+							data.games = nb;
 							
-								data.draw = nb;
-							
-								games.count({noir:uid, resultat:0}, function (err, nb) {
-							
-									if (err) return;
+							games.count({ $or : [ { blanc: uid, resultat: 1 }, { noir: uid, resultat: 2 } ]}, function (err, nb) {
 								
-									data.draw += nb;
-									
-									users.find({uid:uid}, function (err, _data) {
-					
-										if (err || !_data[0] || !_data[0].points) return;
-										
-										var points = _data[0].points;
-									
-										users.count({actif:1, points:{$gt : points}}, function (err, nb) {
-											
-											if (err) return;
-						
-											var classement = nb + 1;
-											
-											socket.emit('Profil', {data:data, classement:classement, points:points, uid:uid, name:name });
-										});
-									});
+								if (err) {
+									return;
+								}
+								
+								data.win = nb;
+								
+								games.count({ $or : [ { blanc: uid, resultat: 0 }, { noir: uid, resultat: 0 } ]}, function (err, nb) {
+								
+									if (err) {
+										return;
+									}
+								
+									data.draw = nb;
+									socket.emit('Profil', { data: data, classement: classement, points: points, uid: uid, name: name });
 								});
 							});
 						});
@@ -429,7 +415,7 @@ module.exports = function() {
 				}
 				
 				if(uid && checkConnection(uid)) {
-					allSockets.socket(connections[uid]).emit('NouveauMessageJeu', {uid:socket.uid, name:socket.name, message:data.message.substr(0, 500)});
+					io.sockets.socket(connections[uid]).emit('NouveauMessageJeu', {uid:socket.uid, name:socket.name, message:data.message.substr(0, 500)});
 				}
 			}
 		});
@@ -438,56 +424,41 @@ module.exports = function() {
 			
 			if (checkSocketUid()) {
 			
-				var uid = socket.uid ? socket.uid : 0;
-				var limit = 8;
-				var page = parseInt(data.page);
-				var friends = data.friends;
+				var uid = socket.uid ? socket.uid : 0,
+					limit = 8,
+					page = parseInt(data.page),
+					friends = data.friends;
 				
-				users.find({uid:uid}, function(err, data) {
+				if (page) {
 					
-					if(err) return;
-					
-					if(page) {
+					if(page <= 0) {
+						page = 1;
+					}
 						
-						if(page <= 0)
-							page = 1;
-							
-						_classement(friends, page, limit, false);
-					}
-					else {
+					_classement(friends, page, limit, false);
+				}
+				else {
 					
-						if(friends) {
-							users.count({actif:1, uid: { $in: friends }, points: { $gt: data[0].points } }, function (err, nb) {
-							
-								if (err) return;
-								
-								nb++;
-								
-								var page = Math.ceil(nb/limit);
-								
-								if(page <= 0)
-									page = 1;
-									
-								_classement(friends, page, limit, true);
-							});
+					var points = socket.points,
+						req = friends ? {actif:1, uid: { $in: friends }, points: { $gt: points } } : {actif:1, points: { $gt: points } };
+				
+					users.count(req, function (err, nb) {
+						
+						if (err) {
+							return;
 						}
-						else {
-							users.count({actif:1, points: { $gt: data[0].points } }, function (err, nb) {
-							
-								if (err) return;
-								
-								nb++;
-								
-								var page = Math.ceil(nb/limit);
-								
-								if(page <= 0)
-									page = 1;
-									
-								_classement(friends, page, limit, true);
-							});
+						
+						nb++;
+						
+						var page = Math.ceil(nb/limit);
+						
+						if(page <= 0) {
+							page = 1;
 						}
-					}
-				});
+							
+						_classement(friends, page, limit, true);
+					});
+				}
 			}
 		});
 		
@@ -497,13 +468,15 @@ module.exports = function() {
 			
 				var uid = socket.uid ? socket.uid : 0;
 				
-				users.find({uid:uid}, function (err, data) {
+				users.findOne({uid:uid}, 'tokens', function (err, data) {
 					
-					if (err || !data[0].tokens) return;
+					if (err || !data || !data.tokens) {
+						return;
+					}
 					
-					var token = data[0].tokens + 3;
+					var token = data.tokens + 3;
 					
-					users.update({uid: uid }, { $set: {tokens: token} }, function (err) { });
+					users.update({uid: uid }, { $set: {tokens: token} }, fn);
 				});
 			}
 		});
@@ -513,12 +486,7 @@ module.exports = function() {
 			if (checkSocketUid()) {
 			
 				socket.leave('home');
-				
-				if(connecter.user[socket.uid]) {
-					connecter.nb --;
-					delete connecter.user[socket.uid];
-					connected();
-				}
+				connected();
 				
 				supprimerPartie(socket.uid);
 				
@@ -533,25 +501,30 @@ module.exports = function() {
 			}
 			
 			var id = data.id,
-				_token = data.token,
+				token = data.token,
 				request = parse_signed_request(data.signed_request, global.secret);
 				
-			if(!request)
+			if (!request) {
 				return;
+			}
 				
-			users.find({uid:socket.uid}, function (err, data) {
+			users.findOne({ uid: socket.uid }, 'tokens', function (err, data) {
 
-				if (err || !data[0]) return;
+				if (err || !data) {
+					return;
+				}
 				
-				var token = parseInt(data[0].tokens) + parseInt(_token);
+				token = parseInt(data.tokens) + parseInt(token);
 				
 				users.update({uid:socket.uid}, { $set: {tokens: token} }, function (err) { 
 				
-					if (err) return;
+					if (err) {
+						return;
+					}
 					
 					initUser();
 					
-					new paiements({ 
+					new payments({ 
 						id:request.payment_id,
 						uid:socket.uid,
 						item:id,
@@ -567,12 +540,6 @@ module.exports = function() {
 			
 			if (socket.uid && connections[socket.uid]) {
 				delete connections[socket.uid];
-				connections.nb--;
-			}
-			
-			if (socket.uid && connecter.user[socket.uid]) {
-				connecter.nb--;
-				delete connecter.user[socket.uid];
 				connected();
 			}
 		
@@ -613,8 +580,8 @@ module.exports = function() {
 				resultatPartie(vainqueur, nom, blanc, noir);
 				
 				if (checkConnection(uid)) {
-					allSockets.socket(connections[uid]).jeu = false;
-					allSockets.socket(connections[uid]).emit('JeuTerminer', { uid:socket.uid, vainqueur: vainqueur, nom: nom });
+					io.sockets.socket(connections[uid]).jeu = false;
+					io.sockets.socket(connections[uid]).emit('JeuTerminer', { uid:socket.uid, vainqueur: vainqueur, nom: nom });
 				}
 			}
 		}
@@ -631,7 +598,7 @@ module.exports = function() {
 		
 		function checkConnection (uid) {
 			
-			if (!allSockets.socket(connections[uid]).id) {
+			if (!io.sockets.socket(connections[uid]).id) {
 				return false;
 			}
 			
@@ -658,85 +625,84 @@ module.exports = function() {
 			
 				var uid = socket.uid ? socket.uid : 0;
 				
-				users.find({uid:uid}, function (err, data) {
+				users.findOne({ uid:uid }, function (err, data) {
 					
-					if (err || !data[0]) return;
+					if (err || !data) {
+						return;
+					}
 					
-					if(data[0].ban) {
+					if(data.ban) {
 						socket.disconnect();
 						return;
 					}
 					
-					socket.moderateur = data[0].moderateur ? true : false;
+					socket.moderateur = data.moderateur ? true : false;
 					
 					checkTrophy(uid);
 					
-					if(!data[0].parrainage && parrainage) {
-						users.update({uid: uid }, { $set: {parrainage: parrainage} }, function (err) { });
+					if(!data.parrainage && parrainage) {
+						users.update({uid: uid }, { $set: {parrainage: parrainage} }, fn);
 					}
 					
-					var points = data[0].points;
+					var points = data.points;
 					socket.points = points;
 					
-					free_tokens.find({uid:uid}, function (err, _data) {
+					free_tokens.findOne({ uid:uid }, 'time', function (err, _data) {
 				
-						if (err) return;
+						if (err) {
+							return;
+						}
 						
 						var token = 0;
 						
-						if(!data[0].tokens && data[0].tokens != 0) {
+						if (!data.tokens && data.tokens != 0) {
 							token += 17;
-							users.update({uid: uid }, { $set: {tokens: token} }, function (err) { });
+							users.update({uid: uid }, { $set: {tokens: token} }, fn);
 						}
 						else {
-							token += data[0].tokens;
+							token += data.tokens;
 						}
 						
 						var time = Math.round(new Date().getTime() / 1000);
 					
-						if(!_data[0] || !_data[0].time) {
+						if (!_data || !_data.time) {
 							
 							token += 3;
 							time_free = time;
 							var free_token = new free_tokens({ uid : uid });
 							free_token.time = time;
 							free_token.save();
-							users.update({uid: uid }, { $set: {tokens: token} }, function (err) { });
+							users.update({ uid: uid }, { $set: { tokens: token} }, fn);
 						}
-						else if(_data[0].time < (time - (24*3600))) {
+						else if (_data.time < (time - (24*3600))) {
 							
 							time_free = time;
 							token += 3;
-							free_tokens.update({uid: uid }, { $set: {time: time} }, function (err) { });
-							users.update({uid: uid }, { $set: {tokens: token} }, function (err) { });
+							free_tokens.update({uid: uid }, { $set: {time: time} }, fn);
+							users.update({uid: uid }, { $set: {tokens: token} }, fn);
 						}
 						else {
-							time_free = _data[0].time;
+							time_free = _data.time;
 						}
 						
-						badges.find({uid:uid}, function (err, data) {
+						badges.find({ uid:uid }, function (err, data) {
 						
-							if (err) return;
+							if (err) {
+								return;
+							}
 							
 							var trophy = data;
 							
-							users.count({actif:1, points:{$gt : points}}, function (err, nb) {
+							users.count({ actif:1, points: { $gt : points } }, function (err, nb) {
 								
-								if (err) return;
+								if (err) {
+									return;
+								}
 								
 								var classement = nb + 1;
+								
 								socket.classement = classement;
 								socket.join('home');
-								
-								if(!connecter.user[socket.uid] && !socket.jeu) {
-									
-									connecter.nb ++;
-									connecter.user[socket.uid] = {
-										name : socket.name,
-										classement : socket.classement,
-										points : socket.points
-									};
-								}
 								
 								connected();
 								
@@ -760,17 +726,31 @@ module.exports = function() {
 		}
 		
 		function connected() {
-			sendHome('Connected', connecter);
-			allSockets.emit('NbConnected', connections.nb );
+			
+			var connected = {
+				user: {},
+				nb: io.sockets.clients('home').length,	
+			};
+			
+			io.sockets.clients('home').forEach(function (data) {
+				connected.user[data.uid] = {
+					name : data.name,
+					classement : data.classement,
+					points : data.points	
+				};
+			});
+			
+			sendHome('Connected', connected);
+			io.sockets.emit('NbConnected', io.sockets.clients().length);
 		}
 		
 		function annulerAllDefi (_socket) {
 			if(_socket.uid && _socket.defis && _socket.defis.defis) {
 				for(var uid in _socket.defis.defis) {
-					if(checkConnection(uid) && allSockets.socket(connections[uid]).defis && allSockets.socket(connections[uid]).defis.defis && allSockets.socket(connections[uid]).defis.defis[_socket.uid]) {
-						delete allSockets.socket(connections[uid]).defis.defis[_socket.uid];
-						allSockets.socket(connections[uid]).defis.nb --;
-						allSockets.socket(connections[uid]).emit('Defis', allSockets.socket(connections[uid]).defis);
+					if(checkConnection(uid) && io.sockets.socket(connections[uid]).defis && io.sockets.socket(connections[uid]).defis.defis && io.sockets.socket(connections[uid]).defis.defis[_socket.uid]) {
+						delete io.sockets.socket(connections[uid]).defis.defis[_socket.uid];
+						io.sockets.socket(connections[uid]).defis.nb --;
+						io.sockets.socket(connections[uid]).emit('Defis', io.sockets.socket(connections[uid]).defis);
 					}
 				}
 				delete _socket.defis;
@@ -782,7 +762,7 @@ module.exports = function() {
 			var id = parties.id ++;
 			
 			socket.jeu = id;
-			allSockets.socket(connections[uid]).jeu = id;
+			io.sockets.socket(connections[uid]).jeu = id;
 			
 			if(parties_proposition.parties[uid]) {
 				delete parties_proposition.parties[uid];
@@ -797,29 +777,18 @@ module.exports = function() {
 			listerParties();
 			
 			socket.leave('home');
-			
-			if(connecter.user[socket.uid]) {
-				connecter.nb --;
-				delete connecter.user[socket.uid];
-			}
-			
-			allSockets.socket(connections[uid]).leave('home');
-			
-			if(connecter.user[uid]) {
-				connecter.nb --;
-				delete connecter.user[uid];
-			}
+			io.sockets.socket(connections[uid]).leave('home');
 			
 			connected();
 			
 			annulerAllDefi(socket);
-			annulerAllDefi(allSockets.socket(connections[uid]));
+			annulerAllDefi(io.sockets.socket(connections[uid]));
 			
 			if(partie.color == 'blanc'){
 						
 				var blanc = {
 					uid: uid,
-					name: allSockets.socket(connections[uid]).name
+					name: io.sockets.socket(connections[uid]).name
 				};
 				
 				var noir = {
@@ -835,7 +804,7 @@ module.exports = function() {
 				
 				var noir = {
 					uid: uid,
-					name: allSockets.socket(connections[uid]).name
+					name: io.sockets.socket(connections[uid]).name
 				};
 			}
 			
@@ -849,7 +818,7 @@ module.exports = function() {
 			var jeu = newJeu(id, blanc, noir, time);
 			
 			socket.emit('NouvellePartie', jeu);
-			allSockets.socket(connections[uid]).emit('NouvellePartie', jeu);
+			io.sockets.socket(connections[uid]).emit('NouvellePartie', jeu);
 		}
 		
 		function supprimerPartie(uid) {
@@ -872,86 +841,101 @@ module.exports = function() {
 			sendHome('ListerMessages', messages.data);
 		}
 		
-		function sendHome(name, data) {
-			
-			allSockets.in('home').emit(name, data);
-		}
-		
 		function resultatPartie(vainqueur, nom, blanc, noir){
 		
-			users.find({uid:blanc}, function (err, data) {
+			users.findOne({ uid: blanc }, function (err, data) {
 					
-				if (err) return;
+				if (err) {
+					return;
+				}
 					
-				var points_blanc = data[0].points;
-				var tokens_blanc = data[0].tokens;
-				var parrainage_blanc = data[0].parrainage ? data[0].parrainage : false;
+				var points_blanc = data.points,
+					tokens_blanc = data.tokens,
+					parrainage_blanc = data.parrainage ? data.parrainage : false,
+					cons_game_blanc = data.cons_game ? data.cons_game : 0;
+				
 				tokens_blanc--;
 				
-				if(tokens_blanc < 0) tokens_blanc = 0;
-				
-				var cons_game_blanc = data[0].cons_game ? data[0].cons_game : 0;
+				if(tokens_blanc < 0) {
+					tokens_blanc = 0;
+				}
 			
-				users.find({uid:noir}, function (err, data) {
+				users.findOne({ uid: noir }, function (err, data) {
 					
-					if (err) return;
+					if (err) {
+						return;
+					}
 					
-					var points_noir = data[0].points;
-					var tokens_noir = data[0].tokens;
-					var parrainage_noir = data[0].parrainage ? data[0].parrainage : false;
+					var points_noir = data.points,
+						tokens_noir = data.tokens,
+						parrainage_noir = data.parrainage ? data.parrainage : false,
+						cons_game_noir = data.cons_game ? data.cons_game : 0;
+					
 					tokens_noir--;
 					
-					if(tokens_noir < 0) tokens_noir = 0;
+					if(tokens_noir < 0) {
+						tokens_noir = 0;
+					}
 					
-					var cons_game_noir = data[0].cons_game ? data[0].cons_game : 0;
+					games.count({ $or : [ { blanc: blanc }, { noir: blanc } ] }, function (err, nb) {
 					
-					games.count({$or : [{blanc:blanc}, {noir:blanc}]}, function (err, nb) {
-					
-						if (err) return;
+						if (err) {
+							return;
+						}
 						
 						var nb_partie_blanc = nb;
 						
-						games.count({$or : [{blanc:noir}, {noir:noir}]}, function (err, nb) {
+						games.count({ $or : [ { blanc: noir }, { noir: noir } ] }, function (err, nb) {
 							
-							if (err) return;
+							if (err) {
+								return;
+							}
 							
 							var nb_partie_noir = nb;
 							
 							if(vainqueur == 1) {
-								var resultat_blanc = 1;
-								var resultat_noir = 0;
 								
-								if(cons_game_blanc < 0)
+								var resultat_blanc = 1,
+									resultat_noir = 0;
+								
+								if(cons_game_blanc < 0) {
 									cons_game_blanc = 0;
+								}
 								
-								if(cons_game_noir > 0)
+								if(cons_game_noir > 0) {
 									cons_game_noir = 0;
+								}
 									
 								cons_game_blanc++;
 								cons_game_noir--;
 							}
 							else if(vainqueur == 2) {
-								var resultat_blanc = 0;
-								var resultat_noir = 1;
 								
-								if(cons_game_noir < 0)
+								var resultat_blanc = 0,
+									resultat_noir = 1;
+								
+								if(cons_game_noir < 0) {
 									cons_game_noir = 0;
+								}
 								
-								if(cons_game_blanc > 0)
+								if(cons_game_blanc > 0) {
 									cons_game_blanc = 0;
+								}
 									
 								cons_game_noir++;
 								cons_game_blanc--;
 							}
 							else {
-								var resultat_blanc = 0.5;
-								var resultat_noir = 0.5;
+								
+								var resultat_blanc = 0.5,
+									resultat_noir = 0.5;
+								
 								cons_game_blanc = 0;
 								cons_game_noir = 0;
 							}
 						
-							var gain_blanc = gain(points_blanc, points_noir, resultat_blanc, nb_partie_blanc);
-							var gain_noir = gain(points_noir, points_blanc, resultat_noir, nb_partie_noir);
+							var gain_blanc = gain(points_blanc, points_noir, resultat_blanc, nb_partie_blanc),
+								gain_noir = gain(points_noir, points_blanc, resultat_noir, nb_partie_noir);
 							
 							var partie = new games({ resultat : vainqueur });
 							partie.blanc = blanc;
@@ -964,29 +948,32 @@ module.exports = function() {
 							points_noir += gain_noir;
 							
 							users.update({uid: blanc }, { $set: {points: points_blanc, tokens:tokens_blanc, cons_game: cons_game_blanc, actif:1} }, function (err) { 
-							nb_partie_blanc++;
-							setBadgesGame(blanc, nb_partie_blanc);
 							
-								if(resultat_blanc == 1) {
-								setBadgesWin(blanc);
-								}
+								nb_partie_blanc++;
 								
+								setBadgesGame(blanc, nb_partie_blanc);
+								
+								if(resultat_blanc == 1) {
+									setBadgesWin(blanc);
+								}
+									
 								setBadgesGameDay(blanc);
 								setBadgesConsGame(blanc, cons_game_blanc);
-								
+									
 							});
 							
 							users.update({uid: noir }, { $set: {points: points_noir, tokens:tokens_noir, cons_game: cons_game_noir, actif:1} }, function (err) { 
+								
 								nb_partie_noir++;
 								setBadgesGame(noir, nb_partie_noir);
-							
+									
 								if(resultat_noir == 1) {
-								setBadgesWin(noir);
+									setBadgesWin(noir);
 								}
-							
-							setBadgesGameDay(noir);
-							setBadgesConsGame(noir, cons_game_noir);
-							
+									
+								setBadgesGameDay(noir);
+								setBadgesConsGame(noir, cons_game_noir);
+									
 							});
 							
 							if(parrainage_blanc) {
@@ -1005,15 +992,17 @@ module.exports = function() {
 		
 		function setParrainage(uid) {
 			
-			users.find({uid:uid}, function (err, data) {
+			users.findOne({ uid: uid }, 'tokens', function (err, data) {
 					
-				if (err || !data[0]) return;
+				if (err || !data) {
+					return;
+				}
 				
-				if(!data[0].tokens && data[0].tokens != 0) return;
+				if(!data.tokens && data.tokens != 0) return;
 				
-				var token = data[0].tokens + 0.1;
+				var token = data.tokens + 0.1;
 				
-				users.update({uid: uid }, { $set: {tokens:token} }, function (err) { });
+				users.update({uid: uid }, { $set: {tokens:token} }, fn);
 			});
 		}
 		
@@ -1179,7 +1168,7 @@ module.exports = function() {
 					badge.save();
 					
 					if (checkConnection(uid)) {
-						allSockets.socket(connections[uid]).emit('trophy', trophy);
+						io.sockets.socket(connections[uid]).emit('trophy', trophy);
 					}
 				}
 			});
@@ -1501,7 +1490,9 @@ module.exports = function() {
 			
 			users.count(req, function (err, nb) {
 				
-				if (err) return;
+				if (err) {
+					return;
+				}
 				
 				if(nb == 0) {
 					
@@ -1529,9 +1520,13 @@ module.exports = function() {
 				
 				users.find(req).sort({points:-1}).skip(offset).limit(newLimit).hint({points:1}).exec(function (err, data) {
 					
-					if (err) return;
+					if (err) {
+						return;
+					}
 					
-					if(!data[0] || !data[0].points) return;
+					if (!data[0] || !data[0].points) {
+						return;
+					}
 					
 					var points = (bol && socket.points > data[0].points) ? socket.points : data[0].points;
 						
@@ -1562,12 +1557,13 @@ module.exports = function() {
 							var _i = 0,
 								newData = [];
 								
-							if(bol) {
+							if (bol) {
 								
 								var saveUser = false;
 							
-								for(var i in data) {
-									if(!saveUser && socket.points >= data[i].points) {
+								for (var i in data) {
+									
+									if (!saveUser && socket.points >= data[i].points) {
 										newData.push({
 											uid:socket.uid,
 											points:socket.points,
@@ -1579,7 +1575,7 @@ module.exports = function() {
 									newData.push(data[i]);
 								}
 							
-								if(!saveUser) {
+								if (!saveUser) {
 									newData.push({
 										uid:socket.uid,
 										points:socket.points,
@@ -1590,9 +1586,9 @@ module.exports = function() {
 								newData = data;
 							}
 							
-							for(var i in newData) {
+							for (var i in newData) {
 								
-								if(newData[i].points < newData[_i].points) {
+								if (newData[i].points < newData[_i].points) {
 									if(!val) {
 										pos += egal;
 									}
@@ -1641,8 +1637,9 @@ module.exports = function() {
 				suiv:{}
 			};
 			
-			for(i=1; i <= nb_page; i++){
-				if((i <= nb) || (i > nb_page - nb) || ((i < page + nb) && (i > page-nb))){
+			for (i=1; i <= nb_page; i++) {
+				
+				if ((i <= nb) || (i > nb_page - nb) || ((i < page + nb) && (i > page-nb))) {
 					_page.list[i] = {
 						num:i,
 						nom:i
@@ -1670,7 +1667,7 @@ module.exports = function() {
 				}
 			}
 			
-			if(offset >= limit){
+			if (offset >= limit) {
 			
 				_page.prec = {
 					num:page-1,
@@ -1678,7 +1675,7 @@ module.exports = function() {
 				};
 			}
 			
-			if(page != nb_page){
+			if (page != nb_page) {
 			
 				_page.suiv = {
 					num:page+1,
@@ -1687,6 +1684,15 @@ module.exports = function() {
 			}
 			
 			socket.emit('Classement', {classement:data, page:_page});
+		}
+		
+		function fn (err) {
+			return;
+		}
+		
+		function sendHome(name, data) {
+			
+			io.sockets.in('home').emit(name, data);
 		}
 		
 		function parse_signed_request(signed_request, app_secret) {
