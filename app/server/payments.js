@@ -5,8 +5,8 @@ module.exports = function(app) {
 
 	var security_token = '911f3fd471bdb649c9beb94631edf75a';
 	
-	var users = mongoose.model('users', global.usersSchema),
-		payments = mongoose.model('paiements', global.paiementsSchema);
+	var users = mongoose.collections.users,
+		payments = mongoose.collections.payments;
 	
 	var tokens = {
 		10: {

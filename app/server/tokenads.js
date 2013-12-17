@@ -3,8 +3,8 @@ module.exports = function(app) {
 
 	var postback_key = "9ee29ed8c42efb22";
 	
-	var users = mongoose.model('users', global.usersSchema);
-	var tokenads = mongoose.model('token_ads', global.tokenAdsSchema);
+	var users = mongoose.collections.users,
+		tokenads = mongoose.collections.tokenads;
 
 	app.get('/tokenads', function(req, res) {
 	
@@ -22,8 +22,9 @@ module.exports = function(app) {
 				cmp_vkey = md5(uid + mt + postback_key);
 			
 			if(cmp_vkey == vkey) {
-				var amount = get_param('award', url),
-					response = "200 OK";
+				var amount = get_param('award', url);
+				
+				response = "200 OK";
 					
 				tokenads.count({id:vkey}, function (err, nb) {
 					

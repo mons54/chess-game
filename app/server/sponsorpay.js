@@ -3,8 +3,8 @@ module.exports = function(app) {
 
 	var security_token = "911f3fd471bdb649c9beb94631edf75a";
 	
-	var users = mongoose.model('users', global.usersSchema);
-	var sponsorpay = mongoose.model('sponsor_pays', global.sponsorPaySchema);
+	var users = mongoose.collections.users,
+		sponsorpay = mongoose.collections.sponsorpay;
 
 	app.get('/sponsorpay', function(req, res) {
 	
@@ -27,7 +27,7 @@ module.exports = function(app) {
 				
 				if (sid == sha1_of_important_data) {
 				
-					var response = "HTTP200";
+					response = "HTTP200";
 					
 					sponsorpay.count({id:transid}, function (err, nb) {
 						
