@@ -176,7 +176,7 @@ body .fb-like {
 	border-bottom: 5px solid #362f2d;
 }
 
-#left .infos .nb-connect{
+#left .infos .connected{
 	color:#000;
 	font-size:13px;
 	font-weight:bold;
@@ -557,12 +557,12 @@ footer {
 	float:right;
 }
 
-#accueil #parties{
+#accueil #games{
 	height:224px;
 	overflow:auto;
 }
 
-#accueil table.parties{
+#accueil table.games{
 	border-collapse:collapse;
 	width:100%;
 	font-size:12px;
@@ -570,41 +570,41 @@ footer {
     font-weight:bold;
 }
 
-#accueil table.parties tr.bg-brun,
-#accueil table.parties tr.bg-gris{
+#accueil table.games tr.bg-brun,
+#accueil table.games tr.bg-gris{
 	height:56px;
 }
 
-#accueil table.parties tr .images{
+#accueil table.games tr .images{
 	width:60px;
 	text-align:center;
 }
-#accueil table.parties tr th{
+#accueil table.games tr th{
 	text-align:left;
 }
 
-#accueil table.parties tr .nom{
+#accueil table.games tr .nom{
 	padding-left:5px;
 	line-height:1.4em;
 }
 
-#accueil table.parties tr .nom a{
+#accueil table.games tr .nom a{
 	display: inline-block;
 	padding-bottom:5px;
 }
 
-#accueil table.parties tr .color,
-#accueil table.parties tr .time{
+#accueil table.games tr .color,
+#accueil table.games tr .time{
 	width:60px;
 	text-align:center;
 }
 
-#accueil table.parties tr .play{
+#accueil table.games tr .play{
 	width:100px;
 	text-align:center;
 }
 
-#accueil table.parties tr .play button{
+#accueil table.games tr .play button{
 	line-height:20px;
 	background-color: #362f2d;
 	color:#fff;
@@ -614,19 +614,19 @@ footer {
 	border-radius:5px;	
 }
 
-#accueil table.parties tr .close{
+#accueil table.games tr .close{
 	width:30px;
 	text-align:center;
 }
 
-#accueil table.parties tr .close a{
+#accueil table.games tr .close a{
 	display:block;
 	width:20px;
 	height:20px;
 	background:url(../img/close.png) no-repeat;
 }
 
-#accueil table.parties img{padding-top:3px;}
+#accueil table.games img{padding-top:3px;}
 
 #accueil #tchat{
 	border-top: 5px solid #362f2d;
