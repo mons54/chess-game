@@ -2,7 +2,7 @@
 
 (function ($) {
 
-    $.widget("ui.online", {
+    $.widget('ui.online', {
 
         _case: {},
         
@@ -59,270 +59,10 @@
 			
 			this.socket.open = false;
 			
-			this._socket_onmessage();
+			this._socket_on();
 		},
 		
-		_init: function () {
-			
-			$.pub();
-			
-			this.tokens = { 
-				ready: false 
-			};
-			
-			this.trophy = { 
-				ready: false 
-			};
-			
-			this.menu = {
-				accueil: true,
-				jouer: false,
-				classement: true
-			};
-			
-			this.menu_game = 'parties';
-			this.all_defis = {};
-			this.nb_defis = 0;
-			this.all_connected = {};
-			this.type_ranking = 'friends';
-			
-			$(this.element).empty().html();
-			
-			var left = $('<div id="left"></div>').appendTo(this.element);
-			
-			var div = $('<div class="infos"></div>').appendTo(left);
-			
-			this.clock = $('<div class="clock"></div>').appendTo(div);
-			
-			this.nb_connect = $('<div class="nb-connect"></div>').appendTo(div);
-			
-			$('<a class="trophy" href="#"></a>').appendTo(left).click(function () {
-				
-				if (this.trophy && this.trophy.ready) {
-					this._trophy();
-				}
-				
-				return false;
-				
-			}.bind(this));
-			
-			var classes = (this.options.sound) ? 'sound' : 'no-sound';
-			
-			this.bt_sound = $('<a id="sound" class="' + classes + '" href="#"></a>').appendTo(left).click(function () {
-				
-				this._sound();
-				
-				return false;
-				
-			}.bind(this));
-			
-			var _right = $('<div id="right"></div>').appendTo(this.element);
-			
-			$('<a href="#" class="dealspot dealspot-' + lang + '"></div>').appendTo(_right).click(function () {
-				
-				this._sponsorpay();
-				
-				return false;
-				
-			}.bind(this));
-			
-			var free = $('<div class="free"></div>').appendTo(_right),
-				time = $('<div class="time"></div>').appendTo(free);
-			
-			this.free_h = $('<span class="hours"></span>').appendTo(time);
-			$('<span class="sep-1">:</span>').appendTo(time);
-			this.free_m = $('<span class="minutes"></span>').appendTo(time);
-			$('<span class="sep-2">:</span>').appendTo(time);
-			this.free_s = $('<span class="secondes"></span>').appendTo(time);
-			
-			if (this.options.send_invite.nb < 30) {
-			
-				this.options.send_invite.bt = $('<a class="invite invite-' + lang + '" href="#"></a>').appendTo(_right).click(function () {
-				
-					if (all_friends) {
-						this._invite_friends();
-					}
-					
-					return false;
-					
-				}.bind(this));
-			}
-			
-			this.conteneur = $('<div id="conteneur"></div>').appendTo(this.element);
-			
-			var menu = $('<div id="menu"></div>').appendTo(this.conteneur);
-			
-			var right = $('<a class="token" href="#"></a>').appendTo(menu).click(function () {
-				
-				this._shop();
-				
-				return false;
-				
-			}.bind(this));
-			
-			$('<span class="plus"></span>').appendTo(right);
-			$('<span class="ico"></span>').appendTo(right);
-			
-			this.options.tokens = $('<span class="text"></span>').appendTo(right);
-			
-			var ul = $('<ul></ul>').appendTo(menu);
-			var li = $('<li></li>').appendTo(ul);
-			
-			$('<a href="#">' + $.options.lang[lang].home + '</a>').appendTo(li).click(function () {
-				
-				if (this.menu.accueil) {
-					
-					this.socket.emit('Quit');
-					
-					$.start();
-				}
-				
-				return false;
-				
-			}.bind(this));
-			
-			var li = $('<li></li>').appendTo(ul);
-			
-			$('<a href="#">' + $.options.lang[lang].play + '</a>').appendTo(li).click(function () {
-				
-				if (this.menu.jouer) {
-					
-					this._init();
-					
-					return false;
-				}
-				
-				return false;
-				
-			}.bind(this));
-			
-			var li = $('<li></li>').appendTo(ul);
-			
-			this.ranking = $('<a href="#">' + $.options.lang[lang].ranking + '</a>').appendTo(li).click(function () {
-				
-				if (this.menu.classement) {
-					
-					this.socket.emit('Quit');
-					
-					this._open_classement(0, true);
-				}
-				
-				return false;
-				
-			}.bind(this));
-			
-			var li = $('<li></li>').appendTo(ul);
-			
-			$('<a href="#">' + $.options.lang[lang].invite + '</a>').appendTo(li).click(function () {
-			
-				if (all_friends) {
-					
-					this._invite_friends();
-				}
-				
-				return false;
-				
-			}.bind(this));
-			
-			if (lang == 'ru') {
-				
-				$('#menu ul li a').css('padding', '0 5px');
-			}
-			
-			this.contenu = $('<div class="contenu"></div>').appendTo(this.conteneur);
-			var accueil = $('<div style="padding:0" id="accueil"></div>').appendTo(this.contenu);
-			var profil = $('<div class="profil"></div>').appendTo(accueil);
-			this.right = $('<div class="right"></div>').appendTo(profil);
-			
-			$('<button>' + $.options.lang[lang].create_game +'</button>').appendTo(this.right).click(function () {
-			
-				if (this.tokens && this.tokens.ready) {
-					
-					if (this.tokens.data >= 1) {
-									
-						this._creer_partie();
-					}
-					else {
-						
-						this._no_tokens();
-					}
-				}
-				
-			}.bind(this));
-			
-			var menu = $('<ul class="menu_game"></ul>').appendTo(accueil);
-			
-			this.parties = $('<li></li>').appendTo(menu);
-			
-			this.defis = $('<li></li>').appendTo(menu);
-			
-			this.connected = $('<li></li>').appendTo(menu);
-			
-			this.friends = $('<li></li>').appendTo(menu);
-			
-			var image = $('<div class="left photo"></div>').appendTo(profil);
-			$('<img src="https://graph.facebook.com/' + this.uid + '/picture">').appendTo(image);
-			var name = $('<div style="padding-bottom:5px"></div>').appendTo(profil);
-			
-			$('<a href="#">' + this.name + '</a>').appendTo(name).click(function () {
-				
-				this._open_profil(this.uid, this.name);
-				
-			}.bind(this));
-			
-			var div = $('<div></div>').appendTo(profil);
-			var points = $('<span>' + $.options.lang[lang].points + ': </span>').appendTo(div);
-			this.options.points = $('<span></span>').appendTo(div);
-			
-			var div = $('<div></div>').appendTo(profil);
-			var classement = $('<span>' + $.options.lang[lang].ranking + ': </span>').appendTo(div);
-			this.options.classement = $('<span></span>').appendTo(div);
-			
-			$('<div class="clear"></div>').appendTo(profil);
-			
-			var parties = $('<div id="parties"></div>').appendTo(accueil);
-			this.list_parties = $('<table class="parties"></table>').appendTo(parties);
-			
-			var tchat = $('<div id="tchat"></div>').appendTo(accueil);
-			this.tchat = $('<div class="tchat"></div>').appendTo(tchat);
-			
-			$('<textarea></textarea>').appendTo(tchat).keydown(function(e) {
-				
-				if (e.which != 13 || !e.target.value) {
-					return;
-				}
-				
-				if (e.target.oldValue && e.target.oldValue == e.target.value) {
-					return;
-				}
-						
-				this.socket.emit('EnvoyerMessage', e.target.value);
-				
-				e.target.oldValue = e.target.value;
-				e.target.value = null;
-					
-				return false;
-				
-			}.bind(this));
-			
-			if (this.socket.open) {
-			
-				this.socket.emit('InitUser');
-			}
-			
-			if (this.options.trophy) {
-				
-				for (var i in this.options.trophy) {
-					
-					delete this.options.trophy[i];
-					
-					this._win_trophy(i);
-				}
-			}
-			
-		},
-		
-		_socket_onmessage: function (data) {
+		_socket_on: function () {
 			
 			this.socket.on('connect', function () {
 				
@@ -338,9 +78,9 @@
 				
 			}.bind(this));
 			
-			this.socket.on('ListerParties', function (data) {
+			this.socket.on('ListGames', function (data) {
 				
-				this._parties(data);
+				this._games(data);
 			
 			}.bind(this));
 			
@@ -350,15 +90,15 @@
 			
 			}.bind(this));
 			
-			this.socket.on('NouvellePartie', function (jeu) {
+			this.socket.on('NewGame', function (jeu) {
 				
-				this._nouvelle_partie(jeu);
+				this._new_game(jeu);
 			
 			}.bind(this));
 			
-			this.socket.on('ChargerPartie', function (data) {
+			this.socket.on('loadGame', function (data) {
 				
-				this._charger_partie(data);
+				this._load_game(data);
 			
 			}.bind(this));
 			
@@ -392,15 +132,15 @@
 			
 			}.bind(this));
 			
-			this.socket.on('Connected', function (data) {
+			this.socket.on('Challengers', function (data) {
 				
-				this._connected(data);
+				this._challengers(data);
 			
 			}.bind(this));
 			
-			this.socket.on('NbConnected', function (data) {
+			this.socket.on('Connected', function (data) {
 				
-				this._nb_connected(data);
+				this._connected(data);
 			
 			}.bind(this));
 			
@@ -439,6 +179,291 @@
 				});
 				
 			}.bind(this));
+		},
+		
+		_init: function () {
+			
+			$.pub();
+			
+			this.tokens = { 
+				ready: false 
+			};
+			
+			this.trophy = { 
+				ready: false 
+			};
+			
+			this.menu = {
+				accueil: true,
+				jouer: false,
+				classement: true
+			};
+			
+			this.menu_game = 'games';
+			this.all_defis = {};
+			this.nb_defis = 0;
+			this.all_connected = {};
+			this.type_ranking = 'friends';
+			
+			$(this.element).empty().html();
+			
+			this._create_column_left();
+			this._create_column_right();
+			this._create_menu();
+			
+			this.contenu = $('<div class="contenu"></div>').appendTo(this.conteneur);
+			this.home = $('<div style="padding:0" id="accueil"></div>').appendTo(this.contenu);
+			
+			this._create_profil();
+			this._create_menu_game();
+			this._create_tchat();
+		},
+		
+		_create_column_left: function () {
+			
+			var left = $('<div id="left"></div>').appendTo(this.element);
+			
+			var div = $('<div class="infos"></div>').appendTo(left);
+			
+			this.clock = $('<div class="clock"></div>').appendTo(div);
+			
+			this.connected = $('<div class="connected"></div>').appendTo(div);
+			
+			$('<a class="trophy" href="#"></a>').appendTo(left).click(function () {
+				
+				if (this.trophy && this.trophy.ready) {
+					this._trophy();
+				}
+				
+				return false;
+				
+			}.bind(this));
+			
+			var classes = (this.options.sound) ? 'sound' : 'no-sound';
+			
+			this.bt_sound = $('<a id="sound" class="' + classes + '" href="#"></a>').appendTo(left).click(function () {
+				
+				this._sound();
+				
+				return false;
+				
+			}.bind(this));
+		},
+		
+		_create_column_right: function () {
+			
+			var right = $('<div id="right"></div>').appendTo(this.element);
+			
+			$('<a href="#" class="dealspot dealspot-' + lang + '"></div>').appendTo(right).click(function () {
+				
+				this._sponsorpay();
+				
+				return false;
+				
+			}.bind(this));
+			
+			var free = $('<div class="free"></div>').appendTo(right),
+				time = $('<div class="time"></div>').appendTo(free);
+			
+			this.free_h = $('<span class="hours"></span>').appendTo(time);
+			$('<span class="sep-1">:</span>').appendTo(time);
+			this.free_m = $('<span class="minutes"></span>').appendTo(time);
+			$('<span class="sep-2">:</span>').appendTo(time);
+			this.free_s = $('<span class="secondes"></span>').appendTo(time);
+			
+			if (this.options.send_invite.nb < 30) {
+			
+				this.options.send_invite.bt = $('<a class="invite invite-' + lang + '" href="#"></a>').appendTo(right).click(function () {
+				
+					if (all_friends) {
+						this._invite_friends();
+					}
+					
+					return false;
+					
+				}.bind(this));
+			}
+			
+			this.conteneur = $('<div id="conteneur"></div>').appendTo(this.element);
+		},
+		
+		_create_menu: function () {
+			
+			var menu = $('<div id="menu"></div>').appendTo(this.conteneur);
+			
+			var token = $('<a class="token" href="#"></a>').appendTo(menu).click(function () {
+				
+				this._shop();
+				
+				return false;
+				
+			}.bind(this));
+			
+			$('<span class="plus"></span>').appendTo(token);
+			$('<span class="ico"></span>').appendTo(token);
+			
+			this.options.tokens = $('<span class="text"></span>').appendTo(token);
+			
+			var ul = $('<ul></ul>').appendTo(menu);
+			var li = $('<li></li>').appendTo(ul);
+			
+			$('<a href="#">' + $.options.lang[lang].home + '</a>').appendTo(li).click(function () {
+				
+				if (this.menu.accueil) {
+					
+					this.socket.emit('Quit');
+					
+					$.start();
+				}
+				
+				return false;
+				
+			}.bind(this));
+			
+			var li = $('<li></li>').appendTo(ul);
+			
+			$('<a href="#">' + $.options.lang[lang].play + '</a>').appendTo(li).click(function () {
+				
+				if (this.menu.jouer) {
+					
+					this._init();
+				}
+				
+				return false;
+				
+			}.bind(this));
+			
+			var li = $('<li></li>').appendTo(ul);
+			
+			this.ranking = $('<a href="#">' + $.options.lang[lang].ranking + '</a>').appendTo(li).click(function () {
+				
+				if (this.menu.classement) {
+					
+					this.socket.emit('Quit');
+					
+					this._open_classement(0, true);
+				}
+				
+				return false;
+				
+			}.bind(this));
+			
+			var li = $('<li></li>').appendTo(ul);
+			
+			$('<a href="#">' + $.options.lang[lang].invite + '</a>').appendTo(li).click(function () {
+			
+				if (all_friends) {
+					
+					this._invite_friends();
+				}
+				
+				return false;
+				
+			}.bind(this));
+			
+			if (lang == 'ru') {
+				
+				$('#menu ul li a').css('padding', '0 5px');
+			}
+		},
+		
+		_create_profil: function () {
+			
+			var profil = $('<div class="profil"></div>').appendTo(this.home);
+			var right = $('<div class="right"></div>').appendTo(profil);
+			
+			var image = $('<div class="left photo"></div>').appendTo(profil);
+			$('<img src="https://graph.facebook.com/' + this.uid + '/picture">').appendTo(image);
+			var name = $('<div style="padding-bottom:5px"></div>').appendTo(profil);
+			
+			$('<a href="#">' + this.name + '</a>').appendTo(name).click(function () {
+				
+				this._open_profil(this.uid, this.name);
+				
+			}.bind(this));
+			
+			var div = $('<div></div>').appendTo(profil);
+			var points = $('<span>' + $.options.lang[lang].points + ': </span>').appendTo(div);
+			this.options.points = $('<span></span>').appendTo(div);
+			
+			var div = $('<div></div>').appendTo(profil);
+			var classement = $('<span>' + $.options.lang[lang].ranking + ': </span>').appendTo(div);
+			this.options.classement = $('<span></span>').appendTo(div);
+			
+			$('<button>' + $.options.lang[lang].create_game +'</button>').appendTo(right).click(function () {
+				
+				if (this.tokens && this.tokens.ready) {
+					
+					if (this.tokens.data >= 1) {
+									
+						this._create_game();
+					}
+					else {
+						
+						this._no_tokens();
+					}
+				}
+				
+			}.bind(this));
+			
+			$('<div class="clear"></div>').appendTo(profil);
+		},
+		
+		_create_menu_game: function () {
+			
+			var menu = $('<ul class="menu_game"></ul>').appendTo(this.home);
+			
+			this.games = $('<li></li>').appendTo(menu);
+			
+			this.defis = $('<li></li>').appendTo(menu);
+			
+			this.challengers = $('<li></li>').appendTo(menu);
+			
+			this.friends = $('<li></li>').appendTo(menu);
+			
+			var games = $('<div id="games"></div>').appendTo(this.home);
+			this.list_games = $('<table class="games"></table>').appendTo(games);
+		},
+		
+		_create_tchat: function () {
+			
+			var tchat = $('<div id="tchat"></div>').appendTo(this.home);
+			
+			this.tchat = $('<div class="tchat"></div>').appendTo(tchat);
+			
+			$('<textarea></textarea>').appendTo(tchat).keydown(function(e) {
+				
+				if (e.which != 13 || !e.target.value) {
+					return;
+				}
+				
+				if (e.target.oldValue && e.target.oldValue == e.target.value) {
+					return false;
+				}
+						
+				this.socket.emit('EnvoyerMessage', e.target.value);
+				
+				e.target.oldValue = e.target.value;
+				e.target.value = null;
+					
+				return false;
+				
+			}.bind(this));
+			
+			if (this.socket.open) {
+			
+				this.socket.emit('InitUser');
+			}
+			
+			if (this.options.trophy) {
+				
+				for (var i in this.options.trophy) {
+					
+					delete this.options.trophy[i];
+					
+					this._win_trophy(i);
+				}
+			}
 		},
 		
 		_clock: function () {
@@ -521,7 +546,7 @@
 					
 					if (this.checked.data) {
 						
-						var data = "";
+						var data = '';
 						
 						this.options.send_invite.nb += this.checked.nb;
 						
@@ -825,27 +850,27 @@
 					1: {
 						token:2000,
 						base:500,
-						price: this._convert_price(response, 10),
+						price: $._convert_price(response, 10),
 					},
 					2: {
 						token:1000,
 						base:300,
-						price: this._convert_price(response, 6)
+						price: $._convert_price(response, 6)
 					},
 					3: {
 						token:500,
 						base:200,
-						price: this._convert_price(response, 4)
+						price: $._convert_price(response, 4)
 					},
 					4: {
 						token:200,
 						base:100,
-						price: this._convert_price(response, 2)
+						price: $._convert_price(response, 2)
 					},
 					5: {
 						token:75,
 						base:50,
-						price: this._convert_price(response, 1)
+						price: $._convert_price(response, 1)
 					}				
 				};
 				
@@ -892,69 +917,6 @@
 					token: token.token, 
 					signed_request:data.signed_request
 				});
-			}
-		},
-		
-		_convert_price: function (data, price) {
-			
-			var currency = this._currency(data.currency.user_currency),
-				rate = data.currency.usd_exchange_inverse;
-
-			var localPrice = Math.round((price * rate)*100)/100,
-				localPrice = String(localPrice).split(".");
-			
-			var minorUnits = localPrice[1] ? localPrice[1].substr(0, 2) : '',
-				majorUnits = localPrice[0] || "0",
-				separator = (1.1).toLocaleString()[1];
-
-			var displayPrice = currency + ' ' + String(majorUnits) +
-				(minorUnits ? separator + minorUnits : '') + ' ' + data.currency.user_currency;
-			
-			return displayPrice;
-		},
-		
-		_currency: function (currency) {
-			
-			switch(currency){
-				case 'BOB': return 'Bs';
-				case 'BRL': return 'R$';
-				case 'GBP': return '£';
-				case 'CAD': return 'C$';
-				case 'CZK': return 'Kc';
-				case 'DKK': return 'kr';
-				case 'EUR': return '€';
-				case 'GTQ': return 'Q';
-				case 'HNL': return 'L';
-				case 'HKD': return 'HK$';
-				case 'HUF': return 'Ft';
-				case 'ISK': return 'kr';
-				case 'INR': return 'Rs.';
-				case 'IDR': return 'Rp';
-				case 'ILS': return '₪';
-				case 'JPY': return '¥';
-				case 'KRW': return 'W';
-				case 'MYR': return 'RM';
-				case 'NIO': return 'C$';
-				case 'NOK': return 'kr';
-				case 'PEN': return 'S/.';
-				case 'PHP': return 'P';
-				case 'PLN': return 'zł';
-				case 'QAR': return 'ر.ق';
-				case 'RON': return 'L';
-				case 'RUB': return 'руб';
-				case 'SAR': return 'ر.س';
-				case 'SGD': return 'S$';
-				case 'ZAR': return 'R';
-				case 'SEK': return 'kr';
-				case 'CHF': return 'CHF';
-				case 'TWD': return 'NT$';
-				case 'THB': return 'B';
-				case 'TRY': return 'YTL';
-				case 'AED': return 'د.إ';
-				case 'UYU': return 'UYU';
-				case 'VEF': return 'VEF';
-				case 'VND': return '₫';
-				default:return '$';
 			}
 		},
 		
@@ -1005,7 +967,7 @@
 			$('<iframe frameborder="0" marginwidth="0" marginheight="0" scrolling="auto" width="600" height="600" src="https://offers.tokenads.com/show?client_id=' + this.uid + '&app_id=4561&dpl=top&width=600&fixed_height=600"></iframe>').appendTo(sponsorpay);
 		},
 		
-		_creer_partie: function (uid) {
+		_create_game: function (uid) {
 			
 			var fade = $('#fade').css('display', 'block');
 			var fenetre = $('<div class="fenetre" style="height:200px"></div>').appendTo(this.contenu);
@@ -1108,7 +1070,7 @@
 						
 					if ($._in_array(_time , array_time) && $._in_array(_color , array_color) && $._in_array(_points_min , array_points_min) && $._in_array(_points_max , array_points_max)) {
 						
-						this.socket.emit('CreerPartie', { 
+						this.socket.emit('CreateGame', { 
 							color: _color, 
 							time: _time, 
 							points_min: _points_min, 
@@ -1124,37 +1086,38 @@
 		},
 		
 		_change_menu_game: function (menu, menu_game) {
-		
+			
+			this.socket.emit('updateRoom', menu_game);
 			this.menu_game = menu_game;
 			$('ul.menu_game li a').removeClass('selected').addClass('normal');
 			$(menu).removeClass('normal').addClass('selected');
 		},
 		
-		_parties: function (data) {
+		_games: function (data) {
 			
 			var classes = 'normal',
-				nbParties = 0;
+				nbGames = 0;
 			
-			if (this.menu_game == 'parties') {
-				this._lister(data.parties, 'parties');
+			if (this.menu_game == 'games') {
+				this._lister(data.games, 'games');
 				classes = 'selected';
 			}
 			
-			$(this.parties).empty();
+			$(this.games).empty();
 			
-			for (var uid in data.parties) {
+			for (var uid in data.games) {
 				
-				var partie = data.parties[uid];
+				var game = data.games[uid];
 				
-				if (this.uid == uid || (partie.points_min <= this.points && (partie.points_max == 0 || partie.points_max >= this.points))) {
+				if (this.uid == uid || (game.points_min <= this.points && (game.points_max == 0 || game.points_max >= this.points))) {
 					
-					nbParties++;
+					nbGames++;
 				}
 			}
 			
-			$('<a class="' + classes + '" href="#">' + nbParties + ' ' + $.options.lang[lang].quick_game + '</a>').appendTo(this.parties).click(function (e) {
-				this._change_menu_game(e.target, "parties");
-				this._lister(data.parties, "parties");
+			$('<a class="' + classes + '" href="#">' + nbGames + ' ' + $.options.lang[lang].quick_game + '</a>').appendTo(this.games).click(function (e) {
+				this._change_menu_game(e.target, 'games');
+				this._lister(data.games, 'games');
 				return false;
 			}.bind(this));
 		},
@@ -1183,16 +1146,16 @@
 			}.bind(this));
 		},
 		
-		_nb_connected: function (data) {
+		_connected: function (data) {
 			
-			$(this.nb_connect).empty().text(data + ' ' + $.options.lang[lang].connected);
+			$(this.connected).empty().text(data + ' ' + $.options.lang[lang].connected);
 			
-			if(lang == 'ru') {
-				$(this.nb_connect).css('font-size', '0.8em');
+			if (lang == 'ru') {
+				$(this.connected).css('font-size', '0.8em');
 			}
 		},
 		
-		_connected: function(data) {
+		_challengers: function(data) {
 			
 			var classes = 'normal';
 			
@@ -1205,7 +1168,7 @@
 			
 			if (this.menu_game == 'connected') {
 				
-				$(this.list_parties).empty().html();
+				$(this.list_games).empty().html();
 				classes = 'selected';
 			}
 			
@@ -1227,8 +1190,8 @@
 				}
 			}
 			
-			$(this.connected).empty();
-			$('<a class="' + classes + ' connected" href="#">' + data.nb + ' ' + $.options.lang[lang].challengers + '</a>').appendTo(this.connected).click(function (e) {
+			$(this.challengers).empty();
+			$('<a class="' + classes + ' connected" href="#">' + data.nb + ' ' + $.options.lang[lang].challengers + '</a>').appendTo(this.challengers).click(function (e) {
 				this._change_menu_game(e.target, 'connected');
 				this._lister(data.user, 'connected');
 				return false;
@@ -1274,7 +1237,7 @@
 		
 		_lister: function (data, type) {
 			
-			$(this.list_parties).empty().html();
+			$(this.list_games).empty().html();
 			
 			var i = 0;
 			
@@ -1293,7 +1256,7 @@
 				return;
 			}
 			
-			if (type == 'parties' && this.uid != uid) {
+			if (type == 'games' && this.uid != uid) {
 					
 				if (data.points_min > this.points) {
 					return;
@@ -1304,11 +1267,11 @@
 				}
 			}
 			
-			if ($('.parties tr:last').attr('class') == 'bg-gris') {
-				var tr = $('<tr class="bg-brun"></tr>').appendTo(this.list_parties);
+			if ($('.games tr:last').attr('class') == 'bg-gris') {
+				var tr = $('<tr class="bg-brun"></tr>').appendTo(this.list_games);
 			}
 			else {
-				var tr = $('<tr class="bg-gris"></tr>').appendTo(this.list_parties);
+				var tr = $('<tr class="bg-gris"></tr>').appendTo(this.list_games);
 			}
 			
 			$('<td class="images"><img src="https://graph.facebook.com/' + uid + '/picture"/></td>').appendTo(tr).click(function () {
@@ -1326,7 +1289,7 @@
 			
 			switch (type) {
 				
-				case 'parties' :
+				case 'games' :
 					
 					$('<td class="color">' + $.options.lang[lang][data.color] + '</td>').appendTo(tr);
 					
@@ -1341,7 +1304,7 @@
 							if (this.tokens && this.tokens.ready) {
 								
 								if (this.tokens.data >= 1) {
-									this.socket.emit('NouvellePartie', uid);
+									this.socket.emit('NewGame', uid);
 								}
 								else {
 									this._no_tokens();
@@ -1352,7 +1315,7 @@
 					else {
 						
 						$('<button>' + $.options.lang[lang].cancel + '</button>').appendTo(play).click(function () {
-							this.socket.emit('AnnulerPartie');
+							this.socket.emit('CancelGame');
 						}.bind(this));
 					}
 					
@@ -1375,7 +1338,7 @@
 								
 								if(this.tokens.data >= 1) {
 									
-									this.socket.emit('NouvellePartieDefi', uid);
+									this.socket.emit('NewGameDefi', uid);
 								}
 								else {
 										
@@ -1410,7 +1373,7 @@
 								if(this.tokens && this.tokens.ready) {
 									
 									if(this.tokens.data >= 1) {
-										this._creer_partie(uid);
+										this._create_game(uid);
 									}
 									else {
 										this._no_tokens();
@@ -1567,7 +1530,7 @@
 			}
 		},
 		
-		_nouvelle_partie: function (jeu) {
+		_new_game: function (jeu) {
 
 			this._50_coup = 0;
 			
@@ -1708,12 +1671,12 @@
 				}
 				
 				if (e.target.oldValue && e.target.oldValue == e.target.value) {
-					return;
+					return false;
 				}
 				
 				this._nouveau_message_jeu(this.name, e.target.value);
 						
-				this.socket.socket.emit('EnvoyerMessageJeu', { 
+				this.socket.emit('EnvoyerMessageJeu', { 
 					id: _id_jeu, 
 					message: e.target.value
 				});
@@ -1757,7 +1720,7 @@
 			$('<div class="clear"></div>').appendTo(div);
 		},
 		
-		_charger_partie: function(data) {
+		_load_game: function(data) {
 			
 			if (!this.jeu) {
 				return;
@@ -2117,7 +2080,7 @@
 					this.jeu[this.jeu.tour].time += 30;
 				}
 				
-				this.socket.emit('ChargerPartie', {
+				this.socket.emit('loadGame', {
 					id: this.jeu.id,
 					mouvement: mouvement,
 					depart: depart,

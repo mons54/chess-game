@@ -4,14 +4,14 @@ module.exports = function () {
 	
 	var connections = {};
 	
-	var parties_proposition = {
+	var created_game = {
 		nb:0,
-		parties: {}
+		games: {}
 	};
 	
-	var parties = {
+	var started_games = {
 		id : 1,
-		jeu: []
+		games: []
 	};
 	
 	var messages = {
@@ -27,7 +27,7 @@ module.exports = function () {
 	
 	io.sockets.on('connection', function (socket) {
 		
-		socket.on('create', function(data) {
+		socket.on('create', function (data) {
 			
 			if (!data.uid || !data.accessToken) {
 				socket.disconnect();
@@ -82,26 +82,30 @@ module.exports = function () {
 			});
 		});
 		
-		socket.on('InitUser', function() {
+		socket.on('updateRoom', function (data) {
+			socket.join(data);
+		});
+		
+		socket.on('InitUser', function () {
 			initUser();
 		});
 		
-		socket.on('AnnulerPartie', function() {
+		socket.on('CancelGame', function () {
 			if (checkSocketUid()) {
-				supprimerPartie(socket.uid);
+				deleteGame(socket.uid);
 			}
 		});
 		
-		socket.on('CreerPartie', function(data) {
+		socket.on('CreateGame', function (data) {
 			
 			if (checkSocketUid()) {
 				
-				if(parties_proposition.parties[socket.uid]) {
-					delete parties_proposition.parties[socket.uid];
-					parties_proposition.nb --;
+				if (created_game.games[socket.uid]) {
+					delete created_game.games[socket.uid];
+					created_game.nb --;
 				}
 				
-				parties_proposition.parties[socket.uid] = {
+				created_game.games[socket.uid] = {
 					name: socket.name,
 					points: socket.points,
 					classement: socket.classement,
@@ -111,13 +115,13 @@ module.exports = function () {
 					points_max: data.points_max,
 				};
 				
-				parties_proposition.nb ++;
+				created_game.nb ++;
 				
-				listerParties();
+				listGames();
 			}
 		});
 		
-		socket.on('Defis', function(data) {
+		socket.on('Defis', function (data) {
 			
 			if (checkSocketUid() && checkConnection(data.uid)) {
 			
@@ -166,7 +170,7 @@ module.exports = function () {
 			}
 		});
 		
-		socket.on('AnnulerDefi', function(uid) {
+		socket.on('AnnulerDefi', function (uid) {
 			
 			if(checkSocketUid() && checkConnection(uid) && io.sockets.socket(connections[uid]).defis && io.sockets.socket(connections[uid]).defis.defis && io.sockets.socket(connections[uid]).defis.defis[socket.uid]) {
 				delete io.sockets.socket(connections[uid]).defis.defis[socket.uid];
@@ -181,24 +185,24 @@ module.exports = function () {
 			}
 		});
 		
-		socket.on('NouvellePartie', function(uid) {
+		socket.on('NewGame', function (uid) {
 			
 			if (!socket.jeu && checkSocketUid() && socket.uid != uid) {
 			
-				if(parties_proposition.parties[uid] && checkConnection(uid) && !io.sockets.socket(connections[uid]).jeu) {
+				if (created_game.games[uid] && checkConnection(uid) && !io.sockets.socket(connections[uid]).jeu) {
 					
-					var partie = parties_proposition.parties[uid];
+					var game = created_game.games[uid];
 					
-					demarrerPartie(uid, partie);
+					startGame(uid, game);
 				}
 				else {
 					
-					supprimerPartie(uid);
+					deleteGame(uid);
 				}
 			}
 		});
 		
-		socket.on('NouvellePartieDefi', function(uid) {
+		socket.on('NewGameDefi', function (uid) {
 			
 			if (!socket.jeu && checkSocketUid() && socket.uid != uid) {
 				
@@ -208,8 +212,9 @@ module.exports = function () {
 						
 						if(io.sockets.socket(connections[uid]).defis && io.sockets.socket(connections[uid]).defis.defis && io.sockets.socket(connections[uid]).defis.defis[socket.uid]) {
 					
-							var partie = io.sockets.socket(connections[uid]).defis.defis[socket.uid];
-							demarrerPartie(uid, partie);
+							var game = io.sockets.socket(connections[uid]).defis.defis[socket.uid];
+							
+							startGame(uid, game);
 						}
 					}
 					else {
@@ -225,17 +230,17 @@ module.exports = function () {
 		});
 		
 		
-		socket.on('ChargerPartie', function(data) {
+		socket.on('loadGame', function (data) {
 			
-			if (checkSocketUid() && parties.jeu[data.id]) {
+			if (checkSocketUid() && started_games.games[data.id]) {
 				
 				var uid = 0;
 				
-				if(parties.jeu[data.id].blanc == socket.uid) {
-					uid = parties.jeu[data.id].noir;
+				if (started_games.games[data.id].blanc == socket.uid) {
+					uid = started_games.games[data.id].noir;
 				}
-				else if(parties.jeu[data.id].noir == socket.uid) {
-					uid = parties.jeu[data.id].blanc;
+				else if (started_games.games[data.id].noir == socket.uid) {
+					uid = started_games.games[data.id].blanc;
 				}
 				
 				if(uid) {
@@ -255,55 +260,55 @@ module.exports = function () {
 							}
 						};
 							
-						io.sockets.socket(connections[uid]).emit('ChargerPartie', _data);
+						io.sockets.socket(connections[uid]).emit('loadGame', _data);
 					}
 				}
 			}
 		});
 		
-		socket.on('ProposerNul', function(data) {
+		socket.on('ProposerNul', function (data) {
 			
-			if (checkSocketUid() && parties.jeu[data.id]) {
+			if (checkSocketUid() && started_games.games[data.id]) {
 				
 				var uid = 0;
 						
-				if(parties.jeu[data.id].blanc == socket.uid) {
-					uid = parties.jeu[data.id].noir;
+				if (started_games.games[data.id].blanc == socket.uid) {
+					uid = started_games.games[data.id].noir;
 				}
-				else if(parties.jeu[data.id].noir == socket.uid) {
-					uid = parties.jeu[data.id].blanc;
+				else if (started_games.games[data.id].noir == socket.uid) {
+					uid = started_games.games[data.id].blanc;
 				}
 				
-				if(uid && checkConnection(uid)) {
+				if (uid && checkConnection(uid)) {
 					io.sockets.socket(connections[uid]).emit('ProposerNul', {uid:socket.uid, name:socket.name});
 				}
 			}
 		});
 		
-		socket.on('JeuTerminer', function(data) {
+		socket.on('JeuTerminer', function (data) {
 			
 			if (checkSocketUid()) {
 				
 				var nom = data.nom ? data.nom : "";
 				var vainqueur = data.vainqueur ? data.vainqueur : 0;
 				
-				if(parties.jeu[data.id] && data.blanc > 0 && data.noir > 0) {
+				if (started_games.games[data.id] && data.blanc > 0 && data.noir > 0) {
 					
 					var uid = 0;
 					
-					if(parties.jeu[data.id].blanc == socket.uid) {
-						uid = parties.jeu[data.id].noir;
+					if (started_games.games[data.id].blanc == socket.uid) {
+						uid = started_games.games[data.id].noir;
 					}
-					else if(parties.jeu[data.id].noir == socket.uid) {
-						uid = parties.jeu[data.id].blanc;
+					else if (started_games.games[data.id].noir == socket.uid) {
+						uid = started_games.games[data.id].blanc;
 					}
 					
 					if(uid) {
 				
-						delete parties.jeu[data.id];
+						delete started_games.games[data.id];
 						socket.jeu = false;
 						
-						resultatPartie(vainqueur, nom, data.blanc, data.noir);
+						resultGame(vainqueur, nom, data.blanc, data.noir);
 						
 						if (checkConnection(uid)) {
 							io.sockets.socket(connections[uid]).jeu = false;
@@ -314,7 +319,7 @@ module.exports = function () {
 			}
 		});
 		
-		socket.on('Profil', function(uid, name) {
+		socket.on('Profil', function (uid, name) {
 			
 			if (checkSocketUid() && uid > 0) {
 			
@@ -367,7 +372,7 @@ module.exports = function () {
 			}
 		});
 		
-		socket.on('EnvoyerMessage', function(message) {
+		socket.on('EnvoyerMessage', function (message) {
 			
 			if(autoriseTchat()) {
 				
@@ -391,7 +396,7 @@ module.exports = function () {
 			}
 		});
 		
-		socket.on('SupprimerMessage', function(id) {
+		socket.on('SupprimerMessage', function (id) {
 			
 			if (!messages.data[id] || !messages.data[id].uid) {
 				return;
@@ -402,26 +407,30 @@ module.exports = function () {
 			}
 		});
 		
-		socket.on('EnvoyerMessageJeu', function(data) {
+		socket.on('EnvoyerMessageJeu', function (data) {
 			
-			if (checkSocketUid() && socket.name && parties.jeu[data.id]) {
+			if (checkSocketUid() && socket.name && started_games.games[data.id]) {
 				
 				var uid = 0;
 						
-				if(parties.jeu[data.id].blanc == socket.uid) {
-					uid = parties.jeu[data.id].noir;
+				if (started_games.games[data.id].blanc == socket.uid) {
+					uid = started_games.games[data.id].noir;
 				}
-				else if(parties.jeu[data.id].noir == socket.uid) {
-					uid = parties.jeu[data.id].blanc;
+				else if (started_games.games[data.id].noir == socket.uid) {
+					uid = started_games.games[data.id].blanc;
 				}
 				
-				if(uid && checkConnection(uid)) {
-					io.sockets.socket(connections[uid]).emit('NouveauMessageJeu', {uid:socket.uid, name:socket.name, message:data.message.substr(0, 500)});
+				if (uid && checkConnection(uid)) {
+					io.sockets.socket(connections[uid]).emit('NouveauMessageJeu', {
+						uid: socket.uid, 
+						name: socket.name, 
+						message: data.message.substr(0, 500)
+					});
 				}
 			}
 		});
 		
-		socket.on('Classement', function(data) {
+		socket.on('Classement', function (data) {
 			
 			if (checkSocketUid()) {
 			
@@ -487,9 +496,9 @@ module.exports = function () {
 			if (checkSocketUid()) {
 			
 				socket.leave('home');
-				connected();
+				challengers();
 				
-				supprimerPartie(socket.uid);
+				deleteGame(socket.uid);
 				
 				annulerAllDefi(socket);
 			}
@@ -544,13 +553,13 @@ module.exports = function () {
 				connected();
 			}
 		
-			if (socket.uid && parties_proposition.parties[socket.uid]) {
-				delete parties_proposition.parties[socket.uid];
-				parties_proposition.nb--;
-				listerParties();
+			if (socket.uid && created_game.games[socket.uid]) {
+				delete created_game.games[socket.uid];
+				created_game.nb--;
+				listGames();
 			}
 			
-			if (socket.jeu && parties.jeu[socket.jeu]) {
+			if (socket.jeu && started_games.games[socket.jeu]) {
 				disconnectJeu();
 			}
 				
@@ -559,26 +568,26 @@ module.exports = function () {
 		
 		function disconnectJeu() {
 			
-			var partie = parties.jeu[socket.jeu];
-			var uid = 0;
+			var game = started_games.games[socket.jeu],
+				uid = 0;
 				
-			if(partie.blanc == socket.uid) {
-				uid = partie.noir;
+			if (game.blanc == socket.uid) {
+				uid = game.noir;
 				var vainqueur = 2;
 			}
-			else if(partie.noir == socket.uid) {
-				uid = partie.blanc;
+			else if (game.noir == socket.uid) {
+				uid = game.blanc;
 				var vainqueur = 1;
 			}
 			
 			if(uid) {
 			
-				var blanc = partie.blanc;
-				var noir = partie.noir;
-				var nom = "resign";
+				var blanc = game.blanc;
+				var noir = game.noir;
+				var nom = 'resign';
 		
-				delete parties.jeu[socket.jeu];
-				resultatPartie(vainqueur, nom, blanc, noir);
+				delete started_games.games[socket.jeu];
+				resultGame(vainqueur, nom, blanc, noir);
 				
 				if (checkConnection(uid)) {
 					io.sockets.socket(connections[uid]).jeu = false;
@@ -716,7 +725,7 @@ module.exports = function () {
 									trophy: trophy 
 								});
 								
-								socket.emit('ListerParties', parties_proposition);
+								socket.emit('ListGames', created_game);
 							});
 						});
 					});
@@ -726,23 +735,28 @@ module.exports = function () {
 			}
 		}
 		
-		function connected() {
+		function connected () {
 			
-			var connected = {
+			io.sockets.emit('Connected', io.sockets.clients().length);
+			challengers();
+		}
+		
+		function challengers () {
+			
+			var challengers = {
 				user: {},
 				nb: io.sockets.clients('home').length,	
 			};
 			
 			io.sockets.clients('home').forEach(function (data) {
-				connected.user[data.uid] = {
+				challengers.user[data.uid] = {
 					name : data.name,
 					classement : data.classement,
 					points : data.points	
 				};
 			});
 			
-			sendHome('Connected', connected);
-			io.sockets.emit('NbConnected', io.sockets.clients().length);
+			sendHome('Challengers', challengers);
 		}
 		
 		function annulerAllDefi (_socket) {
@@ -758,34 +772,34 @@ module.exports = function () {
 			}
 		}
 		
-		function demarrerPartie(uid, partie) {
+		function startGame (uid, game) {
 		
-			var id = parties.id ++;
+			var id = started_games.id ++;
 			
 			socket.jeu = id;
 			io.sockets.socket(connections[uid]).jeu = id;
 			
-			if(parties_proposition.parties[uid]) {
-				delete parties_proposition.parties[uid];
-				parties_proposition.nb --;
+			if (created_game.games[uid]) {
+				delete created_game.games[uid];
+				created_game.nb --;
 			}
 			
-			if(parties_proposition.parties[socket.uid]) {
-				delete parties_proposition.parties[socket.uid];
-				parties_proposition.nb --;
+			if (created_game.games[socket.uid]) {
+				delete created_game.games[socket.uid];
+				created_game.nb --;
 			}
 			
-			listerParties();
+			listGames();
 			
 			socket.leave('home');
 			io.sockets.socket(connections[uid]).leave('home');
 			
-			connected();
+			challengers();
 			
 			annulerAllDefi(socket);
 			annulerAllDefi(io.sockets.socket(connections[uid]));
 			
-			if(partie.color == 'blanc'){
+			if (game.color == 'blanc'){
 						
 				var blanc = {
 					uid: uid,
@@ -809,40 +823,39 @@ module.exports = function () {
 				};
 			}
 			
-			var time = partie.time;
+			var time = game.time;
 			
-			parties.jeu[id] = {
+			started_games.games[id] = {
 				blanc:blanc.uid,
 				noir:noir.uid
 			};
 			
 			var jeu = newJeu(id, blanc, noir, time);
 			
-			socket.emit('NouvellePartie', jeu);
-			io.sockets.socket(connections[uid]).emit('NouvellePartie', jeu);
+			socket.emit('NewGame', jeu);
+			io.sockets.socket(connections[uid]).emit('NewGame', jeu);
 		}
 		
-		function supprimerPartie(uid) {
+		function deleteGame (uid) {
 		
-			if(parties_proposition.parties[uid]) {
-				
-				delete parties_proposition.parties[uid];
-				parties_proposition.nb --;
-				listerParties();
+			if (created_game.games[uid]) {
+				delete created_game.games[uid];
+				created_game.nb --;
+				listGames();
 			}
 		}
 		
-		function listerParties() {
+		function listGames () {
 		
-			sendHome('ListerParties', parties_proposition);
+			sendHome('ListGames', created_game);
 		}
 		
-		function listerMessages() {
+		function listerMessages () {
 		
 			sendHome('ListerMessages', messages.data);
 		}
 		
-		function resultatPartie(vainqueur, nom, blanc, noir){
+		function resultGame (vainqueur, nom, blanc, noir){
 		
 			users.findOne({ uid: blanc }, function (err, data) {
 					
@@ -857,7 +870,7 @@ module.exports = function () {
 				
 				tokens_blanc--;
 				
-				if(tokens_blanc < 0) {
+				if (tokens_blanc < 0) {
 					tokens_blanc = 0;
 				}
 			
@@ -884,7 +897,7 @@ module.exports = function () {
 							return;
 						}
 						
-						var nb_partie_blanc = nb;
+						var nb_game_white = nb;
 						
 						games.count({ $or : [ { blanc: noir }, { noir: noir } ] }, function (err, nb) {
 							
@@ -892,9 +905,9 @@ module.exports = function () {
 								return;
 							}
 							
-							var nb_partie_noir = nb;
+							var nb_game_black = nb;
 							
-							if(vainqueur == 1) {
+							if (vainqueur == 1) {
 								
 								var resultat_blanc = 1,
 									resultat_noir = 0;
@@ -910,7 +923,7 @@ module.exports = function () {
 								cons_game_blanc++;
 								cons_game_noir--;
 							}
-							else if(vainqueur == 2) {
+							else if (vainqueur == 2) {
 								
 								var resultat_blanc = 0,
 									resultat_noir = 1;
@@ -935,24 +948,24 @@ module.exports = function () {
 								cons_game_noir = 0;
 							}
 						
-							var gain_blanc = gain(points_blanc, points_noir, resultat_blanc, nb_partie_blanc),
-								gain_noir = gain(points_noir, points_blanc, resultat_noir, nb_partie_noir);
+							var gain_blanc = gain(points_blanc, points_noir, resultat_blanc, nb_game_white),
+								gain_noir = gain(points_noir, points_blanc, resultat_noir, nb_game_black);
 							
-							var partie = new games({ resultat : vainqueur });
-							partie.blanc = blanc;
-							partie.noir = noir;
-							partie.time = new Date().getTime() / 1000;
+							var game = new games({ resultat : vainqueur });
+							game.blanc = blanc;
+							game.noir = noir;
+							game.time = new Date().getTime() / 1000;
 
-							partie.save();
+							game.save();
 							
 							points_blanc += gain_blanc;
 							points_noir += gain_noir;
 							
 							users.update({uid: blanc }, { $set: {points: points_blanc, tokens:tokens_blanc, cons_game: cons_game_blanc, actif:1} }, function (err) { 
 							
-								nb_partie_blanc++;
+								nb_game_white++;
 								
-								setBadgesGame(blanc, nb_partie_blanc);
+								setBadgesGame(blanc, nb_game_white);
 								
 								if(resultat_blanc == 1) {
 									setBadgesWin(blanc);
@@ -965,8 +978,8 @@ module.exports = function () {
 							
 							users.update({uid: noir }, { $set: {points: points_noir, tokens:tokens_noir, cons_game: cons_game_noir, actif:1} }, function (err) { 
 								
-								nb_partie_noir++;
-								setBadgesGame(noir, nb_partie_noir);
+								nb_game_black++;
+								setBadgesGame(noir, nb_game_black);
 									
 								if(resultat_noir == 1) {
 									setBadgesWin(noir);
@@ -1072,9 +1085,9 @@ module.exports = function () {
 			});
 		}
 		
-		function setBadgesGame(uid, parties) {
+		function setBadgesGame(uid, games) {
 			
-			switch(parties) {
+			switch(games) {
 					
 				case 1: setTrophy(uid, 1); break;
 				case 100: setTrophy(uid, 2); break;
@@ -1110,36 +1123,34 @@ module.exports = function () {
 				
 				if(err) return;
 				
-				var parties = nb;
+				var game = nb;
 				
 				games.count({ "time": { "$gt": time }, "noir":uid }, function (err, nb) {
 				
 					if(err) return;
 					
-					parties += nb;
+					game += nb;
 					
-					if (parties >= 100) {
+					if (game >= 100) {
 						
 						setTrophy(uid, 15);
-					
-					} else if(parties >= 50) {
+					} 
+					else if (game >= 50) {
 						
 						setTrophy(uid, 14);
-					
-					} else if(parties >= 25) {
+					} 
+					else if(game >= 25) {
 						
 						setTrophy(uid, 13);
-						
-					} else if(parties >= 10) {
+					} 
+					else if(game >= 10) {
 						
 						setTrophy(uid, 12);
-						
-					} else if(parties >= 5) {
+					} 
+					else if(game >= 5) {
 						
 						setTrophy(uid, 11);
-						
-					}	
-				
+					}
 				});
 			});
 		}
@@ -1175,15 +1186,16 @@ module.exports = function () {
 			});
 		}
 		
-		function gain(points_user, points_adversaire, resultat, nb_partie){
+		function gain(points_user, points_adversaire, resultat, nbGame){
 		
 			var points = points_user-points_adversaire;
-			
-			if(points > 400)
+		
+			if(points > 400) {
 				points = 400;
-			
-			else if(points < -400)
+			}
+			else if(points < -400) {
 				points = -400;
+			}
 			
 			points = points / 400;
 			points = Math.pow(10, points);
@@ -1191,14 +1203,15 @@ module.exports = function () {
 			points = 1 / points;
 			points = 1 - points;
 			
-			if(nb_partie <= 30)
+			if (nbGame <= 30) {
 				var k = 30; 
-				
-			else if(points_user < 2400)
+			}
+			else if (points_user < 2400) {
 				var k = 15;
-				
-			else
+			}
+			else {
 				var k=10;
+			}
 			
 			return Math.round(k * (resultat-points));
 		}
