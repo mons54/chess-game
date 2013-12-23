@@ -146,7 +146,7 @@
 			
 			this.socket.on('disconnect', function () {
 				
-				top.location.href=redirectUri;
+				top.location.href=host;
 			
 			}.bind(this));
 			
@@ -1129,8 +1129,8 @@
 			this.all_defis = data.defis;
 			this.nb_defis = data.nb;
 			
-			if (this.menu_game == 'connected') {
-				this._lister(this.all_connected, 'connected');
+			if (this.menu_game == 'challengers') {
+				this._lister(this.all_connected, 'challengers');
 			}
 			
 			if (this.menu_game == 'defis') {
@@ -1140,8 +1140,8 @@
 			
 			$(this.defis).empty();
 			$('<a class="'+ classes +'" href="#">' + data.nb + ' ' + $.options.lang[lang].defi + '</a>').appendTo(this.defis).click(function (e) {
-				this._change_menu_game(e.target, "defis");
-				this._lister(data.defis, "defis");
+				this._change_menu_game(e.target, 'defis');
+				this._lister(data.defis, 'defis');
 				return false;
 			}.bind(this));
 		},
@@ -1166,7 +1166,7 @@
 				user: {}
 			};
 			
-			if (this.menu_game == 'connected') {
+			if (this.menu_game == 'challengers') {
 				
 				$(this.list_games).empty().html();
 				classes = 'selected';
@@ -1178,8 +1178,8 @@
 				
 				if (uid > 0 && this.uid != uid) {
 					
-					if (this.menu_game == 'connected') {
-						this._afficher('connected', i, uid, data.user[uid]);
+					if (this.menu_game == 'challengers') {
+						this._afficher('challengers', i, uid, data.user[uid]);
 						i++;
 					}
 					
@@ -1191,9 +1191,9 @@
 			}
 			
 			$(this.challengers).empty();
-			$('<a class="' + classes + ' connected" href="#">' + data.nb + ' ' + $.options.lang[lang].challengers + '</a>').appendTo(this.challengers).click(function (e) {
-				this._change_menu_game(e.target, 'connected');
-				this._lister(data.user, 'connected');
+			$('<a class="' + classes + ' connected" href="#">' + $.options.lang[lang].challengers + '</a>').appendTo(this.challengers).click(function (e) {
+				this._change_menu_game(e.target, 'challengers');
+				this._lister(data.user, 'challengers');
 				return false;
 			}.bind(this));
 			
@@ -1243,7 +1243,7 @@
 			
 			for (var uid in data){
 				
-				if(this.uid != uid || type != 'connected') {
+				if(this.uid != uid || type != 'challengers') {
 					this._afficher(type, i, uid, data[uid]);
 					i++;
 				}
@@ -1357,7 +1357,7 @@
 					
 					break;
 					
-				case 'connected':
+				case 'challengers':
 				case 'friends':
 				
 					$('<td colspan="2"></td>').appendTo(tr);
