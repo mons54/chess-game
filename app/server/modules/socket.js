@@ -487,7 +487,7 @@ module.exports = function () {
 			if (checkSocketUid()) {
 			
 				socket.leave('home');
-				connected();
+				challengers();
 				
 				supprimerPartie(socket.uid);
 				
@@ -726,23 +726,28 @@ module.exports = function () {
 			}
 		}
 		
-		function connected() {
+		function connected () {
 			
-			var connected = {
+			io.sockets.emit('NbConnected', io.sockets.clients().length);
+			challengers();
+		}
+		
+		function challengers () {
+			
+			var challengers = {
 				user: {},
 				nb: io.sockets.clients('home').length,	
 			};
 			
 			io.sockets.clients('home').forEach(function (data) {
-				connected.user[data.uid] = {
+				challengers.user[data.uid] = {
 					name : data.name,
 					classement : data.classement,
 					points : data.points	
 				};
 			});
 			
-			sendHome('Connected', connected);
-			io.sockets.emit('NbConnected', io.sockets.clients().length);
+			sendHome('Connected', challengers);
 		}
 		
 		function annulerAllDefi (_socket) {
@@ -780,7 +785,7 @@ module.exports = function () {
 			socket.leave('home');
 			io.sockets.socket(connections[uid]).leave('home');
 			
-			connected();
+			challengers();
 			
 			annulerAllDefi(socket);
 			annulerAllDefi(io.sockets.socket(connections[uid]));
