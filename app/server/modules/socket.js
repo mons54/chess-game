@@ -541,7 +541,6 @@ module.exports = function () {
 			
 			if (socket.uid && connections[socket.uid]) {
 				delete connections[socket.uid];
-				connected();
 			}
 		
 			if (socket.uid && parties_proposition.parties[socket.uid]) {
