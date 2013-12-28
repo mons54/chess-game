@@ -1167,7 +1167,7 @@
 			}
 		},
 		
-		_challengers: function(data) {
+		_challengers: function (data) {
 			
 			var classes = 'normal';
 			
@@ -1180,25 +1180,35 @@
 			
 			if (this.menu_game == 'challengers') {
 				
-				this.last_display_home = false;
-				
 				$(this.table_content).empty().html();
 				
 				classes = 'selected';
 			}
 			
+			var sortable = [];
+			
 			for (var uid in data.user) {
+				if (uid && this.uid != uid) {
+					sortable.push({
+						uid: uid,
+						points: data.user[uid].points
+					});
+				}
+			}
+			
+			sortable.sort($._sort);
+			
+			for (var i in sortable) {
 				
-				if (uid > 0 && this.uid != uid) {
-					
-					if (this.menu_game == 'challengers') {
-						this._display_home('challengers', uid, data.user[uid]);
-					}
-					
-					if (this.friends.object[uid]) {
-						_data.nb++;
-						_data.user[uid] = data.user[uid];
-					}
+				var uid = sortable[i].uid;
+				
+				if (this.menu_game == 'challengers') {
+					this._display_home('challengers', uid, data.user[uid]);
+				}
+				
+				if (this.friends.object[uid]) {
+					_data.nb++;
+					_data.user[uid] = data.user[uid];
 				}
 			}
 			
@@ -1247,8 +1257,6 @@
 		
 		_list_home: function (data, type) {
 			
-			this.last_display_home = false;
-			
 			$(this.table_content).empty().html();
 			
 			for (var uid in data){
@@ -1276,16 +1284,7 @@
 				}
 			}
 			
-			var tr = $('<tr></tr>');
-			
-			if (!this.last_display_home || this.last_display_home > data.points) {
-				$(tr).appendTo(this.table_content);
-			}
-			else {
-				$(tr).prependTo(this.table_content);
-			}
-			
-			this.last_display_home = data.points;
+			var tr = $('<tr></tr>').appendTo(this.table_content);
 			
 			$('<td class="images"><img src="https://graph.facebook.com/' + uid + '/picture"/></td>').appendTo(tr).click(function () {
 				this._open_profil(uid, data.name);
