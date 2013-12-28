@@ -44,14 +44,14 @@
 		
 		_sort: function (a, b) {
 			
-			if (!this.sortOption) {
+			if (!$.sortOption) {
 				return 0;
 			}
 			
-			if (a[this.sortOption] > b[this.sortOption]) {
+			if (a[$.sortOption] > b[$.sortOption]) {
 				return -1;
 			}
-			else if (a[this.sortOption] < b[this.sortOption]) {
+			else if (a[$.sortOption] < b[$.sortOption]) {
 				return 1;
 			}
 			
