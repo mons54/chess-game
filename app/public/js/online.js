@@ -82,7 +82,7 @@
 			
 			this.socket.on('ListGames', function (data) {
 				
-				this._games(data);
+				this._list_games(data);
 			
 			}.bind(this));
 			
@@ -118,7 +118,7 @@
 			
 			this.socket.on('ListerMessages', function (data) {
 				
-				this._lister_messages(data);
+				this._list_messages(data);
 			
 			}.bind(this));
 			
@@ -1089,19 +1089,18 @@
 		
 		_change_menu_game: function (menu, menu_game) {
 			
-			this.socket.emit('updateRoom', menu_game);
 			this.menu_game = menu_game;
 			$('ul.menu_game li a').removeClass('selected').addClass('normal');
 			$(menu).removeClass('normal').addClass('selected');
 		},
 		
-		_games: function (data) {
+		_list_games: function (data) {
 			
 			var classes = 'normal',
 				nbGames = 0;
 			
 			if (this.menu_game == 'games') {
-				this._lister(data.games, 'games');
+				this._list_home(data.games, 'games');
 				classes = 'selected';
 			}
 			
@@ -1119,7 +1118,7 @@
 			
 			$('<a class="' + classes + '" href="#">' + nbGames + ' ' + $.options.lang[lang].quick_game + '</a>').appendTo(this.menu_games).click(function (e) {
 				this._change_menu_game(e.target, 'games');
-				this._lister(data.games, 'games');
+				this._list_home(data.games, 'games');
 				return false;
 			}.bind(this));
 		},
@@ -1132,18 +1131,18 @@
 			this.nb_defis = data.nb;
 			
 			if (this.menu_game == 'challengers') {
-				this._lister(this.all_connected, 'challengers');
+				this._list_home(this.all_connected, 'challengers');
 			}
 			
 			if (this.menu_game == 'defis') {
-				this._lister(data.defis, 'defis');
+				this._list_home(data.defis, 'defis');
 				classes = 'selected';
 			}
 			
 			$(this.menu_challenges).empty();
 			$('<a class="'+ classes +'" href="#">' + data.nb + ' ' + $.options.lang[lang].defi + '</a>').appendTo(this.menu_challenges).click(function (e) {
 				this._change_menu_game(e.target, 'defis');
-				this._lister(data.defis, 'defis');
+				this._list_home(data.defis, 'defis');
 				return false;
 			}.bind(this));
 		},
@@ -1181,7 +1180,7 @@
 				if (uid > 0 && this.uid != uid) {
 					
 					if (this.menu_game == 'challengers') {
-						this._afficher('challengers', i, uid, data.user[uid]);
+						this._display_home('challengers', i, uid, data.user[uid]);
 						i++;
 					}
 					
@@ -1195,14 +1194,14 @@
 			$(this.menu_challengers).empty();
 			$('<a class="' + classes + ' connected" href="#">' + $.options.lang[lang].challengers + '</a>').appendTo(this.menu_challengers).click(function (e) {
 				this._change_menu_game(e.target, 'challengers');
-				this._lister(data.user, 'challengers');
+				this._list_home(data.user, 'challengers');
 				return false;
 			}.bind(this));
 			
 			var classes = 'normal';
 			
 			if (this.menu_game == 'friends') {
-				this._lister(_data.user, 'friends');
+				this._list_home(_data.user, 'friends');
 				classes = 'selected';
 			}
 			
@@ -1225,19 +1224,19 @@
 			this.all_friends = data.user;
 			
 			if (this.menu_game == 'friends') {
-				this._lister(data.user, 'friends');
+				this._list_home(data.user, 'friends');
 				classes = 'selected';
 			}
 			
 			$(this.menu_friends).empty();
 			$('<a class="' + classes + ' connected" href="#">' + data.nb + ' ' + $.options.lang[lang].friends + '</a>').appendTo(this.menu_friends).click(function (e) {
 				this._change_menu_game(e.target, 'friends');
-				this._lister(data.user, 'friends');
+				this._list_home(data.user, 'friends');
 				return false;
 			}.bind(this));
 		},
 		
-		_lister: function (data, type) {
+		_list_home: function (data, type) {
 			
 			$(this.table_content).empty().html();
 			
@@ -1246,13 +1245,13 @@
 			for (var uid in data){
 				
 				if(this.uid != uid || type != 'challengers') {
-					this._afficher(type, i, uid, data[uid]);
+					this._display_home(type, i, uid, data[uid]);
 					i++;
 				}
 			}
 		},
 		
-		_afficher: function (type, i, uid, data) {
+		_display_home: function (type, i, uid, data) {
 		
 			if (!data.name || !data.points || !data.classement) {
 				return;
@@ -1475,7 +1474,7 @@
 		
 		},
 		
-		_lister_messages: function(data) {
+		_list_messages: function(data) {
 		
 			$(this.tchat).empty().html();
 			
