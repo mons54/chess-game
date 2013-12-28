@@ -19,8 +19,6 @@ module.exports = function () {
 		data: {}
 	};
 	
-	var rooms = new Array('games', 'defis', 'friends', 'challengers');
-	
 	var users = mongoose.collections.users,
 		games = mongoose.collections.games,
 		badges = mongoose.collections.badges,
@@ -83,40 +81,6 @@ module.exports = function () {
 				});
 			});
 		});
-		
-		socket.on('updateRoom', function (room) {
-			
-			if (inArray(room, rooms)) {
-				
-				leaveRooms();
-				
-				socket.join(room);
-				
-				switch (room) {
-					case 'challengers':
-						listChallengers(false);
-						break;
-				}
-			}
-		});
-		
-		function inArray (value, array) {
-			
-			 for (var i = 0; i < array.length; i++) {
-				 if (array[i] == value) {
-            		return true;
-            	}
-			}
-			
-			return false;
-        }
-		
-		function leaveRooms () {
-			
-			for (var i = 0; i < rooms.length; i++) {
-				socket.leave(rooms[i]);
-			}
-		}
 		
 		socket.on('InitUser', function () {
 			initUser();
