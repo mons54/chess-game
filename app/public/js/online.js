@@ -1187,7 +1187,7 @@
 				classes = 'selected';
 			}
 			
-			for (var uid in data) {
+			for (var uid in data.user) {
 				
 				if (this.uid != uid) {
 					
