@@ -376,6 +376,13 @@ body .fb-like {
 	border-radius: 10px;
 }
 
+#contenu .load {
+	text-align: center;
+	padding-top: 45%;
+}
+
+/******* FOOTER *************/
+
 footer {
 	position: relative;
 	width: 100%;
