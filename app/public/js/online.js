@@ -1231,8 +1231,6 @@
 			
 			var classes = 'normal';
 			
-			this.all_friends = data.user;
-			
 			if (this.menu_game == 'friends') {
 				this._list_home(data.user, 'friends');
 				classes = 'selected';

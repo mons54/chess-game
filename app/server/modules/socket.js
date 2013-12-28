@@ -537,9 +537,10 @@ module.exports = function () {
 		
 		socket.on('disconnect', function () {
 			
+			socket.leave('home');
+			
 			if (socket.uid && connections[socket.uid]) {
 				delete connections[socket.uid];
-				connected();
 			}
 		
 			if (socket.uid && created_game.games[socket.uid]) {
