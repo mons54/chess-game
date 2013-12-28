@@ -204,7 +204,7 @@
 			this.menu_game = 'games';
 			this.all_defis = {};
 			this.nb_defis = 0;
-			this.all_connected = {};
+			this.all_chalengers = {};
 			this.type_ranking = 'friends';
 			
 			$(this.element).empty().html();
@@ -969,7 +969,7 @@
 			$('<iframe frameborder="0" marginwidth="0" marginheight="0" scrolling="auto" width="600" height="600" src="https://offers.tokenads.com/show?client_id=' + this.uid + '&app_id=4561&dpl=top&width=600&fixed_height=600"></iframe>').appendTo(sponsorpay);
 		},
 		
-		_create_game: function (uid) {
+		_create_game: function (uid, data) {
 			
 			var fade = $('#fade').css('display', 'block');
 			var fenetre = $('<div class="fenetre" style="height:200px"></div>').appendTo(this.contenu);
@@ -980,6 +980,16 @@
 				$('.fenetre').remove();
 
 			});
+			
+			if (uid) {
+				
+				var challenger = $('<div class="challenger"></div>').appendTo(fenetre);
+				$('<img src="https://graph.facebook.com/' + uid + '/picture">').appendTo(challenger);
+				$('<div class="name">' + data.name + '</div>').appendTo(challenger);
+				$('<div>' + $.options.lang[lang].points + ': <strong>' + data.points + '</strong></div>').appendTo(challenger);
+				$('<div>' + $.options.lang[lang].ranking + ': <strong>' + data.classement + '</strong></div>').appendTo(challenger);
+				$('<div class="clear"></div>').appendTo(fenetre);
+			}
 			
 			var form = $('<div class="form"></div>').appendTo(fenetre);
 			$('<label>' + $.options.lang[lang].time + '</label>').appendTo(form);
@@ -1131,7 +1141,7 @@
 			this.nb_defis = data.nb;
 			
 			if (this.menu_game == 'challengers') {
-				this._list_home(this.all_connected, 'challengers');
+				this._list_home(this.all_chalengers, 'challengers');
 			}
 			
 			if (this.menu_game == 'defis') {
@@ -1160,7 +1170,7 @@
 			
 			var classes = 'normal';
 			
-			this.all_connected = data.user;
+			this.all_chalengers = data.user;
 			
 			var _data = {
 				nb:0,
@@ -1169,19 +1179,19 @@
 			
 			if (this.menu_game == 'challengers') {
 				
+				this.last_display_home = false;
+				
 				$(this.table_content).empty().html();
+				
 				classes = 'selected';
 			}
-			
-			var i = 0;
 			
 			for (var uid in data.user) {
 				
 				if (uid > 0 && this.uid != uid) {
 					
 					if (this.menu_game == 'challengers') {
-						this._display_home('challengers', i, uid, data.user[uid]);
-						i++;
+						this._display_home('challengers', uid, data.user[uid]);
 					}
 					
 					if (this.friends.object[uid]) {
@@ -1192,7 +1202,7 @@
 			}
 			
 			$(this.menu_challengers).empty();
-			$('<a class="' + classes + ' connected" href="#">' + $.options.lang[lang].challengers + '</a>').appendTo(this.menu_challengers).click(function (e) {
+			$('<a class="' + classes + ' connected" href="#">' + data.nb + ' ' + $.options.lang[lang].challengers + '</a>').appendTo(this.menu_challengers).click(function (e) {
 				this._change_menu_game(e.target, 'challengers');
 				this._list_home(data.user, 'challengers');
 				return false;
@@ -1238,20 +1248,19 @@
 		
 		_list_home: function (data, type) {
 			
-			$(this.table_content).empty().html();
+			this.last_display_home = false;
 			
-			var i = 0;
+			$(this.table_content).empty().html();
 			
 			for (var uid in data){
 				
 				if(this.uid != uid || type != 'challengers') {
-					this._display_home(type, i, uid, data[uid]);
-					i++;
+					this._display_home(type, uid, data[uid]);
 				}
 			}
 		},
 		
-		_display_home: function (type, i, uid, data) {
+		_display_home: function (type, uid, data) {
 		
 			if (!data.name || !data.points || !data.classement) {
 				return;
@@ -1268,12 +1277,16 @@
 				}
 			}
 			
-			if ($('.games tr:last').attr('class') == 'bg-gris') {
-				var tr = $('<tr class="bg-brun"></tr>').appendTo(this.table_content);
+			var tr = $('<tr></tr>');
+			
+			if (!this.last_display_home || this.last_display_home > data.points) {
+				$(tr).appendTo(this.table_content);
 			}
 			else {
-				var tr = $('<tr class="bg-gris"></tr>').appendTo(this.table_content);
+				$(tr).prependTo(this.table_content);
 			}
+			
+			this.last_display_home = data.points;
 			
 			$('<td class="images"><img src="https://graph.facebook.com/' + uid + '/picture"/></td>').appendTo(tr).click(function () {
 				this._open_profil(uid, data.name);
@@ -1374,7 +1387,7 @@
 								if(this.tokens && this.tokens.ready) {
 									
 									if(this.tokens.data >= 1) {
-										this._create_game(uid);
+										this._create_game(uid, data);
 									}
 									else {
 										this._no_tokens();
