@@ -39,6 +39,8 @@
 			
 			this.uid = uid;
 			this.name = name;
+			this.friends = friends;
+			this.all_friends = all_friends;
 			this._decompte();
 			
 			setInterval(function() {
@@ -275,7 +277,7 @@
 			
 				this.options.send_invite.bt = $('<a class="invite invite-' + lang + '" href="#"></a>').appendTo(right).click(function () {
 				
-					if (all_friends) {
+					if (this.all_friends) {
 						this._invite_friends();
 					}
 					
@@ -352,8 +354,7 @@
 			
 			$('<a href="#">' + $.options.lang[lang].invite + '</a>').appendTo(li).click(function () {
 			
-				if (all_friends) {
-					
+				if (this.all_friends) {
 					this._invite_friends();
 				}
 				
@@ -413,16 +414,17 @@
 			
 			var menu = $('<ul class="menu_game"></ul>').appendTo(this.home);
 			
-			this.games = $('<li></li>').appendTo(menu);
+			this.menu_games = $('<li></li>').appendTo(menu);
 			
-			this.defis = $('<li></li>').appendTo(menu);
+			this.menu_challenges = $('<li></li>').appendTo(menu);
 			
-			this.challengers = $('<li></li>').appendTo(menu);
+			this.menu_challengers = $('<li></li>').appendTo(menu);
 			
-			this.friends = $('<li></li>').appendTo(menu);
+			this.menu_friends = $('<li></li>').appendTo(menu);
 			
 			var games = $('<div id="games"></div>').appendTo(this.home);
-			this.list_games = $('<table class="games"></table>').appendTo(games);
+			
+			this.table_content = $('<table class="games"></table>').appendTo(games);
 		},
 		
 		_create_tchat: function () {
@@ -534,7 +536,7 @@
 				
 				var menu = $('<ul class="ul-invite"></ul>').appendTo(fenetre);
 				
-				this.checked = {
+				this.invite_checked = {
 					nb:0,
 					data:{}
 				};
@@ -544,13 +546,13 @@
 				
 				$('<button>' + $.options.lang[lang].invite_friends.send + '</button>').appendTo(fenetre).click(function() {
 					
-					if (this.checked.data) {
+					if (this.invite_checked.data) {
 						
 						var data = '';
 						
-						this.options.send_invite.nb += this.checked.nb;
+						this.options.send_invite.nb += this.invite_checked.nb;
 						
-						for (var uid in this.checked.data) {
+						for (var uid in this.invite_checked.data) {
 							this.options.send_invite.data.push(uid);
 							data += uid + ',';
 						}
@@ -605,14 +607,14 @@
 			
 			var _i = 0;
 			
-			for (var i in all_friends) {
+			for (var i in this.all_friends) {
 			
-				if (!bol && !all_friends[i].installed) {
-					this._friend(all_friends[i], _i);
+				if (!bol && !this.all_friends[i].installed) {
+					this._friend(this.all_friends[i], _i);
 					_i++;
 				}
-				else if (bol && all_friends[i].installed) {
-					this._friend(all_friends[i], _i);
+				else if (bol && this.all_friends[i].installed) {
+					this._friend(this.all_friends[i], _i);
 					_i++;
 				}
 			}
@@ -636,16 +638,16 @@
 				disabled = '';
 			}
 			
-			$('<input type="checkbox" class="' + classes + '" ' + checked + '  ' + disabled + ' />').appendTo(td).click(function () {
+			$('<input type="checkbox" id="' + data.id + '" class="' + classes + '" ' + checked + '  ' + disabled + ' />').appendTo(td).click(function (e) {
 				
-				var nb = this.options.send_invite.nb + this.checked.nb;
+				var nb = this.options.send_invite.nb + this.invite_checked.nb;
 				
-				if ($(this).is(':checked')) {
+				if ($(e.target).is(':checked')) {
 					
 					if(nb < 30) {
 						
-						this.checked.nb++;
-						this.checked.data[data.id] = {};
+						this.invite_checked.nb++;
+						this.invite_checked.data[data.id] = {};
 						
 						nb++;
 						
@@ -654,8 +656,8 @@
 				}
 				else {
 					
-					this.checked.nb--;
-					delete this.checked.data[data.id];
+					this.invite_checked.nb--;
+					delete this.invite_checked.data[data.id];
 					
 					nb--;
 					
@@ -675,7 +677,7 @@
 				
 			}.bind(this));
 			
-			var name = $('<td class="name">' + data.name + '</td>').appendTo(this.tr);
+			var name = $('<td class="name"><label for="' + data.id + '">' + data.name + '</label></td>').appendTo(this.tr);
 		},
 		
 		_trophy: function () {
@@ -1103,7 +1105,7 @@
 				classes = 'selected';
 			}
 			
-			$(this.games).empty();
+			$(this.menu_games).empty();
 			
 			for (var uid in data.games) {
 				
@@ -1115,7 +1117,7 @@
 				}
 			}
 			
-			$('<a class="' + classes + '" href="#">' + nbGames + ' ' + $.options.lang[lang].quick_game + '</a>').appendTo(this.games).click(function (e) {
+			$('<a class="' + classes + '" href="#">' + nbGames + ' ' + $.options.lang[lang].quick_game + '</a>').appendTo(this.menu_games).click(function (e) {
 				this._change_menu_game(e.target, 'games');
 				this._lister(data.games, 'games');
 				return false;
@@ -1138,8 +1140,8 @@
 				classes = 'selected';
 			}
 			
-			$(this.defis).empty();
-			$('<a class="'+ classes +'" href="#">' + data.nb + ' ' + $.options.lang[lang].defi + '</a>').appendTo(this.defis).click(function (e) {
+			$(this.menu_challenges).empty();
+			$('<a class="'+ classes +'" href="#">' + data.nb + ' ' + $.options.lang[lang].defi + '</a>').appendTo(this.menu_challenges).click(function (e) {
 				this._change_menu_game(e.target, 'defis');
 				this._lister(data.defis, 'defis');
 				return false;
@@ -1168,7 +1170,7 @@
 			
 			if (this.menu_game == 'challengers') {
 				
-				$(this.list_games).empty().html();
+				$(this.table_content).empty().html();
 				classes = 'selected';
 			}
 			
@@ -1183,15 +1185,15 @@
 						i++;
 					}
 					
-					if (friends.object[uid]) {
+					if (this.friends.object[uid]) {
 						_data.nb++;
 						_data.user[uid] = data.user[uid];
 					}
 				}
 			}
 			
-			$(this.challengers).empty();
-			$('<a class="' + classes + ' connected" href="#">' + $.options.lang[lang].challengers + '</a>').appendTo(this.challengers).click(function (e) {
+			$(this.menu_challengers).empty();
+			$('<a class="' + classes + ' connected" href="#">' + $.options.lang[lang].challengers + '</a>').appendTo(this.menu_challengers).click(function (e) {
 				this._change_menu_game(e.target, 'challengers');
 				this._lister(data.user, 'challengers');
 				return false;
@@ -1204,11 +1206,11 @@
 				classes = 'selected';
 			}
 			
-			$(this.friends).empty();
+			$(this.menu_friends).empty();
 			
 			if (_data.nb > 0) {
 			
-				$('<a class="' + classes + ' connected" href="#">' + _data.nb + ' ' + $.options.lang[lang].friends + '</a>').appendTo(this.friends).click(function (e) {
+				$('<a class="' + classes + ' connected" href="#">' + _data.nb + ' ' + $.options.lang[lang].friends + '</a>').appendTo(this.menu_friends).click(function (e) {
 					this._change_menu_game(e.target, 'friends');
 					this._friends(_data);
 					return false;
@@ -1227,8 +1229,8 @@
 				classes = 'selected';
 			}
 			
-			$(this.friends).empty();
-			$('<a class="' + classes + ' connected" href="#">' + data.nb + ' ' + $.options.lang[lang].friends + '</a>').appendTo(this.friends).click(function (e) {
+			$(this.menu_friends).empty();
+			$('<a class="' + classes + ' connected" href="#">' + data.nb + ' ' + $.options.lang[lang].friends + '</a>').appendTo(this.menu_friends).click(function (e) {
 				this._change_menu_game(e.target, 'friends');
 				this._lister(data.user, 'friends');
 				return false;
@@ -1237,7 +1239,7 @@
 		
 		_lister: function (data, type) {
 			
-			$(this.list_games).empty().html();
+			$(this.table_content).empty().html();
 			
 			var i = 0;
 			
@@ -1268,10 +1270,10 @@
 			}
 			
 			if ($('.games tr:last').attr('class') == 'bg-gris') {
-				var tr = $('<tr class="bg-brun"></tr>').appendTo(this.list_games);
+				var tr = $('<tr class="bg-brun"></tr>').appendTo(this.table_content);
 			}
 			else {
-				var tr = $('<tr class="bg-gris"></tr>').appendTo(this.list_games);
+				var tr = $('<tr class="bg-gris"></tr>').appendTo(this.table_content);
 			}
 			
 			$('<td class="images"><img src="https://graph.facebook.com/' + uid + '/picture"/></td>').appendTo(tr).click(function () {
@@ -3507,11 +3509,11 @@
 			
 			if (bool) {
 				
-				if (this.type_ranking == "ranking"  && friends.array.length > 0) {
-					this.type_ranking = "friends";
+				if (this.type_ranking == 'ranking'  && this.friends.array.length > 0) {
+					this.type_ranking = 'friends';
 				}
 				else {
-					this.type_ranking = "ranking";
+					this.type_ranking = 'ranking';
 				}
 			}
 			
@@ -3521,12 +3523,18 @@
 				classement:false
 			};
 			
-			if (this.type_ranking == "friends") {
-				this.socket.emit('Classement', {page:page, friends:friends.array});
+			if (this.type_ranking == 'friends') {
+				this.socket.emit('Classement', {
+					page: page, 
+					friends: friends.array
+				});
 			}
 			else {
 			
-				this.socket.emit('Classement', {page:page, friends:false});
+				this.socket.emit('Classement', {
+					page: page, 
+					friends: false
+				});
 			}
 		},
 		
@@ -3540,11 +3548,11 @@
 			
 			this.page_open = false;
 			
-			if (this.type_ranking == "ranking" && friends.array.length > 0) {
-				var name = "friends";
+			if (this.type_ranking == 'ranking' && this.friends.array.length > 0) {
+				var name = 'friends';
 			}
 			else {
-				var name = "ranking";
+				var name = 'ranking';
 			}
 			
 			$(this.ranking).empty().text($.options.lang[lang][name]);
