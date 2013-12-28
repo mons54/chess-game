@@ -485,7 +485,7 @@ module.exports = function () {
 			if (checkSocketUid()) {
 			
 				socket.leave('home');
-				listChallengers(true);
+				listChallengers();
 				
 				deleteGame(socket.uid);
 				
@@ -727,10 +727,10 @@ module.exports = function () {
 		function connected () {
 			
 			io.sockets.emit('Connected', io.sockets.clients().length);
-			listChallengers(true);
+			listChallengers();
 		}
 		
-		function listChallengers (bool) {
+		function listChallengers () {
 			
 			var challengers = {
 				user: {},
@@ -745,11 +745,7 @@ module.exports = function () {
 				};
 			});
 			
-			socket.emit('Challengers', challengers);
-			
-			if (bool) {
-				socket.broadcast.to('challengers').emit('Challengers', challengers);
-			}
+			io.sockets.in('home').emit('Challengers', challengers);
 		}
 		
 		function annulerAllDefi (_socket) {
@@ -787,7 +783,7 @@ module.exports = function () {
 			socket.leave('home');
 			io.sockets.socket(connections[uid]).leave('home');
 			
-			listChallengers(true);
+			listChallengers();
 			
 			annulerAllDefi(socket);
 			annulerAllDefi(io.sockets.socket(connections[uid]));
