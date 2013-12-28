@@ -907,20 +907,20 @@
 				action: 'purchaseitem',
 				product: 'http://apps.solutionsweb.pro/games/facebook/chess/tokens.php?pack=' + id + '&tokens=' + $.options.lang[lang].tokens + '&desc=' + $.options.lang[lang].buy_tokens,
 				quantity: 1
-			}, callback);
+			}, this._callback_buy);
+		},
 		
-			function callback (data) {
-				
-				if (data.status != 'completed' || !data.signed_request) {
-					return;
-				}
-				
-				this.socket.emit('payment', {
-					id: id, 
-					token: token.token, 
-					signed_request: data.signed_request
-				});
+		_callback_buy: function (data) {
+			
+			if (data.status != 'completed' || !data.signed_request) {
+				return;
 			}
+			
+			this.socket.emit('payment', {
+				id: id, 
+				token: token.token, 
+				signed_request: data.signed_request
+			});
 		},
 		
 		_free_tokens: function () {
