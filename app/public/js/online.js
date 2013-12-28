@@ -917,7 +917,7 @@
 				this.socket.emit('payment', {
 					id: id, 
 					token: token.token, 
-					signed_request:data.signed_request
+					signed_request: data.signed_request
 				});
 			}
 		},
