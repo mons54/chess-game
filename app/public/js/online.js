@@ -339,12 +339,13 @@
 			
 			this.ranking = $('<a href="#">' + $.options.lang[lang].ranking + '</a>').appendTo(li).click(function () {
 				
-				if (this.menu.classement) {
-					
-					this.socket.emit('Quit');
-					
-					this._open_classement(0, true);
+				if (!this.socket.open || !this.menu.classement) {
+					return false;
 				}
+				
+				this.socket.emit('Quit');
+					
+				this._open_classement(0, true);
 				
 				return false;
 				
@@ -3497,7 +3498,7 @@
 			};
         },
 		
-		_sauvegarde: function() {
+		_sauvegarde: function () {
 			
 			$(this.num_replay).empty().text(this.coup);
 			
@@ -3515,8 +3516,18 @@
 			}
 		},
 		
-		_open_classement: function(page, bool) {
+		_open_classement: function (page, bool) {
 			
+			this.menu = {
+				accueil:false,
+				jouer:false,
+				classement:false
+			};
+			
+			$(this.conteneur).css('height', '580px');
+			
+			$(this.contenu).empty().html('<div class="load"><img src="/img/load.gif" /></div>');
+            
 			if (bool) {
 				
 				if (this.type_ranking == 'ranking'  && this.friends.array.length > 0) {
@@ -3526,12 +3537,6 @@
 					this.type_ranking = 'ranking';
 				}
 			}
-			
-			this.menu = {
-				accueil:false,
-				jouer:false,
-				classement:false
-			};
 			
 			if (this.type_ranking == 'friends') {
 				this.socket.emit('Classement', {
@@ -3549,7 +3554,10 @@
 		},
 		
 		_classement: function (data) {
-
+			
+			$('#fade').css('display', 'none');
+			$(this.contenu).empty().html();
+			
             this.menu = {
 				accueil:true,
 				jouer:true,
@@ -3566,10 +3574,6 @@
 			}
 			
 			$(this.ranking).empty().text($.options.lang[lang][name]);
-			
-			$(this.conteneur).css("height", "580px");
-
-            $(this.contenu).empty().html();
 			
 			this.table = $('<table class="classement"></table>').appendTo(this.contenu);
 
