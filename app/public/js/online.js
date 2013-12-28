@@ -1187,10 +1187,13 @@
 				classes = 'selected';
 			}
 			
-			for (var uid in data.user) {
+			var sortable = this._sort_challengers(data.user);
+			
+			for (var i in sortable) {
+				
+				var uid = sortable[i].uid;
 				
 				if (this.uid != uid) {
-					
 					if (this.menu_game == 'challengers') {
 						this._display_home('challengers', uid, data.user[uid]);
 					}
@@ -1249,27 +1252,34 @@
 			
 			$(this.table_content).empty().html();
 			
+			var sortable = this._sort_challengers(data);
+			
+			for (var i in sortable) {
+				
+				var uid = sortable[i].uid;
+				
+				if (this.uid != uid || type != 'challengers') {
+					this._display_home(type, uid, data[uid]);
+				}
+			}
+		},
+		
+		_sort_challengers: function (data) {
+			
 			var sortable = [];
 			
 			for (var uid in data) {
-				if(this.uid != uid || type != 'challengers') {
-					sortable.push({
-						uid: uid,
-						points: data[uid].points
-					});
-				}
+				sortable.push({
+					uid: uid,
+					points: data[uid].points
+				});
 			}
 			
 			$.sortOption = 'points';
 			
 			sortable.sort($._sort);
 			
-			for (var i in sortable) {
-				
-				var uid = sortable[i].uid;
-				
-				this._display_home(type, uid, data[uid]);
-			}
+			return sortable;
 		},
 		
 		_display_home: function (type, uid, data) {
