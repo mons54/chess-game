@@ -92,7 +92,8 @@ body .fb-like {
 
 .bg-gris, 
 .bg-gris a { 
-	background-color:#EDEFF4; color:#000; 
+	background-color:#EDEFF4; 
+	color:#000; 
 }
 
 /********* HEADER *************/
@@ -570,9 +571,20 @@ footer {
     font-weight:bold;
 }
 
-#accueil table.games tr.bg-brun,
-#accueil table.games tr.bg-gris{
+#accueil table.games tr {
 	height:56px;
+}
+
+#accueil table.games tr:nth-child(even),
+#accueil table.games tr:nth-child(even) a {
+	background-color:#362f2d; 
+	color:#fff; 
+}
+
+#accueil table.games tr:nth-child(odd),
+#accueil table.games tr:nth-child(odd) a {
+	background-color:#EDEFF4; 
+	color:#000;
 }
 
 #accueil table.games tr .images{
@@ -765,9 +777,9 @@ footer {
 
 .form select{
 	height:30px;
-	line-height:30px;
+	line-height:20px;
 	border:1px solid #DADADA;
-	padding-left:5px;
+	padding:5px;
 	width:120px;
 	border-radius:5px;
 }
@@ -803,7 +815,21 @@ footer {
 }
 .fenetre .stats_joueur strong {
 	display: inline-block;
-	font-weight:bold;
+	font-weight: bold;
+}
+
+.fenetre .challenger {
+	margin-bottom: 30px;
+}
+
+.fenetre .challenger img {
+	float: left;
+	padding-right: 10px;
+}
+
+.fenetre .challenger div.name {
+	font-weight: bold;
+	padding-bottom: 3px;
 }
 
 /********* JEU *********/
@@ -1381,7 +1407,7 @@ table.classement tr td.images img{padding-top:3px;}
 
 #shop table tr th.button button{
 	width: 150px;
-	line-height: 30px;
+	padding: 5px 0;
 	background: url(../img/bt-shop.png) repeat-x;
 	color: #fff;
 	text-align:center;
