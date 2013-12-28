@@ -902,25 +902,27 @@
 		
 		_buy: function (token, id) {
 		
+			var that = this;
+			
 			FB.ui({
 				method: 'pay',
 				action: 'purchaseitem',
 				product: 'http://apps.solutionsweb.pro/games/facebook/chess/tokens.php?pack=' + id + '&tokens=' + $.options.lang[lang].tokens + '&desc=' + $.options.lang[lang].buy_tokens,
 				quantity: 1
-			}, this._callback_buy.bind(id));
-		},
-		
-		_callback_buy: function (data) {
+			}, callback);
 			
-			if (data.status != 'completed' || !data.signed_request) {
-				return;
+			function callback (response) {
+				
+				if (response.status != 'completed' || !response.signed_request) {
+					return;
+				}
+				
+				that.socket.emit('payment', {
+					id: id, 
+					token: token.token, 
+					signed_request: response.signed_request
+				});
 			}
-			
-			this.socket.emit('payment', {
-				id: id, 
-				token: token.token, 
-				signed_request: data.signed_request
-			});
 		},
 		
 		_free_tokens: function () {
@@ -1185,32 +1187,18 @@
 				classes = 'selected';
 			}
 			
-			var sortable = [];
-			
-			for (var uid in data.user) {
-				if (uid && this.uid != uid) {
-					sortable.push({
-						uid: uid,
-						points: data.user[uid].points
-					});
-				}
-			}
-			
-			$.sortOption = 'points';
-			
-			sortable.sort($._sort);
-			
-			for (var i in sortable) {
+			for (var uid in data) {
 				
-				var uid = sortable[i].uid;
-				
-				if (this.menu_game == 'challengers') {
-					this._display_home('challengers', uid, data.user[uid]);
-				}
-				
-				if (this.friends.object[uid]) {
-					_data.nb++;
-					_data.user[uid] = data.user[uid];
+				if (this.uid != uid) {
+					
+					if (this.menu_game == 'challengers') {
+						this._display_home('challengers', uid, data.user[uid]);
+					}
+					
+					if (this.friends.object[uid]) {
+						_data.nb++;
+						_data.user[uid] = data.user[uid];
+					}
 				}
 			}
 			
@@ -1261,11 +1249,26 @@
 			
 			$(this.table_content).empty().html();
 			
-			for (var uid in data){
-				
+			var sortable = [];
+			
+			for (var uid in data) {
 				if(this.uid != uid || type != 'challengers') {
-					this._display_home(type, uid, data[uid]);
+					sortable.push({
+						uid: uid,
+						points: data[uid].points
+					});
 				}
+			}
+			
+			$.sortOption = 'points';
+			
+			sortable.sort($._sort);
+			
+			for (var i in sortable) {
+				
+				var uid = sortable[i].uid;
+				
+				this._display_home(type, uid, data[uid]);
 			}
 		},
 		
