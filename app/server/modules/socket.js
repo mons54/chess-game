@@ -537,8 +537,6 @@ module.exports = function () {
 		
 		socket.on('disconnect', function () {
 			
-			socket.leave('home');
-			
 			if (socket.uid && connections[socket.uid]) {
 				delete connections[socket.uid];
 			}
@@ -735,15 +733,22 @@ module.exports = function () {
 			
 			var challengers = {
 				user: {},
-				nb: io.sockets.clients('home').length,	
+				nb: 0,	
 			};
 			
 			io.sockets.clients('home').forEach(function (data) {
+				
+				if (challengers.user[data.uid]) {
+					return;
+				}
+				
 				challengers.user[data.uid] = {
 					name : data.name,
 					classement : data.classement,
 					points : data.points	
 				};
+				
+				challengers.nb++;
 			});
 			
 			io.sockets.in('home').emit('Challengers', challengers);

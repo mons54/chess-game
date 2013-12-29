@@ -148,7 +148,7 @@
 			
 			this.socket.on('disconnect', function () {
 				
-				top.location.href=host;
+				top.location.href = redirectUri;
 			
 			}.bind(this));
 			
