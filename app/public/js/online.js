@@ -3660,7 +3660,7 @@
 					this._open_profil(uid, response.name);
 					return false;
 				}.bind(this));
-			});
+			}.bind(this));
 
         },
 
