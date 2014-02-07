@@ -32,10 +32,6 @@ window.fbAsyncInit = function() {
 		
 		FB.api('/me', function(response) {
 			
-			if(!response.id) {
-				top.location.href=redirectUri;
-			}
-				
 			uid = response.id;
 			name = response.name.substr(0,30);
 			lang = response.locale ? response.locale.substr(0,2) : 'en';
