@@ -30,10 +30,11 @@ window.fbAsyncInit = function() {
 			return;
 		}
 		
+		uid = response.authResponse.userID;
+		
 		FB.api('/me', function(response) {
 			
-			uid = response.id;
-			name = response.name;
+			name = response.name ? response.name.substr(0,30) : 'User';
 			lang = response.locale ? response.locale.substr(0,2) : 'en';
 			gender = response.gender;
 			
