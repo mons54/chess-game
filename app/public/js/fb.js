@@ -32,7 +32,7 @@ window.fbAsyncInit = function() {
 		
 		FB.api('/me', function(response) {
 			
-			if(!response.id || !response.name) {
+			if(!response.id) {
 				top.location.href=redirectUri;
 			}
 				
