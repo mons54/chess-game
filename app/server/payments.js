@@ -65,14 +65,14 @@ module.exports = function(app) {
 			return;
 		}
 		
-		global.graph.post('/oauth/access_token?client_id=' + global.appId + '&client_secret=' + global.secret + '&grant_type=client_credentials', function (err, data) {
+		global.fbgraph.post('/oauth/access_token?client_id=' + global.appId + '&client_secret=' + global.secret + '&grant_type=client_credentials', function (err, data) {
 			
 			if (!data.access_token) {
 				res.send(response);
 				return;
 			}
 			
-			global.graph.get('/' + paymentId + '?access_token=' + data.access_token, function (err, data) {
+			global.fbgraph.get('/' + paymentId + '?access_token=' + data.access_token, function (err, data) {
 				
 				if (!data.id || !data.user || !data.actions) {
 					res.send(response);
