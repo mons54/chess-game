@@ -79,8 +79,6 @@ module.exports = function(app) {
 					return;
 				}
 				
-				console.log(data.id);
-				
 				var type = '', 
 					status = '';
 				

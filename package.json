@@ -4,13 +4,13 @@
 	"version": "0.0.3-7",
 	"author": "Julien Simonet",
 	"dependencies": {
-		"express": "3.4.x",
-		"connect": "2.11.x",
-		"fbgraph": "0.2.x",
+		"express": "3.5.1",
+		"connect": "2.14.3",
+		"fbgraph": "0.2.10",
 		"stylus": "0.40.x",
 		"jade": "0.35.x",
-		"mongoose": "3.8.x",
-		"socket.io": "0.9.x"
+		"mongoose": "3.8.8",
+		"socket.io": "0.9.16"
 	},
 	"engines": {
 		"node": "0.10.x"
