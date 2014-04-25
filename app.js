@@ -21,7 +21,7 @@ global.mongoose = require('mongoose');
 io.set('log level', 1);
 io.set('origins', host + ':*');
 
-mongoose.connect('mongodb://mons54:jsOL160884@candidate.14.mongolayer.com:10036/chess_new');
+mongoose.connect('mongodb://mons54:swOLjsfb162028@candidate.14.mongolayer.com:10036/chess_new');
 
 require('./app/server/modules/mongoose');
 require('./app/server/modules/socket');
