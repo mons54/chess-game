@@ -1,8 +1,13 @@
 {
-	"name": "Chess",
-	"description": "Online game available on facebook.com and fully developed with Node.js.",
-	"version": "0.0.3-7",
-	"author": "Julien Simonet",
+	"name": "chess-game",
+	"subdomain": "chess-game",
+	"scripts": {
+		"start": "app.js"
+	},
+	"engines": {
+		"node": "0.10.x"
+	},
+	"version": "0.0.0-1",
 	"dependencies": {
 		"express": "3.5.1",
 		"connect": "2.14.3",
@@ -11,11 +16,5 @@
 		"jade": "0.35.x",
 		"mongoose": "3.8.8",
 		"socket.io": "0.9.16"
-	},
-	"engines": {
-		"node": "0.10.x"
-	},
-	"scripts": {
-		"start": "app.js"
 	}
 }

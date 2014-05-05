@@ -9,7 +9,7 @@ app.root = __dirname;
 global.appId = '459780557396952';
 global.secret = 'ffba6ba90d75f0e2ffd73d946fd5f1bd';
 
-global.host = 'chess-game.herokuapp.com';
+global.host = 'chess-game.jit.su';
 global.redirectUri = 'https://apps.facebook.com/the-chess-game/';
 global.root = path.resolve('/');
 global.port = process.env.PORT || 3000;
