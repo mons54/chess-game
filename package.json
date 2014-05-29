@@ -1,20 +1,26 @@
 {
 	"name": "chess-game",
-	"subdomain": "chess-game",
+	"description": "Chess is an online game available on facebook.com",
+	"version": "0.0.1",
+	"private": true,
 	"scripts": {
 		"start": "app.js"
 	},
 	"engines": {
 		"node": "0.10.x"
 	},
-	"version": "0.0.0-1",
 	"dependencies": {
-		"express": "3.5.1",
-		"connect": "2.14.3",
+		"mongoose": "3.8.11",
+		"socket.io": "1.0.2",
+		"express": "4.3.2",
+		"connect": "2.17.3",
+		"body-parser": "1.2.2",
 		"fbgraph": "0.2.10",
-		"stylus": "0.40.x",
-		"jade": "0.35.x",
-		"mongoose": "3.8.8",
-		"socket.io": "0.9.16"
-	}
+		"stylus": "0.45.1",
+		"jade": "1.3.1"
+	},
+	"devDependencies": {
+        "supervisor": "x.x.x",
+        "debug": "x.x.x"
+    }
 }
