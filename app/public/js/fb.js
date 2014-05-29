@@ -1,5 +1,5 @@
-﻿var appId = '466889913406471',
-	redirectUri = 'https://apps.facebook.com/____test/',
+﻿﻿var appId = '459780557396952',
+	redirectUri = 'https://apps.facebook.com/the-chess-game/',
 	url = 'https://www.facebook.com/dialog/oauth?client_id=' + appId + '&redirect_uri=' + redirectUri,
 	host = 'jsimonet.ma-luna.net',
 	uid,
