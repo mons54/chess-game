@@ -11,5 +11,5 @@ module.exports = function (app, express, connect, mongoose, io) {
 
 	mongoose.connect('mongodb://mons54:gTu59JsUOp975s55sTtPmQze@oceanic.mongohq.com:10096/chess');
 	
-	io.set('origins', 'jsimonet.ma-luna.net:*');
+	io.set('origins', 'localhost:3000:*');
 };

@@ -10,4 +10,4 @@ global.dirname 	= __dirname;
 require(dirname + '/server/config')(app, express, connect, mongoose, io);
 
 require(dirname + '/server/modules/mongoose')(mongoose);
-require(dirname + '/server/modules/socket')(io, mongoose);
+require(dirname + '/server/modules/socket')(io, mongoose, fbgraph);
