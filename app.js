@@ -11,3 +11,6 @@ require(dirname + '/server/config')(app, express, connect, mongoose, io);
 
 require(dirname + '/server/modules/mongoose')(mongoose);
 require(dirname + '/server/modules/socket')(io, mongoose, fbgraph);
+require(dirname + '/server/modules/payment')(app, mongoose);
+require(dirname + '/server/modules/sponsorpay')(app, mongoose);
+require(dirname + '/server/modules/tokenads')(app, mongoose);
