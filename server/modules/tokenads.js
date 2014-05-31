@@ -2,8 +2,8 @@ module.exports = function(app, mongoose) {
 
 	var postback_key = "9ee29ed8c42efb22";
 	
-	var users = mongoose.collections.users,
-		tokenads = mongoose.collections.tokenAds;
+	var users = mongoose.models.users,
+		tokenads = mongoose.models.tokenAds;
 
 	app.get('/tokenads', function(req, res) {
 	
