@@ -1,4 +1,4 @@
-module.exports = function (app, mongoose) {
+module.exports = function (app, mongoose, fbgraph) {
 
     var crypto = require('crypto');
 
@@ -8,23 +8,23 @@ module.exports = function (app, mongoose) {
         payments = mongoose.models.payments;
 
     var tokens = {
-        20: {
+        10: {
             amount: 2000,
             item: 1
         },
-        12: {
+        6: {
             amount: 1000,
             item: 2
         },
-        8: {
+        4: {
             amount: 500,
             item: 3
         },
-        4: {
+        2: {
             amount: 200,
             item: 4
         },
-        2: {
+        1: {
             amount: 75,
             item: 5
         }
@@ -55,7 +55,7 @@ module.exports = function (app, mongoose) {
         var signature = req.headers['x-hub-signature'].substr(5),
             query = JSON.stringify(req.body);
 
-        var hmac = crypto.createHmac('sha1', global.secret);
+        var hmac = crypto.createHmac('sha1', app.facebook.secret);
         hmac.update(query);
         var calculatedSecret = hmac.digest(encoding = 'hex');
 
@@ -64,14 +64,14 @@ module.exports = function (app, mongoose) {
             return;
         }
 
-        global.fbgraph.post('/oauth/access_token?client_id=' + global.appId + '&client_secret=' + global.secret + '&grant_type=client_credentials', function (err, data) {
+        fbgraph.post('/oauth/access_token?client_id=' + app.facebook.appId + '&client_secret=' + app.facebook.secret + '&grant_type=client_credentials', function (err, data) {
 
             if (!data.access_token) {
                 res.send(response);
                 return;
             }
 
-            global.fbgraph.get('/' + paymentId + '?access_token=' + data.access_token, function (err, data) {
+            fbgraph.get('/' + paymentId + '?access_token=' + data.access_token, function (err, data) {
 
                 if (!data.id || !data.user || !data.actions) {
                     res.send(response);
