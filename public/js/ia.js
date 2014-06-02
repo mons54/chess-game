@@ -5,17 +5,17 @@
         _case: {
 
         },
-		
-		coup: {
-		
-		},
+
+        coup: {
+
+        },
 
         options: {
 
             blanc: {
 
                 name: "",
-				coup: null,
+                coup: null,
                 nom: null,
                 decompte: null,
                 piece_reste: ""
@@ -23,404 +23,407 @@
             noir: {
 
                 name: "",
-				coup: null,
+                coup: null,
                 nom: null,
                 decompte: null,
                 piece_reste: ""
             },
-			sound:true
+            sound: true
         },
-		
-		_sound:function() {
-			
-			var that = this;
-			
-			if (that.options.sound == true) {
-				$(that.bt_sound).removeClass('sound').addClass('no-sound');
-				if($('#audio #move')[0]) $('#audio #move')[0].pause();
-				if($('#audio #time')[0]) $('#audio #time')[0].pause();
-				that.options.sound = false;
-			}
-			else {
-				$(that.bt_sound).removeClass('no-sound').addClass('sound');
-				that.options.sound = true;
-			}
-		},
-		
-		_init: function () {
+
+        _sound: function () {
 
             var that = this;
-			
-			var _class = "sound";
-			
-			if(!that.options.sound)
-				_class = "no-sound";
-			
-			that.bt_sound = $('<a id="sound" class="' + _class + '" href="#"></a>').appendTo('#left')
-			.click(function() {
-				
-				that._sound();
-				
-				return false;
-			});
-			
-			that.jeu = {
-				blanc: {
-					roi: {
-						position: 'e1',
-						deplacement_interdit: ""
-					},
-					pieces: 16,
-					dernier_coup: {
-						pion:"",
-						depart:"",
-						arriver:""
-					}
-				},
-				noir: {
-					roi: {
-						position: 'e8',
-						deplacement_interdit: ""
-					},
-					pieces: 16,
-					dernier_coup: {
-						pion:"",
-						depart:"",
-						arriver:""
-					}
-				},
-				terminer: false,
-				resultat: {
-					vainqueur : false,
-					nom : false
-				},
-				tour: 'blanc',
-				coup:0,
-				position: {
-					e1: {
-						nom: 'roi',
-						couleur: 'blanc',
-						deplacement: '',
-						capture: '',
-						move: false
-					},
-					e8: {
-						nom: 'roi',
-						couleur: 'noir',
-						deplacement: '',
-						capture: '',
-						move: false
-					},
-					d1: {
-						nom: 'reine',
-						couleur: 'blanc',
-						deplacement: '',
-						capture: '',
-						move: false
-					},
-					d8: {
-						nom: 'reine',
-						couleur: 'noir',
-						deplacement: '',
-						capture: '',
-						move: false
-					},
-					c1: {
-						nom: 'fou',
-						couleur: 'blanc',
-						deplacement: '',
-						capture: '',
-						move: false
-					},
-					f1: {
-						nom: 'fou',
-						couleur: 'blanc',
-						deplacement: '',
-						capture: '',
-						move: false
-					},
-					c8: {
-						nom: 'fou',
-						couleur: 'noir',
-						deplacement: '',
-						capture: '',
-						move: false
-					},
-					f8: {
-						nom: 'fou',
-						couleur: 'noir',
-						deplacement: '',
-						capture: '',
-						move: false
-					},
-					b1: {
-						nom: 'cavalier',
-						couleur: 'blanc',
-						deplacement: 'a3.c3',
-						capture: '',
-						move: false
-					},
-					g1: {
-						nom: 'cavalier',
-						couleur: 'blanc',
-						deplacement: 'f3.h3',
-						capture: '',
-						move: false
-					},
-					b8: {
-						nom: 'cavalier',
-						couleur: 'noir',
-						deplacement: 'a6.c6',
-						capture: '',
-						move: false
-					},
-					g8: {
-						nom: 'cavalier',
-						couleur: 'noir',
-						deplacement: 'f6.h6',
-						capture: '',
-						move: false
-					},
-					a1: {
-						nom: 'tour',
-						couleur: 'blanc',
-						deplacement: '',
-						capture: '',
-						move: false
-					},
-					h1: {
-						nom: 'tour',
-						couleur: 'blanc',
-						deplacement: '',
-						capture: '',
-						move: false
-					},
-					a8: {
-						nom: 'tour',
-						couleur: 'noir',
-						deplacement: '',
-						capture: '',
-						move: false
-					},
-					h8: {
-						nom: 'tour',
-						couleur: 'noir',
-						deplacement: '',
-						capture: '',
-						move: false
-					},
-					a2: {
-						nom: 'pion',
-						couleur: 'blanc',
-						deplacement: 'a3.a4',
-						capture: '',
-						move: false
-					},
-					b2: {
-						nom: 'pion',
-						couleur: 'blanc',
-						deplacement: 'b3.b4',
-						capture: '',
-						move: false
-					},
-					c2: {
-						nom: 'pion',
-						couleur: 'blanc',
-						deplacement: 'c3.c4',
-						capture: '',
-						move: false
-					},
-					d2: {
-						nom: 'pion',
-						couleur: 'blanc',
-						deplacement: 'd3.d4',
-						capture: '',
-						move: false
-					},
-					e2: {
-						nom: 'pion',
-						couleur: 'blanc',
-						deplacement: 'e3.e4',
-						capture: '',
-						move: false
-					},
-					f2: {
-						nom: 'pion',
-						couleur: 'blanc',
-						deplacement: 'f3.f4',
-						capture: '',
-						move: false
-					},
-					g2: {
-						nom: 'pion',
-						couleur: 'blanc',
-						deplacement: 'g3.g4',
-						capture: '',
-						move: false
-					},
-					h2: {
-						nom: 'pion',
-						couleur: 'blanc',
-						deplacement: 'h3.h4',
-						capture: '',
-						move: false
-					},
-					a7: {
-						nom: 'pion',
-						couleur: 'noir',
-						deplacement: 'a6.a5',
-						capture: '',
-						move: false
-					},
-					b7: {
-						nom: 'pion',
-						couleur: 'noir',
-						deplacement: 'b6.b5',
-						capture: '',
-						move: false
-					},
-					c7: {
-						nom: 'pion',
-						couleur: 'noir',
-						deplacement: 'c6.c5',
-						capture: '',
-						move: false
-					},
-					d7: {
-						nom: 'pion',
-						couleur: 'noir',
-						deplacement: 'd6.d5',
-						capture: '',
-						move: false
-					},
-					e7: {
-						nom: 'pion',
-						couleur: 'noir',
-						deplacement: 'e6.e5',
-						capture: '',
-						move: false
-					},
-					f7: {
-						nom: 'pion',
-						couleur: 'noir',
-						deplacement: 'f6.f5',
-						capture: '',
-						move: false
-					},
-					g7: {
-						nom: 'pion',
-						couleur: 'noir',
-						deplacement: 'g6.g5',
-						capture: '',
-						move: false
-					},
-					h7: {
-						nom: 'pion',
-						couleur: 'noir',
-						deplacement: 'h6.h5',
-						capture: '',
-						move: false
-					}
-				},
-				sauvegarde: {}
-			}
-			
-			switch($('select[name=level]').val()){
-				
-				case 'normal': var level = 'normal'; break;
-				case 'difficile': var level = 'difficile'; break;
-				default: var level = 'facile'; break;
-				
-			}
-			
-			that.jeu.level = level;
-			
-			var color = $('select[name=color]').val();
-			
-			if (color == 'blanc') {
+
+            if (that.options.sound == true) {
+                $(that.bt_sound).removeClass('sound').addClass('no-sound');
+                if ($('#audio #move')[0]) $('#audio #move')[0].pause();
+                if ($('#audio #time')[0]) $('#audio #time')[0].pause();
+                that.options.sound = false;
+            } else {
+                $(that.bt_sound).removeClass('no-sound').addClass('sound');
+                that.options.sound = true;
+            }
+        },
+
+        _init: function () {
+
+            var that = this;
+
+            var _class = "sound";
+
+            if (!that.options.sound)
+                _class = "no-sound";
+
+            that.bt_sound = $('<a id="sound" class="' + _class + '" href="#"></a>').appendTo('#left')
+                .click(function () {
+
+                    that._sound();
+
+                    return false;
+                });
+
+            that.jeu = {
+                blanc: {
+                    roi: {
+                        position: 'e1',
+                        deplacement_interdit: ""
+                    },
+                    pieces: 16,
+                    dernier_coup: {
+                        pion: "",
+                        depart: "",
+                        arriver: ""
+                    }
+                },
+                noir: {
+                    roi: {
+                        position: 'e8',
+                        deplacement_interdit: ""
+                    },
+                    pieces: 16,
+                    dernier_coup: {
+                        pion: "",
+                        depart: "",
+                        arriver: ""
+                    }
+                },
+                terminer: false,
+                resultat: {
+                    vainqueur: false,
+                    nom: false
+                },
+                tour: 'blanc',
+                coup: 0,
+                position: {
+                    e1: {
+                        nom: 'roi',
+                        couleur: 'blanc',
+                        deplacement: '',
+                        capture: '',
+                        move: false
+                    },
+                    e8: {
+                        nom: 'roi',
+                        couleur: 'noir',
+                        deplacement: '',
+                        capture: '',
+                        move: false
+                    },
+                    d1: {
+                        nom: 'reine',
+                        couleur: 'blanc',
+                        deplacement: '',
+                        capture: '',
+                        move: false
+                    },
+                    d8: {
+                        nom: 'reine',
+                        couleur: 'noir',
+                        deplacement: '',
+                        capture: '',
+                        move: false
+                    },
+                    c1: {
+                        nom: 'fou',
+                        couleur: 'blanc',
+                        deplacement: '',
+                        capture: '',
+                        move: false
+                    },
+                    f1: {
+                        nom: 'fou',
+                        couleur: 'blanc',
+                        deplacement: '',
+                        capture: '',
+                        move: false
+                    },
+                    c8: {
+                        nom: 'fou',
+                        couleur: 'noir',
+                        deplacement: '',
+                        capture: '',
+                        move: false
+                    },
+                    f8: {
+                        nom: 'fou',
+                        couleur: 'noir',
+                        deplacement: '',
+                        capture: '',
+                        move: false
+                    },
+                    b1: {
+                        nom: 'cavalier',
+                        couleur: 'blanc',
+                        deplacement: 'a3.c3',
+                        capture: '',
+                        move: false
+                    },
+                    g1: {
+                        nom: 'cavalier',
+                        couleur: 'blanc',
+                        deplacement: 'f3.h3',
+                        capture: '',
+                        move: false
+                    },
+                    b8: {
+                        nom: 'cavalier',
+                        couleur: 'noir',
+                        deplacement: 'a6.c6',
+                        capture: '',
+                        move: false
+                    },
+                    g8: {
+                        nom: 'cavalier',
+                        couleur: 'noir',
+                        deplacement: 'f6.h6',
+                        capture: '',
+                        move: false
+                    },
+                    a1: {
+                        nom: 'tour',
+                        couleur: 'blanc',
+                        deplacement: '',
+                        capture: '',
+                        move: false
+                    },
+                    h1: {
+                        nom: 'tour',
+                        couleur: 'blanc',
+                        deplacement: '',
+                        capture: '',
+                        move: false
+                    },
+                    a8: {
+                        nom: 'tour',
+                        couleur: 'noir',
+                        deplacement: '',
+                        capture: '',
+                        move: false
+                    },
+                    h8: {
+                        nom: 'tour',
+                        couleur: 'noir',
+                        deplacement: '',
+                        capture: '',
+                        move: false
+                    },
+                    a2: {
+                        nom: 'pion',
+                        couleur: 'blanc',
+                        deplacement: 'a3.a4',
+                        capture: '',
+                        move: false
+                    },
+                    b2: {
+                        nom: 'pion',
+                        couleur: 'blanc',
+                        deplacement: 'b3.b4',
+                        capture: '',
+                        move: false
+                    },
+                    c2: {
+                        nom: 'pion',
+                        couleur: 'blanc',
+                        deplacement: 'c3.c4',
+                        capture: '',
+                        move: false
+                    },
+                    d2: {
+                        nom: 'pion',
+                        couleur: 'blanc',
+                        deplacement: 'd3.d4',
+                        capture: '',
+                        move: false
+                    },
+                    e2: {
+                        nom: 'pion',
+                        couleur: 'blanc',
+                        deplacement: 'e3.e4',
+                        capture: '',
+                        move: false
+                    },
+                    f2: {
+                        nom: 'pion',
+                        couleur: 'blanc',
+                        deplacement: 'f3.f4',
+                        capture: '',
+                        move: false
+                    },
+                    g2: {
+                        nom: 'pion',
+                        couleur: 'blanc',
+                        deplacement: 'g3.g4',
+                        capture: '',
+                        move: false
+                    },
+                    h2: {
+                        nom: 'pion',
+                        couleur: 'blanc',
+                        deplacement: 'h3.h4',
+                        capture: '',
+                        move: false
+                    },
+                    a7: {
+                        nom: 'pion',
+                        couleur: 'noir',
+                        deplacement: 'a6.a5',
+                        capture: '',
+                        move: false
+                    },
+                    b7: {
+                        nom: 'pion',
+                        couleur: 'noir',
+                        deplacement: 'b6.b5',
+                        capture: '',
+                        move: false
+                    },
+                    c7: {
+                        nom: 'pion',
+                        couleur: 'noir',
+                        deplacement: 'c6.c5',
+                        capture: '',
+                        move: false
+                    },
+                    d7: {
+                        nom: 'pion',
+                        couleur: 'noir',
+                        deplacement: 'd6.d5',
+                        capture: '',
+                        move: false
+                    },
+                    e7: {
+                        nom: 'pion',
+                        couleur: 'noir',
+                        deplacement: 'e6.e5',
+                        capture: '',
+                        move: false
+                    },
+                    f7: {
+                        nom: 'pion',
+                        couleur: 'noir',
+                        deplacement: 'f6.f5',
+                        capture: '',
+                        move: false
+                    },
+                    g7: {
+                        nom: 'pion',
+                        couleur: 'noir',
+                        deplacement: 'g6.g5',
+                        capture: '',
+                        move: false
+                    },
+                    h7: {
+                        nom: 'pion',
+                        couleur: 'noir',
+                        deplacement: 'h6.h5',
+                        capture: '',
+                        move: false
+                    }
+                },
+                sauvegarde: {}
+            }
+
+            switch ($('select[name=level]').val()) {
+
+            case 'normal':
+                var level = 'normal';
+                break;
+            case 'difficile':
+                var level = 'difficile';
+                break;
+            default:
+                var level = 'facile';
+                break;
+
+            }
+
+            that.jeu.level = level;
+
+            var color = $('select[name=color]').val();
+
+            if (color == 'blanc') {
 
                 var couleur1 = 'noir';
                 var couleur2 = 'blanc';
-            }
-            else {
+            } else {
 
                 var couleur2 = 'noir';
                 var couleur1 = 'blanc';
             }
-			
-			$('#right').empty().html();
-			
-			var pieces = $('<div class="pieces"></div>').appendTo('#right');
-			
-			that.options[couleur1].pieces = $('<div class="' + couleur2 + '"></div>').appendTo(pieces);
-			
-			that.options[couleur2].pieces = $('<div class="' + couleur1 + '"></div>').css('margin-top', '5px').appendTo(pieces);
-			
-			that.ia = couleur1;
-			
-			that.joueur = couleur2;
-			
-			that.options[couleur1].name = $.options.text.player + ' 2';
 
-			that.options[couleur2].name = $('input[type=text][name=player]').val();
+            $('#right').empty().html();
 
-			$(that.element).css('margin-top', '10px').empty().html();
+            var pieces = $('<div class="pieces"></div>').appendTo('#right');
 
-			if (!that.options[couleur2].name) {
+            that.options[couleur1].pieces = $('<div class="' + couleur2 + '"></div>').appendTo(pieces);
 
-				that.options[couleur2].name = $.options.text.player + ' 1';
-			}
-			
-			var div = $('<div class="profil_jeu"></div>').appendTo(that.element);
+            that.options[couleur2].pieces = $('<div class="' + couleur1 + '"></div>').css('margin-top', '5px').appendTo(pieces);
 
-			that.options[couleur1].nom = $('<div style="margin-left:10px;font-size:20px" class="nom">' + that.options[couleur1].name + '</div>').appendTo(div);
+            that.ia = couleur1;
 
-			var coup = $('<div id="coup"></div>').appendTo(that.element);
+            that.joueur = couleur2;
 
-			that.options[couleur1].coup = $('<div class="coup"></div>').appendTo(coup);
-			that.options[couleur2].coup = $('<div class="coup"></div>').appendTo(coup);
+            that.options[couleur1].name = $.options.text.player + ' 2';
 
-			var jeu = $('<div id="jeu_' + couleur2 + '"></div>').appendTo(that.element);
+            that.options[couleur2].name = $('input[type=text][name=player]').val();
 
-			var arr = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+            $(that.element).css('margin-top', '10px').empty().html();
 
-			for (var a in arr) {
+            if (!that.options[couleur2].name) {
 
-				for (i = 1; i < 9; i++) {
+                that.options[couleur2].name = $.options.text.player + ' 1';
+            }
 
-					var pos = arr[a] + i;
+            var div = $('<div class="profil_jeu"></div>').appendTo(that.element);
 
-					that._case[pos] = $('<div id="' + pos + '" class="case ' + arr[a] + ' _' + i + '"></div>').appendTo(jeu);
+            that.options[couleur1].nom = $('<div style="margin-left:10px;font-size:20px" class="nom">' + that.options[couleur1].name + '</div>').appendTo(div);
 
-					if (that.jeu.position[pos]) {
-						
-						that._jeu(pos, that.jeu.position[pos]);
-					}
-				}
-			}
-			
-			var div = $('<div class="profil_jeu"></div>').appendTo(that.element);
-			that.options[couleur2].nom = $('<div style="margin-left:10px;font-size:20px;color:#930" class="nom">' + that.options[couleur2].name + '</div>').appendTo(div);
+            var coup = $('<div id="coup"></div>').appendTo(that.element);
 
-			if(that.jeu.tour == that.ia) {
-				
-				setTimeout(function () { 
-					
-					var coup = minmax(that.jeu);
-					
-					if(coup.capture == true){
-					
-						that._capture_ordi(coup.depart, coup.arriver, coup.pion);
-					}
-					else{
-						
-						that._deplace_ordi(coup.depart, coup.arriver, coup.pion);
-					}
-					
-				}, 1000);
-			}
-		
-		},
+            that.options[couleur1].coup = $('<div class="coup"></div>').appendTo(coup);
+            that.options[couleur2].coup = $('<div class="coup"></div>').appendTo(coup);
+
+            var jeu = $('<div id="jeu_' + couleur2 + '"></div>').appendTo(that.element);
+
+            var arr = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+
+            for (var a in arr) {
+
+                for (i = 1; i < 9; i++) {
+
+                    var pos = arr[a] + i;
+
+                    that._case[pos] = $('<div id="' + pos + '" class="case ' + arr[a] + ' _' + i + '"></div>').appendTo(jeu);
+
+                    if (that.jeu.position[pos]) {
+
+                        that._jeu(pos, that.jeu.position[pos]);
+                    }
+                }
+            }
+
+            var div = $('<div class="profil_jeu"></div>').appendTo(that.element);
+            that.options[couleur2].nom = $('<div style="margin-left:10px;font-size:20px;color:#930" class="nom">' + that.options[couleur2].name + '</div>').appendTo(div);
+
+            if (that.jeu.tour == that.ia) {
+
+                setTimeout(function () {
+
+                    var coup = minmax(that.jeu);
+
+                    if (coup.capture == true) {
+
+                        that._capture_ordi(coup.depart, coup.arriver, coup.pion);
+                    } else {
+
+                        that._deplace_ordi(coup.depart, coup.arriver, coup.pion);
+                    }
+
+                }, 1000);
+            }
+
+        },
 
         _jeu: function (position, pion) {
 
@@ -430,47 +433,51 @@
             $(that._case[position]).empty().append(_pion);
 
             if (that.joueur == that.jeu.tour) {
-				
-				if (pion.couleur == that.jeu.tour) {
 
-					if (pion.deplacement || pion.capture) {
-						_pion.draggable({
-							helper: 'clone',
-							zIndex: '99999',
-							start: function (event, ui) {
-								var deplace = pion.deplacement.split(".");
-								for (var d in deplace) {
-									var i = deplace[d];
-									if (i) {
-										that._deplace(position, i, pion);
-									}
-								}
+                if (pion.couleur == that.jeu.tour) {
 
-								var capture = pion.capture.split(".");
-								for (var d in capture) {
-									var i = capture[d];
-									if (i) {
-										that._capture(position, i, pion);
-									}
-								}
-							},
-							stop: function (event, ui) {
-								var deplace = pion.deplacement.split(".");
-								for (var d in deplace) {
-									var i = deplace[d];
-									if (i) { that._case[i].droppable("destroy"); }
-								}
+                    if (pion.deplacement || pion.capture) {
+                        _pion.draggable({
+                            helper: 'clone',
+                            zIndex: '99999',
+                            start: function (event, ui) {
+                                var deplace = pion.deplacement.split(".");
+                                for (var d in deplace) {
+                                    var i = deplace[d];
+                                    if (i) {
+                                        that._deplace(position, i, pion);
+                                    }
+                                }
 
-								var capture = pion.capture.split(".");
-								for (var d in capture) {
-									var i = capture[d];
-									if (i) { that._case[i].droppable("destroy"); }
-								}
-							}
-						});
-					}
-				}
-			}
+                                var capture = pion.capture.split(".");
+                                for (var d in capture) {
+                                    var i = capture[d];
+                                    if (i) {
+                                        that._capture(position, i, pion);
+                                    }
+                                }
+                            },
+                            stop: function (event, ui) {
+                                var deplace = pion.deplacement.split(".");
+                                for (var d in deplace) {
+                                    var i = deplace[d];
+                                    if (i) {
+                                        that._case[i].droppable("destroy");
+                                    }
+                                }
+
+                                var capture = pion.capture.split(".");
+                                for (var d in capture) {
+                                    var i = capture[d];
+                                    if (i) {
+                                        that._case[i].droppable("destroy");
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            }
         },
 
         _deplace: function (depart, arriver, pion) {
@@ -481,8 +488,8 @@
 
                 drop: function (event, ui) {
 
-                    $('.piece').draggable({ 
-                    	disabled: true 
+                    $('.piece').draggable({
+                        disabled: true
                     }).removeClass('ui-draggable');
 
                     $(this).append(ui.draggable);
@@ -499,43 +506,43 @@
                             chiffre = arriver.substr(-1);
 
                             switch (lettre) {
-                                case 'c':
+                            case 'c':
 
-                                    $(that._case['d' + chiffre]).append($(that._case['a' + chiffre]).children());
-                                    $(that._case['a' + chiffre]).empty().html();
+                                $(that._case['d' + chiffre]).append($(that._case['a' + chiffre]).children());
+                                $(that._case['a' + chiffre]).empty().html();
 
-                                    that.jeu.position['d' + chiffre] = {
-                                        nom: that.jeu.position['a' + chiffre].nom,
-                                        couleur: that.jeu.position['a' + chiffre].couleur,
-                                        deplacement: '',
-                                        capture: '',
-                                        move: true
-                                    }
+                                that.jeu.position['d' + chiffre] = {
+                                    nom: that.jeu.position['a' + chiffre].nom,
+                                    couleur: that.jeu.position['a' + chiffre].couleur,
+                                    deplacement: '',
+                                    capture: '',
+                                    move: true
+                                }
 
-                                    delete that.jeu.position['a' + chiffre];
+                                delete that.jeu.position['a' + chiffre];
 
-                                    extension = ' 0-0-0';
+                                extension = ' 0-0-0';
 
-                                    break;
+                                break;
 
-                                case 'g':
+                            case 'g':
 
-                                    $(that._case['f' + chiffre]).append($(that._case['h' + chiffre]).children());
-                                    $(that._case['h' + chiffre]).empty().html();
+                                $(that._case['f' + chiffre]).append($(that._case['h' + chiffre]).children());
+                                $(that._case['h' + chiffre]).empty().html();
 
-                                    that.jeu.position['f' + chiffre] = {
-                                        nom: that.jeu.position['h' + chiffre].nom,
-                                        couleur: that.jeu.position['h' + chiffre].couleur,
-                                        deplacement: '',
-                                        capture: '',
-                                        move: true
-                                    }
+                                that.jeu.position['f' + chiffre] = {
+                                    nom: that.jeu.position['h' + chiffre].nom,
+                                    couleur: that.jeu.position['h' + chiffre].couleur,
+                                    deplacement: '',
+                                    capture: '',
+                                    move: true
+                                }
 
-                                    delete that.jeu.position['h' + chiffre];
+                                delete that.jeu.position['h' + chiffre];
 
-                                    extension = ' 0-0';
+                                extension = ' 0-0';
 
-                                    break;
+                                break;
 
                             }
                         }
@@ -554,8 +561,8 @@
 
                 drop: function (event, ui) {
 
-                    $('.piece').draggable({ 
-                    	disabled: true 
+                    $('.piece').draggable({
+                        disabled: true
                     }).removeClass('ui-draggable');
 
                     var extension = "";
@@ -565,25 +572,23 @@
                         piece = that._prise_passant(arriver);
 
                         extension = ' e.p.';
+                    } else {
+
+                        piece = that.jeu.position[arriver].nom;
                     }
-					else {
-						
-						piece = that.jeu.position[arriver].nom;
-					}
-					
+
                     $(this).empty().append(ui.draggable);
 
                     if (pion.couleur == "blanc") {
 
                         that.jeu.noir.pieces = that.jeu.noir.pieces - 1;
-						
-						$(that.options.noir.pieces).append('<div class="piece ' + piece + '"></div>');
-                    }
-                    else {
+
+                        $(that.options.noir.pieces).append('<div class="piece ' + piece + '"></div>');
+                    } else {
 
                         that.jeu.blanc.pieces = that.jeu.blanc.pieces - 1;
-						
-						$(that.options.blanc.pieces).append('<div class="piece ' + piece + '"></div>');
+
+                        $(that.options.blanc.pieces).append('<div class="piece ' + piece + '"></div>');
                     }
 
 
@@ -591,154 +596,152 @@
                 }
             });
         },
-		
-		_deplace_ordi: function (depart, arriver, pion) {
+
+        _deplace_ordi: function (depart, arriver, pion) {
 
             var that = this;
-			
-			var piece = "";
-			
-			that._case[depart].empty().html();
 
-			var extension = "";
+            var piece = "";
 
-			if (pion.nom == 'roi' && pion.move == 0) {
+            that._case[depart].empty().html();
 
-				reg = new RegExp('^(c1|g1|c8|g8)$');
+            var extension = "";
 
-				if (reg.test(arriver)) {
+            if (pion.nom == 'roi' && pion.move == 0) {
 
-					lettre = arriver.substr(0, 1);
-					chiffre = arriver.substr(-1);
+                reg = new RegExp('^(c1|g1|c8|g8)$');
 
-					switch (lettre) {
-						case 'c':
+                if (reg.test(arriver)) {
 
-							$(that._case['d' + chiffre]).append($(that._case['a' + chiffre]).children());
-                            $(that._case['a' + chiffre]).empty().html();
-									
-							that.jeu.position['d' + chiffre] = {
-								nom: that.jeu.position['a' + chiffre].nom,
-								couleur: that.jeu.position['a' + chiffre].couleur,
-								deplacement: '',
-								capture: '',
-								move: true
-							}
+                    lettre = arriver.substr(0, 1);
+                    chiffre = arriver.substr(-1);
 
-							delete that.jeu.position['a' + chiffre];
+                    switch (lettre) {
+                    case 'c':
 
-							extension = ' 0-0-0';
+                        $(that._case['d' + chiffre]).append($(that._case['a' + chiffre]).children());
+                        $(that._case['a' + chiffre]).empty().html();
 
-							break;
+                        that.jeu.position['d' + chiffre] = {
+                            nom: that.jeu.position['a' + chiffre].nom,
+                            couleur: that.jeu.position['a' + chiffre].couleur,
+                            deplacement: '',
+                            capture: '',
+                            move: true
+                        }
 
-						case 'g':
+                        delete that.jeu.position['a' + chiffre];
 
-							$(that._case['f' + chiffre]).append($(that._case['h' + chiffre]).children());
-                            $(that._case['h' + chiffre]).empty().html();
+                        extension = ' 0-0-0';
 
-                            that.jeu.position['f' + chiffre] = {
-								nom: that.jeu.position['h' + chiffre].nom,
-								couleur: that.jeu.position['h' + chiffre].couleur,
-								deplacement: '',
-								capture: '',
-								move: true
-							}
+                        break;
 
-							delete that.jeu.position['h' + chiffre];
+                    case 'g':
 
-							extension = ' 0-0';
+                        $(that._case['f' + chiffre]).append($(that._case['h' + chiffre]).children());
+                        $(that._case['h' + chiffre]).empty().html();
 
-							break;
+                        that.jeu.position['f' + chiffre] = {
+                            nom: that.jeu.position['h' + chiffre].nom,
+                            couleur: that.jeu.position['h' + chiffre].couleur,
+                            deplacement: '',
+                            capture: '',
+                            move: true
+                        }
 
-					}
-				}
-			}
-			
-			that.jeu[pion.couleur].dernier_coup = {
-				pion:pion,
-				depart:depart,
-				arriver:arriver
-			};
+                        delete that.jeu.position['h' + chiffre];
 
-			that._move(pion, depart, arriver, ' ', extension);
-                
+                        extension = ' 0-0';
+
+                        break;
+
+                    }
+                }
+            }
+
+            that.jeu[pion.couleur].dernier_coup = {
+                pion: pion,
+                depart: depart,
+                arriver: arriver
+            };
+
+            that._move(pion, depart, arriver, ' ', extension);
+
         },
 
         _capture_ordi: function (depart, arriver, pion) {
 
             var that = this;
-			
-			var piece = "";
-			
-			that._case[depart].empty().html();
+
+            var piece = "";
+
+            that._case[depart].empty().html();
 
             var extension = "";
 
-			if (!that.jeu.position[arriver]) {
+            if (!that.jeu.position[arriver]) {
 
-				piece = that._prise_passant(arriver);
+                piece = that._prise_passant(arriver);
 
-				extension = ' e.p.';
-			}
-			else {
-				
-				piece = that.jeu.position[arriver].nom;
-			}
+                extension = ' e.p.';
+            } else {
 
-			if (pion.couleur == "blanc") {
+                piece = that.jeu.position[arriver].nom;
+            }
 
-				that.jeu.noir.pieces = that.jeu.noir.pieces - 1;
-				
-				$(that.options.noir.pieces).append('<div class="piece ' + piece + '"></div>');
-			}
-			else {
+            if (pion.couleur == "blanc") {
 
-				that.jeu.blanc.pieces = that.jeu.blanc.pieces - 1;
-				
-				$(that.options.blanc.pieces).append('<div class="piece ' + piece + '"></div>');
-			}
-			
-			that.jeu[pion.couleur].dernier_coup = {
-				pion:"",
-				depart:"",
-				arriver:""
-			};
+                that.jeu.noir.pieces = that.jeu.noir.pieces - 1;
 
-			that._move(pion, depart, arriver, 'x', extension);
-                
+                $(that.options.noir.pieces).append('<div class="piece ' + piece + '"></div>');
+            } else {
+
+                that.jeu.blanc.pieces = that.jeu.blanc.pieces - 1;
+
+                $(that.options.blanc.pieces).append('<div class="piece ' + piece + '"></div>');
+            }
+
+            that.jeu[pion.couleur].dernier_coup = {
+                pion: "",
+                depart: "",
+                arriver: ""
+            };
+
+            that._move(pion, depart, arriver, 'x', extension);
+
         },
 
         _prise_passant: function (arriver) {
 
             var that = this;
-			
-			var pion = "";
+
+            var pion = "";
 
             lettre = arriver.substr(0, 1);
             chiffre = arriver.substr(-1);
 
             switch (chiffre) {
-                case '3':
-                    $(that._case[lettre + '4']).empty().html();
-					
-					pion = that.jeu.position[lettre + '4'].nom;
+            case '3':
+                $(that._case[lettre + '4']).empty().html();
 
-                    delete that.jeu.position[lettre + '4'];
+                pion = that.jeu.position[lettre + '4'].nom;
 
-                    break;
+                delete that.jeu.position[lettre + '4'];
 
-                case '6':
-                    $(that._case[lettre + '5']).empty().html();
-					
-					pion = that.jeu.position[lettre + '5'].nom;
+                break;
 
-                    delete that.jeu.position[lettre + '5'];
+            case '6':
+                $(that._case[lettre + '5']).empty().html();
 
-                    break;
+                pion = that.jeu.position[lettre + '5'].nom;
+
+                delete that.jeu.position[lettre + '5'];
+
+                break;
 
             }
-			
-			return pion;
+
+            return pion;
         },
 
         _promotion: function (nom, couleur, depart, arriver) {
@@ -746,27 +749,27 @@
             var that = this;
 
             $('<div class="piece ' + nom + '_' + couleur + '"></div>').appendTo(that.fenetre)
-            .click(function () {
+                .click(function () {
 
-                $('#fade').css('display', 'none');
-                $('#fenetre_piece').remove();
-                $('#' + arriver).empty().append(this);
+                    $('#fade').css('display', 'none');
+                    $('#fenetre_piece').remove();
+                    $('#' + arriver).empty().append(this);
 
-                that.jeu.position[arriver].nom = nom;
+                    that.jeu.position[arriver].nom = nom;
 
-                that._charge(depart, arriver);
-            });
+                    that._charge(depart, arriver);
+                });
         },
 
         _move: function (pion, depart, arriver, signe, extension) {
 
             var that = this;
-			
-			if(that.options.sound && $('#audio #move')[0]) $('#audio #move')[0].play();
+
+            if (that.options.sound && $('#audio #move')[0]) $('#audio #move')[0].play();
 
             that.position_en_passant = [];
-			
-			if (that.jeu.position[depart].nom == 'pion') {
+
+            if (that.jeu.position[depart].nom == 'pion') {
 
                 // Prise en passant (controle)
 
@@ -776,8 +779,7 @@
 
                         var _prise = 3;
                         var _arriver = 4;
-                    }
-                    else {
+                    } else {
 
                         var _prise = 6;
                         var _arriver = 5;
@@ -824,37 +826,35 @@
 
                 that.jeu[pion.couleur].roi.position = arriver;
             }
-			
-			$('.case').css('background', "");
-			
-			$(that._case[depart]).css('background', '#930');
-			$(that._case[arriver]).css('background', '#930');
-			
-			that.coup = $(that.options[that.jeu.tour].coup).prepend('<div>' + depart + signe + arriver + extension + '</div>');
-			
-			if (pion.nom == 'pion' && arriver.substr(-1) == 1 || pion.nom == 'pion' && arriver.substr(-1) == 8) {
 
-                if(that.jeu.tour != that.ia) {
-					
-					$('#fade').css('display', 'block');
+            $('.case').css('background', "");
 
-					that.fenetre = $('<div id="fenetre_piece"></div>').appendTo('#conteneur');
+            $(that._case[depart]).css('background', '#930');
+            $(that._case[arriver]).css('background', '#930');
 
-					var arr = ['reine', 'tour', 'fou', 'cavalier'];
+            that.coup = $(that.options[that.jeu.tour].coup).prepend('<div>' + depart + signe + arriver + extension + '</div>');
 
-					for (var i in arr) {
+            if (pion.nom == 'pion' && arriver.substr(-1) == 1 || pion.nom == 'pion' && arriver.substr(-1) == 8) {
 
-						that._promotion(arr[i], pion.couleur, depart, arriver);
-					}
-				}
-				else{
-				
-					that.jeu.position[arriver].nom = "reine";
+                if (that.jeu.tour != that.ia) {
 
-					that._charge(depart, arriver);
-				}
-            }
-            else {
+                    $('#fade').css('display', 'block');
+
+                    that.fenetre = $('<div id="fenetre_piece"></div>').appendTo('#conteneur');
+
+                    var arr = ['reine', 'tour', 'fou', 'cavalier'];
+
+                    for (var i in arr) {
+
+                        that._promotion(arr[i], pion.couleur, depart, arriver);
+                    }
+                } else {
+
+                    that.jeu.position[arriver].nom = "reine";
+
+                    that._charge(depart, arriver);
+                }
+            } else {
 
                 that._charge(depart, arriver);
             }
@@ -867,8 +867,7 @@
             if (that.jeu.tour == 'blanc') {
 
                 that.jeu.tour = 'noir';
-            }
-            else {
+            } else {
 
                 that.jeu.tour = 'blanc';
             }
@@ -897,7 +896,7 @@
                 var fonction = that._verif_roi_interdit();
 
                 that.lettre = lettre - 1;
-                var fonction =  that._verif_roi_interdit();
+                var fonction = that._verif_roi_interdit();
 
                 that.chiffre = chiffre + 1;
                 var fonction = that._verif_roi_interdit();
@@ -1009,32 +1008,29 @@
                 if (that.jeu.blanc.pieces == 1 && that.jeu.noir.pieces == 1) {
 
                     that.nul = true;
-                }
-                else if (that.jeu.blanc.pieces == 1) {
+                } else if (that.jeu.blanc.pieces == 1) {
 
                     switch (that.options.noir.piece_reste.nom) {
 
-                        case 'cavalier':
-                        case 'fou':
+                    case 'cavalier':
+                    case 'fou':
 
-                            that.nul = true;
+                        that.nul = true;
 
-                            break;
+                        break;
                     }
-                }
-                else if (that.jeu.noir.pieces == 1) {
+                } else if (that.jeu.noir.pieces == 1) {
 
                     switch (that.options.blanc.piece_reste.nom) {
 
-                        case 'cavalier':
-                        case 'fou':
+                    case 'cavalier':
+                    case 'fou':
 
-                            that.nul = true;
+                        that.nul = true;
 
-                            break;
+                        break;
                     }
-                }
-                else if (that.options.blanc.piece_reste.nom == 'fou' && that.options.noir.piece_reste.nom == 'fou') {
+                } else if (that.options.blanc.piece_reste.nom == 'fou' && that.options.noir.piece_reste.nom == 'fou') {
 
                     var lettre = that._lettre_chiffre(that.options.blanc.piece_reste.position.substr(0, 1));
                     var chiffre = that.options.blanc.piece_reste.position.substr(-1);
@@ -1075,7 +1071,7 @@
 
                         deplacement = that.deplacement.join('.');
 
-                        if(that.jeu.tour == that.pion_couleur){
+                        if (that.jeu.tour == that.pion_couleur) {
 
                             that.pat = false;
                         }
@@ -1085,7 +1081,7 @@
 
                         capture = that.capture.join('.');
 
-                        if(that.jeu.tour == that.pion_couleur) {
+                        if (that.jeu.tour == that.pion_couleur) {
 
                             that.pat = false;
                         }
@@ -1096,10 +1092,9 @@
                     that.jeu.position[i].deplacement = deplacement;
                     that.jeu.position[i].capture = capture;
 
-                }
-                else if (that.pat == true && that.jeu.tour == pion.couleur) {
+                } else if (that.pat == true && that.jeu.tour == pion.couleur) {
 
-                    if (pion.deplacement || pion.capture){
+                    if (pion.deplacement || pion.capture) {
 
                         that.pat = false;
                     }
@@ -1127,98 +1122,94 @@
 
                         var deplacement = [];
                         var capture = "";
-						
-						if (that.roi_echec == 1) {
 
-							if (pion.deplacement) {
+                        if (that.roi_echec == 1) {
 
-								if (that.roi_echec_deplacement) {
+                            if (pion.deplacement) {
 
-									for (var a in that.roi_echec_deplacement) {
+                                if (that.roi_echec_deplacement) {
 
-										var val = that.roi_echec_deplacement[a];
-										
-										var _deplacement = pion.deplacement.split('.');
+                                    for (var a in that.roi_echec_deplacement) {
 
-										if ($._in_array(val, _deplacement)) {
+                                        var val = that.roi_echec_deplacement[a];
 
-											that.mat = false;
+                                        var _deplacement = pion.deplacement.split('.');
 
-											deplacement.push(val);
-										}
-									}
-								}
-							}
+                                        if ($._in_array(val, _deplacement)) {
 
-							if (pion.capture) {
+                                            that.mat = false;
 
-								var _capture = pion.capture.split('.');
+                                            deplacement.push(val);
+                                        }
+                                    }
+                                }
+                            }
 
-								if ($._in_array(that.roi_echec_capture, _capture)) {
+                            if (pion.capture) {
 
-									that.mat = false;
+                                var _capture = pion.capture.split('.');
 
-									capture = that.roi_echec_capture;
-								}
-							}
-						}
-						
-						if (deplacement.length > 0) {
+                                if ($._in_array(that.roi_echec_capture, _capture)) {
 
-							var deplacement = deplacement.join('.');
-						}
-						else {
-							var deplacement = "";
-						}
-						
+                                    that.mat = false;
+
+                                    capture = that.roi_echec_capture;
+                                }
+                            }
+                        }
+
+                        if (deplacement.length > 0) {
+
+                            var deplacement = deplacement.join('.');
+                        } else {
+                            var deplacement = "";
+                        }
+
                         that.jeu.position[i].deplacement = deplacement;
                         that.jeu.position[i].capture = capture;
                     }
                 }
             }
-			
-			that.jeu.coup++;
-			
-			var position = JSON.stringify(that.jeu.position);
-			
-			that.jeu.sauvegarde[that.jeu.coup] = {
-				depart:depart,
-				arriver:arriver,
-				jeu:JSON.parse(position)
-			};
-			
-			if(that.mat == true){
-					
+
+            that.jeu.coup++;
+
+            var position = JSON.stringify(that.jeu.position);
+
+            that.jeu.sauvegarde[that.jeu.coup] = {
+                depart: depart,
+                arriver: arriver,
+                jeu: JSON.parse(position)
+            };
+
+            if (that.mat == true) {
+
                 that.jeu.terminer = true;
                 that.jeu.resultat.nom = 'mat';
-					
-                if(that.jeu.tour == 'noir'){
+
+                if (that.jeu.tour == 'noir') {
                     that.jeu.resultat.vainqueur = 1;
-                }
-                else{
+                } else {
                     that.jeu.resultat.vainqueur = 2;
                 }
 
                 that._resultat();
-            }
-			else if(that.pat == true || that.nul == true){
-                
+            } else if (that.pat == true || that.nul == true) {
+
                 that.jeu.terminer = true;
                 that.jeu.resultat.vainqueur = 0;
 
                 if (that.pat == true) {
 
                     that.jeu.resultat.nom = 'pat';
-                }
-                else {
+                } else {
 
                     that.jeu.resultat.nom = 'nul';
                 }
 
                 that._resultat();
             }
-			
-			$('.nom').css('color', '#000');
+
+            $('.nom').css('color', '#000');
 
             if (that.jeu.terminer == false) {
 
@@ -1228,36 +1219,34 @@
 
                     that._jeu(i, that.jeu.position[i]);
                 }
-				
-				if(that.jeu.tour == that.ia) {
-				
-					setTimeout(function () { 
-						
-						var coup = minmax(that.jeu);
-						
-						if(coup.capture == true){
-						
-							that._capture_ordi(coup.depart, coup.arriver, coup.pion);
-						}
-						else{
-							
-							that._deplace_ordi(coup.depart, coup.arriver, coup.pion);
-						}
-						
-					}, 1000);
-				}
-            }
-			else if(that.jeu.tour != that.ia){
-				
-				for (var i in that.jeu.position) {
+
+                if (that.jeu.tour == that.ia) {
+
+                    setTimeout(function () {
+
+                        var coup = minmax(that.jeu);
+
+                        if (coup.capture == true) {
+
+                            that._capture_ordi(coup.depart, coup.arriver, coup.pion);
+                        } else {
+
+                            that._deplace_ordi(coup.depart, coup.arriver, coup.pion);
+                        }
+
+                    }, 1000);
+                }
+            } else if (that.jeu.tour != that.ia) {
+
+                for (var i in that.jeu.position) {
 
                     that._jeu(i, that.jeu.position[i]);
                 }
-			}
+            }
 
         },
-		
-		_deplacement: function () {
+
+        _deplacement: function () {
 
             var that = this;
 
@@ -1271,229 +1260,227 @@
 
             switch (that.pion_nom) {
 
-                case 'roi':
+            case 'roi':
 
-                    if (that.roi_echec == false && that.pion_move == false) {
-                        var fonction = that._verif_roque();
-                    }
+                if (that.roi_echec == false && that.pion_move == false) {
+                    var fonction = that._verif_roque();
+                }
+
+                that.lettre = lettre;
+                that.chiffre = chiffre + 1;
+                var fonction = that._verif_roi();
+
+                that.chiffre = chiffre - 1;
+                var fonction = that._verif_roi();
+
+                that.lettre = lettre - 1;
+                var fonction = that._verif_roi();
+
+                that.chiffre = chiffre + 1;
+                var fonction = that._verif_roi();
+
+                that.lettre = lettre + 1;
+                var fonction = that._verif_roi();
+
+                that.chiffre = chiffre - 1;
+                var fonction = that._verif_roi();
+
+                that.chiffre = chiffre;
+                var fonction = that._verif_roi();
+
+                that.lettre = lettre - 1;
+                var fonction = that._verif_roi();
+
+                break;
+
+            case 'reine':
+            case 'tour':
+
+                that.stop = false;
+                that.roi_echec_interdit = false;
+                that._deplacement_avant_roi = [];
+                that._deplacement_echec_roi = [];
+
+                for (that.i = 1; that.i < 9; that.i++) {
 
                     that.lettre = lettre;
-                    that.chiffre = chiffre + 1;
-                    var fonction = that._verif_roi();
+                    that.chiffre = chiffre + that.i;
+                    var fonction = that._verif_reine_tour_fou();
+                }
 
-                    that.chiffre = chiffre - 1;
-                    var fonction = that._verif_roi();
 
-                    that.lettre = lettre - 1;
-                    var fonction = that._verif_roi();
+                that.stop = false;
+                that.roi_echec_interdit = false;
+                that._deplacement_avant_roi = [];
+                that._deplacement_echec_roi = [];
 
-                    that.chiffre = chiffre + 1;
-                    var fonction = that._verif_roi();
+                for (that.i = 1; that.i < 9; that.i++) {
 
-                    that.lettre = lettre + 1;
-                    var fonction = that._verif_roi();
-
-                    that.chiffre = chiffre - 1;
-                    var fonction = that._verif_roi();
-
+                    that.lettre = lettre + that.i;
                     that.chiffre = chiffre;
-                    var fonction = that._verif_roi();
-
-                    that.lettre = lettre - 1;
-                    var fonction = that._verif_roi();
-
-                    break;
-
-                case 'reine':
-                case 'tour':
-
-                    that.stop = false;
-					that.roi_echec_interdit = false;
-                    that._deplacement_avant_roi = [];
-                    that._deplacement_echec_roi = [];
-
-                    for (that.i = 1; that.i < 9; that.i++) {
-
-                        that.lettre = lettre;
-                        that.chiffre = chiffre + that.i;
-                        var fonction = that._verif_reine_tour_fou();
-                    }
+                    var fonction = that._verif_reine_tour_fou();
+                }
 
 
-                    that.stop = false;
-					that.roi_echec_interdit = false;
-                    that._deplacement_avant_roi = [];
-                    that._deplacement_echec_roi = [];
+                that.stop = false;
+                that.roi_echec_interdit = false;
+                that._deplacement_avant_roi = [];
+                that._deplacement_echec_roi = [];
 
-                    for (that.i = 1; that.i < 9; that.i++) {
-
-                        that.lettre = lettre + that.i;
-                        that.chiffre = chiffre;
-                        var fonction = that._verif_reine_tour_fou();
-                    }
-
-
-					that.stop = false;
-					that.roi_echec_interdit = false;
-                    that._deplacement_avant_roi = [];
-                    that._deplacement_echec_roi = [];
-
-                    for (that.i = 1; that.i < 9; that.i++) {
-
-                        that.lettre = lettre;
-                        that.chiffre = chiffre - that.i;
-                        var fonction = that._verif_reine_tour_fou();
-                    }
-
-                    that.stop = false;
-					that.roi_echec_interdit = false;
-                    that._deplacement_avant_roi = [];
-                    that._deplacement_echec_roi = [];
-
-                    for (that.i = 1; that.i < 9; that.i++) {
-
-                        that.lettre = lettre - that.i;
-                        that.chiffre = chiffre;
-                        var fonction = that._verif_reine_tour_fou();
-                    }
-
-
-                    if (that.pion_nom == 'tour') {
-                        break;
-                    }
-
-                case 'reine':
-                case 'fou':
-
-                    that.stop = false;
-					that.roi_echec_interdit = false;
-                    that._deplacement_avant_roi = [];
-                    that._deplacement_echec_roi = [];
-
-                    for (that.i = 1; that.i < 9; that.i++) {
-
-                        that.lettre = lettre + that.i;
-                        that.chiffre = chiffre + that.i;
-                        var fonction = that._verif_reine_tour_fou();
-
-                    }
-
-                    that.stop = false;
-					that.roi_echec_interdit = false;
-                    that._deplacement_avant_roi = [];
-                    that._deplacement_echec_roi = [];
-
-                    for (that.i = 1; that.i < 9; that.i++) {
-
-                        that.lettre = lettre - that.i;
-                        that.chiffre = chiffre - that.i;
-                        var fonction = that._verif_reine_tour_fou();
-
-                    }
-
-                    that.stop = false;
-					that.roi_echec_interdit = false;
-                    that._deplacement_avant_roi = [];
-                    that._deplacement_echec_roi = [];
-
-                    for (that.i = 1; that.i < 9; that.i++) {
-
-                        that.lettre = lettre + that.i;
-                        that.chiffre = chiffre - that.i;
-                        var fonction = that._verif_reine_tour_fou();
-
-                    }
-
-                    that.stop = false;
-					that.roi_echec_interdit = false;
-                    that._deplacement_avant_roi = [];
-                    that._deplacement_echec_roi = [];
-
-                    for (that.i = 1; that.i < 9; that.i++) {
-
-                        that.lettre = lettre - that.i;
-                        that.chiffre = chiffre + that.i;
-                        var fonction = that._verif_reine_tour_fou();
-
-                    }
-
-                    break;
-
-                case 'cavalier':
-
-                    that.lettre = lettre - 2;
-                    that.chiffre = chiffre - 1;
-                    var fonction = that._verif_cavalier();
-
-                    that.chiffre = chiffre + 1;
-                    var fonction = that._verif_cavalier();
-
-                    that.lettre = lettre + 2;
-                    var fonction = that._verif_cavalier();
-
-                    that.chiffre = chiffre - 1;
-                    var fonction = that._verif_cavalier();
-
-                    that.lettre = lettre + 1;
-                    that.chiffre = chiffre + 2;
-                    var fonction = that._verif_cavalier();
-
-                    that.chiffre = chiffre - 2;
-                    var fonction = that._verif_cavalier();
-
-                    that.lettre = lettre - 1;
-                    var fonction = that._verif_cavalier();
-
-                    that.chiffre = chiffre + 2;
-                    var fonction = that._verif_cavalier();
-
-                    break;
-
-                case 'pion':
-
-                    if (that.prise_en_passant && that.jeu.tour == that.pion_couleur) {
-
-                        if ($._in_array(that.pion_position, that.position_en_passant)) {
-
-                            that.capture.push(that.prise_en_passant);
-                        }
-                    }
-
-                    if (that.pion_couleur == 'blanc') {
-
-                        that.chiffre = chiffre + 1;
-                    }
-                    else {
-
-                        that.chiffre = chiffre - 1;
-                    }
-
-                    that.lettre = lettre + 1;
-                    var fonction = that._verif_capture_pion();
-
-                    that.lettre = lettre - 1;
-                    var fonction =  that._verif_capture_pion();
+                for (that.i = 1; that.i < 9; that.i++) {
 
                     that.lettre = lettre;
-                    var fonction = that._verif_deplacement_pion();
+                    that.chiffre = chiffre - that.i;
+                    var fonction = that._verif_reine_tour_fou();
+                }
 
-                    if (that.deplacement.length > 0) {
+                that.stop = false;
+                that.roi_echec_interdit = false;
+                that._deplacement_avant_roi = [];
+                that._deplacement_echec_roi = [];
 
-                        if (that.pion_move == false) {
+                for (that.i = 1; that.i < 9; that.i++) {
 
-                            if (that.pion_couleur == 'blanc') {
-                                that.chiffre = chiffre + 2;
-                            }
-                            else {
-                                that.chiffre = chiffre - 2;
-                            }
+                    that.lettre = lettre - that.i;
+                    that.chiffre = chiffre;
+                    var fonction = that._verif_reine_tour_fou();
+                }
 
-                            that.lettre = lettre;
-                            var fonction = that._verif_deplacement_pion();
-                        }
-                    }
 
+                if (that.pion_nom == 'tour') {
                     break;
+                }
+
+            case 'reine':
+            case 'fou':
+
+                that.stop = false;
+                that.roi_echec_interdit = false;
+                that._deplacement_avant_roi = [];
+                that._deplacement_echec_roi = [];
+
+                for (that.i = 1; that.i < 9; that.i++) {
+
+                    that.lettre = lettre + that.i;
+                    that.chiffre = chiffre + that.i;
+                    var fonction = that._verif_reine_tour_fou();
+
+                }
+
+                that.stop = false;
+                that.roi_echec_interdit = false;
+                that._deplacement_avant_roi = [];
+                that._deplacement_echec_roi = [];
+
+                for (that.i = 1; that.i < 9; that.i++) {
+
+                    that.lettre = lettre - that.i;
+                    that.chiffre = chiffre - that.i;
+                    var fonction = that._verif_reine_tour_fou();
+
+                }
+
+                that.stop = false;
+                that.roi_echec_interdit = false;
+                that._deplacement_avant_roi = [];
+                that._deplacement_echec_roi = [];
+
+                for (that.i = 1; that.i < 9; that.i++) {
+
+                    that.lettre = lettre + that.i;
+                    that.chiffre = chiffre - that.i;
+                    var fonction = that._verif_reine_tour_fou();
+
+                }
+
+                that.stop = false;
+                that.roi_echec_interdit = false;
+                that._deplacement_avant_roi = [];
+                that._deplacement_echec_roi = [];
+
+                for (that.i = 1; that.i < 9; that.i++) {
+
+                    that.lettre = lettre - that.i;
+                    that.chiffre = chiffre + that.i;
+                    var fonction = that._verif_reine_tour_fou();
+
+                }
+
+                break;
+
+            case 'cavalier':
+
+                that.lettre = lettre - 2;
+                that.chiffre = chiffre - 1;
+                var fonction = that._verif_cavalier();
+
+                that.chiffre = chiffre + 1;
+                var fonction = that._verif_cavalier();
+
+                that.lettre = lettre + 2;
+                var fonction = that._verif_cavalier();
+
+                that.chiffre = chiffre - 1;
+                var fonction = that._verif_cavalier();
+
+                that.lettre = lettre + 1;
+                that.chiffre = chiffre + 2;
+                var fonction = that._verif_cavalier();
+
+                that.chiffre = chiffre - 2;
+                var fonction = that._verif_cavalier();
+
+                that.lettre = lettre - 1;
+                var fonction = that._verif_cavalier();
+
+                that.chiffre = chiffre + 2;
+                var fonction = that._verif_cavalier();
+
+                break;
+
+            case 'pion':
+
+                if (that.prise_en_passant && that.jeu.tour == that.pion_couleur) {
+
+                    if ($._in_array(that.pion_position, that.position_en_passant)) {
+
+                        that.capture.push(that.prise_en_passant);
+                    }
+                }
+
+                if (that.pion_couleur == 'blanc') {
+
+                    that.chiffre = chiffre + 1;
+                } else {
+
+                    that.chiffre = chiffre - 1;
+                }
+
+                that.lettre = lettre + 1;
+                var fonction = that._verif_capture_pion();
+
+                that.lettre = lettre - 1;
+                var fonction = that._verif_capture_pion();
+
+                that.lettre = lettre;
+                var fonction = that._verif_deplacement_pion();
+
+                if (that.deplacement.length > 0) {
+
+                    if (that.pion_move == false) {
+
+                        if (that.pion_couleur == 'blanc') {
+                            that.chiffre = chiffre + 2;
+                        } else {
+                            that.chiffre = chiffre - 2;
+                        }
+
+                        that.lettre = lettre;
+                        var fonction = that._verif_deplacement_pion();
+                    }
+                }
+
+                break;
             }
 
         },
@@ -1506,8 +1493,7 @@
 
                 var _chiffre = 1;
                 var _couleur = 'noir';
-            }
-            else {
+            } else {
 
                 var _chiffre = 8;
                 var _couleur = 'blanc';
@@ -1577,8 +1563,7 @@
 
                     that.capture.push(that.position);
 
-                }
-                else if (that._verif_deplacement_roi()) {
+                } else if (that._verif_deplacement_roi()) {
 
                     that.deplacement.push(that.position);
 
@@ -1595,8 +1580,7 @@
                 if (that.pion_couleur == 'blanc') {
 
                     var couleur = 'noir';
-                }
-                else {
+                } else {
 
                     var couleur = 'blanc';
                 }
@@ -1614,8 +1598,7 @@
                 if (that.pion_couleur == 'blanc') {
 
                     var couleur = 'noir';
-                }
-                else {
+                } else {
                     var couleur = 'blanc';
                 }
 
@@ -1644,8 +1627,7 @@
                             if (that.pion_couleur == 'blanc') {
 
                                 var couleur = 'noir';
-                            }
-                            else {
+                            } else {
                                 var couleur = 'blanc';
                             }
                             if (that.jeu[couleur].roi.position == that.position) {
@@ -1662,13 +1644,11 @@
 
                             that.stop = true;
 
-                        }
-                        else {
+                        } else {
 
                             that.i = 8;
                         }
-                    }
-                    else if (that._verif_deplacement()) {
+                    } else if (that._verif_deplacement()) {
 
                         that.deplacement.push(that.position);
                         that._deplacement_avant_roi.push(that.position);
@@ -1676,21 +1656,18 @@
 
                         that.jeu[that.pion_couleur].roi.deplacement_interdit.push(that.position);
 
-                    }
-                    else {
+                    } else {
 
                         that.jeu[that.pion_couleur].roi.deplacement_interdit.push(that.position);
 
                         that.i = 8;
                     }
-                }
-                else if (that.jeu.tour != that.pion_couleur) {
+                } else if (that.jeu.tour != that.pion_couleur) {
 
                     if (that.pion_couleur == 'blanc') {
 
                         var couleur = 'noir';
-                    }
-                    else {
+                    } else {
 
                         var couleur = 'blanc';
                     }
@@ -1707,8 +1684,7 @@
                         }
 
                         that.i = 8;
-                    }
-					else if (that._verif_deplacement()) {
+                    } else if (that._verif_deplacement()) {
 
                         if (that.roi_echec_interdit == true) {
 
@@ -1718,84 +1694,80 @@
 
                         that._deplacement_avant_roi.push(that.position);
 
-                    }
-					else {
-						
-						if (that.roi_echec_interdit == true) {
+                    } else {
+
+                        if (that.roi_echec_interdit == true) {
 
                             that.jeu[that.pion_couleur].roi.deplacement_interdit.push(that.position);
 
                         }
-						
+
                         that.i = 8;
                     }
-                }
-                else {
+                } else {
 
                     that.i = 8;
                 }
             }
         },
 
-        _piece_avant_roi: function(){
+        _piece_avant_roi: function () {
 
             var that = this;
 
-            if(that.pion_nom == 'reine' || that.pion_nom == 'tour' || that.pion_nom == 'fou'){
-			
+            if (that.pion_nom == 'reine' || that.pion_nom == 'tour' || that.pion_nom == 'fou') {
+
                 var key = that.sauvegarde_capture;
-			
+
                 var pion_nom = that.jeu.position[key].nom;
                 var pion_deplacement = that.jeu.position[key].deplacement;
                 var pion_capture = that.jeu.position[key].capture;
                 var pion_move = that.jeu.position[key].move;
-			
-                var deplacement="";
-                var capture="";
-			
-                if(pion_nom == 'reine' || that.pion_nom == pion_nom){
-                    
+
+                var deplacement = "";
+                var capture = "";
+
+                if (pion_nom == 'reine' || that.pion_nom == pion_nom) {
+
                     capture = that.pion_position;
-                    
-                    if(that.deplacement_avant_roi){
-                        
+
+                    if (that.deplacement_avant_roi) {
+
                         deplacement = that.deplacement_avant_roi.join('.');
                     }
-                }
-                else if(that.pion_nom == 'reine' && pion_nom != 'cavalier' && pion_nom != 'pion'){
-				
+                } else if (that.pion_nom == 'reine' && pion_nom != 'cavalier' && pion_nom != 'pion') {
+
                     var _capture = pion_capture.split('.');
-                    
-                    if($._in_array(that.pion_position, _capture)){
-                        
+
+                    if ($._in_array(that.pion_position, _capture)) {
+
                         capture = that.pion_position;
-                        
-                        if(that.deplacement_avant_roi){
-                            
+
+                        if (that.deplacement_avant_roi) {
+
                             deplacement = that.deplacement_avant_roi.join('.');
                         }
                     }
-                }
-                else if(pion_nom == 'pion'){
-				
-                    var lettre = that._lettre_chiffre(that.pion_position.substr(0,1));
-                    var lettre_pion = that._lettre_chiffre(key.substr(0,1));
-				
+                } else if (pion_nom == 'pion') {
+
+                    var lettre = that._lettre_chiffre(that.pion_position.substr(0, 1));
+                    var lettre_pion = that._lettre_chiffre(key.substr(0, 1));
+
                     var _deplacement = pion_deplacement.split('.');
 
-                    if(lettre == lettre_pion && !$._in_array(that.pion_position, _deplacement)){
-                        
+                    if (lettre == lettre_pion && !$._in_array(that.pion_position, _deplacement)) {
+
                         deplacement = pion_deplacement;
                     }
-				
+
                     var _capture = pion_capture.split('.');
-				
-                    if($._in_array(that.pion_position, _capture)){
-					
+
+                    if ($._in_array(that.pion_position, _capture)) {
+
                         capture = that.pion_position;
                     }
                 }
-			
+
                 that.jeu.position[key].deplacement = deplacement;
                 that.jeu.position[key].capture = capture;
             }
@@ -1815,8 +1787,7 @@
 
                     that.capture.push(that.position);
 
-                }
-                else if (that._verif_deplacement()) {
+                } else if (that._verif_deplacement()) {
 
                     that.deplacement.push(that.position);
 
@@ -1825,8 +1796,7 @@
                 if (that.pion_couleur == 'blanc') {
 
                     couleur = 'noir';
-                }
-                else {
+                } else {
 
                     couleur = 'blanc';
                 }
@@ -1868,8 +1838,7 @@
                     if (that.pion_couleur == 'blanc') {
 
                         var couleur = 'noir';
-                    }
-                    else {
+                    } else {
 
                         var couleur = 'blanc';
                     }
@@ -1949,39 +1918,39 @@
         _resultat: function () {
 
             var that = this;
-			
-			var div = $('<div class="replay"></div>').appendTo(that.element);
-			var max = that.jeu.coup;
-			
-			$('<button> < </button>').appendTo(div)
-			.click(function() {
-				that.jeu.coup = 1;
-				that._sauvegarde();
-			});
-			
-			$('<button> << </button>').appendTo(div)
-			.click(function() {
-				if(that.jeu.sauvegarde[that.jeu.coup - 1]) {
-					that.jeu.coup --;
-					that._sauvegarde();
-				}
-			});
-			
-			that.num_replay = $('<span class="num">' + that.jeu.coup + '</span>').appendTo(div);
-			
-			$('<button> >> </button>').appendTo(div)
-			.click(function() {
-				if(that.jeu.sauvegarde[that.jeu.coup + 1]) {
-					that.jeu.coup ++;
-					that._sauvegarde();
-				}
-			});
-			
-			$('<button> > </button>').appendTo(div)
-			.click(function() {
-				that.jeu.coup = max;
-				that._sauvegarde();
-			});
+
+            var div = $('<div class="replay"></div>').appendTo(that.element);
+            var max = that.jeu.coup;
+
+            $('<button> < </button>').appendTo(div)
+                .click(function () {
+                    that.jeu.coup = 1;
+                    that._sauvegarde();
+                });
+
+            $('<button> << </button>').appendTo(div)
+                .click(function () {
+                    if (that.jeu.sauvegarde[that.jeu.coup - 1]) {
+                        that.jeu.coup--;
+                        that._sauvegarde();
+                    }
+                });
+
+            that.num_replay = $('<span class="num">' + that.jeu.coup + '</span>').appendTo(div);
+
+            $('<button> >> </button>').appendTo(div)
+                .click(function () {
+                    if (that.jeu.sauvegarde[that.jeu.coup + 1]) {
+                        that.jeu.coup++;
+                        that._sauvegarde();
+                    }
+                });
+
+            $('<button> > </button>').appendTo(div)
+                .click(function () {
+                    that.jeu.coup = max;
+                    that._sauvegarde();
+                });
 
             $('#fade').css('display', 'block');
             var fenetre = $('<div class="fenetre"></div>').appendTo(that.element);
@@ -1999,8 +1968,7 @@
             if (that.jeu.resultat.vainqueur == 1) {
 
                 $('<div class="vainqueur">' + winner + ' : ' + that.options.blanc.name + '</div>').appendTo(fenetre);
-            }
-            else if (that.jeu.resultat.vainqueur == 2) {
+            } else if (that.jeu.resultat.vainqueur == 2) {
 
                 $('<div class="vainqueur">' + winner + ' : ' + that.options.noir.name + '</div>').appendTo(fenetre);
             }
@@ -2010,39 +1978,47 @@
                 $('.fenetre').css('display', 'none');
             });
         },
-		
-		_sauvegarde: function() {
-			
-			var that = this;
-			
-			$(that.num_replay).empty().text(that.jeu.coup);
-			
-			$('.case').css('background', "").empty().html();
-			$(that._case[that.jeu.sauvegarde[that.jeu.coup].depart]).css('background', '#930');
-			$(that._case[that.jeu.sauvegarde[that.jeu.coup].arriver]).css('background', '#930');
-			
-			for (var i in that.jeu.sauvegarde[that.jeu.coup].jeu) {
 
-				var position = i;
-				var pion = that.jeu.sauvegarde[that.jeu.coup].jeu[i];
-				
-				var _pion = $('<div class="piece ' + pion.nom + '_' + pion.couleur + '"></div>');
-				$(that._case[position]).empty().append(_pion);
-			}
-		},
+        _sauvegarde: function () {
+
+            var that = this;
+
+            $(that.num_replay).empty().text(that.jeu.coup);
+
+            $('.case').css('background', "").empty().html();
+            $(that._case[that.jeu.sauvegarde[that.jeu.coup].depart]).css('background', '#930');
+            $(that._case[that.jeu.sauvegarde[that.jeu.coup].arriver]).css('background', '#930');
+
+            for (var i in that.jeu.sauvegarde[that.jeu.coup].jeu) {
+
+                var position = i;
+                var pion = that.jeu.sauvegarde[that.jeu.coup].jeu[i];
+
+                var _pion = $('<div class="piece ' + pion.nom + '_' + pion.couleur + '"></div>');
+                $(that._case[position]).empty().append(_pion);
+            }
+        },
 
         _chiffre_lettre: function (chiffre) {
 
             switch (chiffre) {
 
-                case 1: return 'a';
-                case 2: return 'b';
-                case 3: return 'c';
-                case 4: return 'd';
-                case 5: return 'e';
-                case 6: return 'f';
-                case 7: return 'g';
-                case 8: return 'h';
+            case 1:
+                return 'a';
+            case 2:
+                return 'b';
+            case 3:
+                return 'c';
+            case 4:
+                return 'd';
+            case 5:
+                return 'e';
+            case 6:
+                return 'f';
+            case 7:
+                return 'g';
+            case 8:
+                return 'h';
             }
         },
 
@@ -2050,16 +2026,24 @@
 
             switch (lettre) {
 
-                case 'a': return 1;
-                case 'b': return 2;
-                case 'c': return 3;
-                case 'd': return 4;
-                case 'e': return 5;
-                case 'f': return 6;
-                case 'g': return 7;
-                case 'h': return 8;
+            case 'a':
+                return 1;
+            case 'b':
+                return 2;
+            case 'c':
+                return 3;
+            case 'd':
+                return 4;
+            case 'e':
+                return 5;
+            case 'f':
+                return 6;
+            case 'g':
+                return 7;
+            case 'h':
+                return 8;
             }
         }
-	});
+    });
 
 })(jQuery);
