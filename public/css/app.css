@@ -37,6 +37,7 @@ body .fb-like {
 }
 
 #menu .fb-like {
+	line-height: 1;
 	display:inline-block;
 }
 
