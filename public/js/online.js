@@ -1427,26 +1427,27 @@
 
         _free: function () {
 
-            if (this.free_time > 0) {
-
-                var time = (3600 * 24) - (Math.round(new Date().getTime() / 1000) - this.free_time);
-
-                if (time > 0) {
-
-                    var heure = Math.floor(time / 3600);
-
-                    time -= (heure * 3600);
-
-                    var minute = Math.floor(time / 60);
-                    var seconde = Math.floor(time - (minute * 60));
-
-                    $(this.free_h).empty().text($._sprintf(heure));
-                    $(this.free_m).empty().text($._sprintf(minute));
-                    $(this.free_s).empty().text($._sprintf(seconde));
-                } else {
-                    this.socket.emit('InitUser');
-                }
+            if ((this.free_time != 0 && !this.free_time) || this.free_time < 0) {
+                return;
             }
+
+            if (this.free_time == 0) {
+                this.socket.emit('InitUser');
+            }
+
+            var time = this.free_time,
+                heure = Math.floor(time / 3600);
+
+            time -= (heure * 3600);
+
+            var minute = Math.floor(time / 60),
+                seconde = Math.floor(time - (minute * 60));
+
+            $(this.free_h).empty().text($._sprintf(heure));
+            $(this.free_m).empty().text($._sprintf(minute));
+            $(this.free_s).empty().text($._sprintf(seconde));
+
+            this.free_time--;
         },
 
         _open_profil: function (uid, name) {

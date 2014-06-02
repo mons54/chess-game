@@ -822,7 +822,7 @@ module.exports = function (app, io, mongoose, fbgraph, crypto) {
                                     points: points,
                                     classement: classement,
                                     tokens: token,
-                                    free: time_free,
+                                    free: getFreeTime(time_free),
                                     trophy: trophy
                                 });
 
@@ -834,6 +834,10 @@ module.exports = function (app, io, mongoose, fbgraph, crypto) {
 
                 socket.emit('ListerMessages', messages.data);
             }
+        }
+
+        function getFreeTime (time) {
+            return (3600 * 24) - (Math.round(new Date().getTime() / 1000) - time);
         }
 
         function connected() {
