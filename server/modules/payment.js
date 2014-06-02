@@ -137,7 +137,7 @@ module.exports = function (app, mongoose, fbgraph) {
                                     item: tokens[amount].item,
                                     type: 'charge',
                                     status: 'completed',
-                                    time: Math.round(+new Date() / 1000),
+                                    time: Math.round(new Date() / 1000),
                                 }).save(function (err) {
 
                                     if (err) {
