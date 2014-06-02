@@ -1985,7 +1985,7 @@ module.exports = function (app, io, mongoose, fbgraph) {
 
         function parseSignedRequest(signedRequest, secret) {
 
-            signedRequest = signedRequest.split(".", 2);
+            signedRequest = signedRequest.split('.', 2);
 
             var encodedSig = signedRequest[0],
                 payload = signedRequest[1],
