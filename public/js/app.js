@@ -5,7 +5,7 @@
             appId: '466889913406471',
             redirectUri: 'https://apps.facebook.com/____test/',
             url: 'https://www.facebook.com/dialog/oauth?client_id=' + this.appId + '&redirect_uri=' + this.redirectUri,
-            host: : 'mons54.parthuisot.fr',
+            host: 'mons54.parthuisot.fr',
             uid: null,
             name: 'User',
             lang: 'en',
