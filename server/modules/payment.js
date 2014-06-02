@@ -57,7 +57,7 @@ module.exports = function (app, mongoose, fbgraph) {
 
         var hmac = crypto.createHmac('sha1', app.facebook.secret);
         hmac.update(query);
-        var calculatedSecret = hmac.digest(encoding = 'hex');
+        var calculatedSecret = hmac.digest('hex');
 
         if (signature != calculatedSecret) {
             res.send(response);
