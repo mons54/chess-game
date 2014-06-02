@@ -142,6 +142,7 @@ module.exports = function (app, mongoose, fbgraph) {
 
                                     if (err) {
                                         res.send(response);
+                                        return;
                                     }
 
                                     res.send('HTTP/1.0 200 OK');
@@ -185,6 +186,7 @@ module.exports = function (app, mongoose, fbgraph) {
 
                                     if (err) {
                                         res.send(response);
+                                        return;
                                     }
 
                                     res.send('HTTP/1.0 200 OK');
