@@ -45,7 +45,7 @@
 
                 if ($.getParam('app_request_type') == 'user_to_user') {
 
-                    var requestIds = $.get_param('request_ids');
+                    var requestIds = $.getParam('request_ids');
 
                     if (requestIds) {
                         FB.api('/' + requestIds, $.FB.setSponsorship);
