@@ -9,7 +9,9 @@ module.exports = function (app, express, connect, mongoose, io) {
 	app.use(express.static(dirname + '/public'));
 	app.use(require('body-parser')());
 
-	mongoose.connect('mongodb://mons54:gTu59JsUOp975s55sTtPmQze@oceanic.mongohq.com:10096/chess');
-	
-	io.set('origins', 'localhost:3000:*');
+
+        mongoose.connect('mongodb://127.0.0.1:27017/chess_new');
+
+        io.set('origins', 'mons54.parthuisot.fr:*');
+
 };
