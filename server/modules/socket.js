@@ -2011,10 +2011,6 @@ module.exports = function (app, io, mongoose, fbgraph) {
             return new Buffer(data, 'base64').toString('ascii');
         }
 
-        function base64Encode(data) {
-            return new Buffer(data).toString('base64');
-        }
-
         function fn(err) {
             return;
         }
