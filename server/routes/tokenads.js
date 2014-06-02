@@ -1,6 +1,4 @@
-module.exports = function (app, mongoose) {
-
-    var crypto = require('crypto');
+module.exports = function (app, mongoose, crypto) {
 
     var secret = '9ee29ed8c42efb22';
 

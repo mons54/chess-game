@@ -1,6 +1,4 @@
-module.exports = function (app, io, mongoose, fbgraph) {
-
-    var crypto = require('crypto');
+module.exports = function (app, io, mongoose, fbgraph, crypto) {
 
     var connections = {},
         created_game = {

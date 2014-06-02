@@ -1,6 +1,4 @@
-module.exports = function (app, mongoose, fbgraph) {
-
-    var crypto = require('crypto');
+module.exports = function (app, mongoose, fbgraph, crypto) {
 
     var security_token = '911f3fd471bdb649c9beb94631edf75a';
 
