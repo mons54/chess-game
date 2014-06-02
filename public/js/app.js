@@ -3,7 +3,7 @@
 	$.extend({
 		options: {
 			appId 			: '466889913406471',
-			redirectUri 	: 'https://apps.facebook.com/____test/',
+			redirectUri 		: 'https://apps.facebook.com/____test/',
 			url 			: 'https://www.facebook.com/dialog/oauth?client_id=' + this.appId + '&redirect_uri=' + this.redirectUri,
 			uid 			: null,
 			name 			: 'User',
