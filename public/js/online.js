@@ -376,9 +376,8 @@
             var name = $('<div style="padding-bottom:5px"></div>').appendTo(profil);
 
             $('<a href="#">' + this.name + '</a>').appendTo(name).click(function () {
-
                 this._open_profil(this.uid, this.name);
-
+                return false;
             }.bind(this));
 
             var div = $('<div></div>').appendTo(profil);
@@ -1299,6 +1298,7 @@
 
             $('<a href="#">' + data.name + '</a>').appendTo(nom).click(function () {
                 this._open_profil(uid, data.name);
+                return false;
             }.bind(this));
 
             $('<div><span style="font-weight:normal">' + $.options.text.points + ': </span>' + data.points + '</div>').appendTo(nom);
@@ -1367,6 +1367,7 @@
 
                 $('<a href="#" class="close"></a>').appendTo(close).click(function () {
                     this.socket.emit('AnnulerDefi', uid);
+                    return false;
                 }.bind(this));
 
                 break;
@@ -1533,6 +1534,7 @@
                 var mg = $('<div class="mg"></div>').appendTo(div);
                 $('<a href="#">' + data.name + '</a> ').appendTo(mg).click(function () {
                     this._open_profil(data.uid, data.name);
+                    return false;
                 }.bind(this));
 
                 var message = $('<span></span>').appendTo(mg);
@@ -1595,6 +1597,7 @@
             var nom = $('<div class="nom"></div>').appendTo(div);
             this.options[couleur1].nom = $('<a href="#">' + this.jeu[couleur1].name + '</a>').appendTo(nom).click(function () {
                 this._open_profil(profil_1.uid, profil_1.name);
+                return false;
             }.bind(this));
 
             var time = this.jeu[couleur1].time;
@@ -1642,6 +1645,7 @@
             var nom = $('<div class="nom"></div>').appendTo(div);
             this.options[couleur2].nom = $('<a href="#">' + this.jeu[couleur2].name + '</a>').appendTo(nom).click(function () {
                 this._open_profil(profil_2.uid, profil_2.name);
+                return false;
             }.bind(this));
 
             var bt = $('<div class="bt"></div>').appendTo(div);
