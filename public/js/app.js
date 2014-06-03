@@ -2,8 +2,8 @@
 
     $.extend({
         options: {
-            appId: '466889913406471',
-            redirectUri: 'https://apps.facebook.com/____test/',
+            appId: '459780557396952',
+            redirectUri: 'https://apps.facebook.com/the-chess-game/',
             url: 'https://www.facebook.com/dialog/oauth?client_id=' + this.appId + '&redirect_uri=' + this.redirectUri,
             host: 'mons54.parthuisot.fr',
             uid: null,
