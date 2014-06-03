@@ -868,7 +868,7 @@ module.exports = function (app, io, mongoose, fbgraph, crypto) {
                 challengers.nb++;
             });
 
-            io.sockets.in('home').emit('Challengers', challengers);
+            io.sockets.to('home').emit('Challengers', challengers);
         }
 
         function annulerAllDefi(socket) {
@@ -1982,7 +1982,7 @@ module.exports = function (app, io, mongoose, fbgraph, crypto) {
 
         function sendHome(name, data) {
 
-            io.sockets.in('home').emit(name, data);
+            io.sockets.to('home').emit(name, data);
         }
 
         function parseSignedRequest(signedRequest, secret) {
