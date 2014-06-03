@@ -3,9 +3,9 @@ module.exports = function (app, express, connect, mongoose, io) {
 	app.host = 'mons54.parthuisot.fr';
 
     app.facebook = {
-        appId: '466889913406471',
-        secret: '61f10f2183f931b1d2db51d3711919b8',
-        redirectUri: 'https://apps.facebook.com/____test/'
+        appId: '459780557396952',
+        secret: 'ffba6ba90d75f0e2ffd73d946fd5f1bd',
+        redirectUri: 'https://apps.facebook.com/the-chess-game/'
     };
 
     app.items = {
