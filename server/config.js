@@ -38,8 +38,7 @@ module.exports = function (app, express, connect, mongoose, io) {
     app.set('views', app.static);
     app.engine('html', require('ejs').renderFile);
 
-    mongoose.connect('mongodb://mons54:swOLjsfb162028@candidate.14.mongolayer.com:10036/chess_new');
-    //mongoose.connect('mongodb://127.0.0.1:27017/chess_new');
+    mongoose.connect('mongodb://127.0.0.1:27017/chess_new');
 
     io.set('origins', app.host + ':*');
 
