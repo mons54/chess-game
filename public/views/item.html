@@ -1,0 +1,12 @@
+<head prefix=
+  "og: http://ogp.me/ns# 
+  fb: http://ogp.me/ns/fb# 
+  product: http://ogp.me/ns/product#">
+  <meta property="og:type"                   content="og:product" />
+  <meta property="og:title"                  content="<%= item.tokens + ' ' + token %>" />
+  <meta property="og:image"                  content="https://<%= host %>/img/token-medium.png" />
+  <meta property="og:description"            content="<%= desc + ' - ' + item.tokens + ' ' + token %>" />
+  <meta property="og:url"                    content="https://<%= host + path %>" />
+  <meta property="product:price:amount"      content="<%= item.amount %>"/>
+  <meta property="product:price:currency"    content="USD"/>
+</head>

@@ -841,28 +841,28 @@
                 this.table = $('<table class="token"></table>').appendTo(this.shop);
 
                 var tokens = {
-                    1: {
-                        token: 2000,
-                        base: 500,
-                        price: $._convert_price(response, 10),
+                    5: {
+                        token: 5000,
+                        base: 1000,
+                        price: $._convert_price(response, 20),
                     },
-                    2: {
-                        token: 1000,
-                        base: 300,
-                        price: $._convert_price(response, 6)
+                    4: {
+                        token: 1500,
+                        base: 500,
+                        price: $._convert_price(response, 10)
                     },
                     3: {
                         token: 500,
-                        base: 200,
-                        price: $._convert_price(response, 4)
+                        base: 250,
+                        price: $._convert_price(response, 5)
                     },
-                    4: {
-                        token: 200,
+                    2: {
+                        token: 150,
                         base: 100,
                         price: $._convert_price(response, 2)
                     },
-                    5: {
-                        token: 75,
+                    1: {
+                        token: 50,
                         base: 50,
                         price: $._convert_price(response, 1)
                     }
@@ -879,7 +879,7 @@
 
         _tokens: function (data, id) {
 
-            var tr = $('<tr></tr>').appendTo(this.table);
+            var tr = $('<tr></tr>').prependTo(this.table);
 
             $('<th class="token"></th>').appendTo(tr);
 
@@ -898,7 +898,7 @@
             FB.ui({
                 method: 'pay',
                 action: 'purchaseitem',
-                product: 'http://apps.solutionsweb.pro/games/facebook/chess/tokens.php?pack=' + id + '&tokens=' + $.options.text.tokens + '&desc=' + $.options.text.buy_tokens,
+                product: 'https://'+ $.options.host + '/item/' + id + '/' + $.options.text.tokens + '/' + $.options.text.buy_tokens,
                 quantity: 1
             }, callback);
 

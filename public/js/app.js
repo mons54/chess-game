@@ -40,7 +40,7 @@
                 $.options.gender = res.gender;
 
                 if ($.options.lang == 'ar') {
-                    $('<link rel="stylesheet" href="/css/style-ar.css">').appendTo('head');
+                    $('<link rel="stylesheet" href="/css/app-ar.css">').appendTo('head');
                 }
 
                 if ($.getParam('app_request_type') == 'user_to_user') {

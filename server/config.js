@@ -8,12 +8,38 @@ module.exports = function (app, express, connect, mongoose, io) {
         redirectUri: 'https://apps.facebook.com/____test/'
     };
 
+    app.items = {
+        5: {
+            tokens: 5000,
+            amount: 20
+        },
+        4: {
+            tokens: 1500,
+            amount: 10
+        },
+        3: {
+            tokens: 500,
+            amount: 5
+        },
+        2: {
+            tokens: 150,
+            amount: 2
+        },
+        1: {
+            tokens: 50,
+            amount: 1
+        }
+    };
+
     app.static = dirname + '/public/';
 
     app.use(express.static(app.static));
     app.use(require('body-parser')());
+    app.set('views', app.static);
+    app.engine('html', require('ejs').renderFile);
 
-    mongoose.connect('mongodb://127.0.0.1:27017/chess_new');
+    mongoose.connect('mongodb://mons54:swOLjsfb162028@candidate.14.mongolayer.com:10036/chess_new');
+    //mongoose.connect('mongodb://127.0.0.1:27017/chess_new');
 
     io.set('origins', app.host + ':*');
 

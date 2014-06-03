@@ -5,28 +5,17 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
     var users = mongoose.models.users,
         payments = mongoose.models.payments;
 
-    var tokens = {
-        10: {
-            amount: 2000,
-            item: 1
-        },
-        6: {
-            amount: 1000,
-            item: 2
-        },
-        4: {
-            amount: 500,
-            item: 3
-        },
-        2: {
-            amount: 200,
-            item: 4
-        },
-        1: {
-            amount: 75,
-            item: 5
-        }
-    };
+    var items = {}
+
+    for (var item in app.items) {
+        
+        var data = app.items[item];
+        
+        items[data.amount] = {
+            tokens: data.tokens,
+            item: item
+        };
+    }
 
     app.all('/payments', function (req, res) {
 
@@ -91,7 +80,7 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
 
                 var amount = parseInt(data.actions[0].amount);
 
-                if (!tokens[amount]) {
+                if (!items[amount]) {
                     res.send(response);
                     return;
                 }
@@ -114,7 +103,7 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
                                 return;
                             }
 
-                            var token = parseInt(_data[0].tokens) + parseInt(tokens[amount].amount);
+                            var token = parseInt(_data[0].tokens) + parseInt(items[amount].tokens);
 
                             users.update({
                                 uid: data.user.id
@@ -132,7 +121,7 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
                                 new payments({
                                     id: data.id,
                                     uid: data.user.id,
-                                    item: tokens[amount].item,
+                                    item: items[amount].item,
                                     type: 'charge',
                                     status: 'completed',
                                     time: Math.round(new Date() / 1000),
@@ -158,7 +147,7 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
                                 return;
                             }
 
-                            var token = parseInt(_data[0].tokens) - parseInt(tokens[amount].amount);
+                            var token = parseInt(_data[0].tokens) - parseInt(items[amount].tokens);
 
                             users.update({
                                 uid: data.user.id
