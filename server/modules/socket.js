@@ -853,18 +853,15 @@ module.exports = function (app, io, mongoose, fbgraph, crypto) {
                 nb: 0,
             };
 
-            io.sockets.to('home').sockets.forEach(function (data) {
-
-                if (challengers.user[data.uid]) {
+            io.sockets.sockets.forEach(function (socket) {
+                if (!socket.rooms || socket.rooms.indexOf('home') === -1 || !socket.uid || challengers.user[socket.uid]) {
                     return;
                 }
-
-                challengers.user[data.uid] = {
-                    name: data.name,
-                    classement: data.classement,
-                    points: data.points
+                challengers.user[socket.uid] = {
+                    name: socket.name,
+                    classement: socket.classement,
+                    points: socket.points
                 };
-
                 challengers.nb++;
             });
 
