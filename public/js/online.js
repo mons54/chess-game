@@ -3531,7 +3531,7 @@
             if (this.type_ranking == 'friends') {
                 this.socket.emit('Classement', {
                     page: page,
-                    friends: friends.array
+                    friends: this.friends.array 
                 });
             } else {
 
