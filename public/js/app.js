@@ -85,11 +85,10 @@
             $.options.text = data;
             $(document).ready(function () {
                 $.init();
+                $.ads();
             });
         },
         init: function () {
-
-            $.ads();
 
             $('.fb-like').appendTo('body');
 
