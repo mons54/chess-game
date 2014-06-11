@@ -111,6 +111,9 @@
                 return false;
             });
         },
+        reloadAdHeader: function () {
+            $('#header iframe').attr('src', $('#header iframe').attr('src'));
+        },
         ads: function () {
 
             if (typeof (LSM_Slot) === 'undefined') {

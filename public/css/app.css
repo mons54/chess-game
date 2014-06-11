@@ -101,16 +101,18 @@ body .fb-like {
 
 #header {
 	position: relative;
-	width: 760px;
-	height: 72px;
-	margin: 12px auto;
-	border: 5px solid #362f2d;
-	background: #fff;
-	border-radius: 10px;
+	width: 728px;
+	height: 90px;
+	margin: 8px auto;
 }
 
-#header #top_banner {
-	border:none; 
+#header iframe {
+	width: 728px;
+	height: 90px;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	overflow: hidden;
 }
 
 /********* CONTENT *************/
