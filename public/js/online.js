@@ -1547,6 +1547,8 @@
 
         _new_game: function (jeu) {
 
+            $.reloadAdHeader();
+
             this._50_coup = 0;
 
             this.menu = {
