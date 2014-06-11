@@ -111,8 +111,9 @@
                 return false;
             });
         },
-        reloadAdHeader: function () {
+        reloadAds: function () {
             $('#header iframe').attr('src', $('#header iframe').attr('src'));
+            $.ads();
         },
         ads: function () {
 

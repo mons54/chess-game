@@ -35,8 +35,6 @@
 
             var that = this;
 
-            $.ads();
-
             $('#header').css('display', 'block');
             $('#footer').css('display', 'block');
 
