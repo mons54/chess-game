@@ -106,15 +106,6 @@ body .fb-like {
 	margin: 8px auto;
 }
 
-#header iframe {
-	width: 728px;
-	height: 90px;
-	padding: 0;
-	margin: 0;
-	border: 0;
-	overflow: hidden;
-}
-
 /********* CONTENT *************/
 
 #content {
@@ -409,6 +400,15 @@ footer {
 	float:right;
 	width:300px;
 	height:250px;
+}
+
+#footer #pub iframe {
+	width: 300px;
+	height: 250px;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	overflow: hidden;
 }
 
 #footer .fb-like-box{
@@ -1662,4 +1662,13 @@ table.classement tr td.images img{padding-top:3px;}
 	background: #fff;
 	border: 5px solid #362f2d;
 	border-radius: 5px;
+}
+
+#pub-footer iframe {
+	width: 728px;
+	height: 90px;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	overflow: hidden;
 }
