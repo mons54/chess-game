@@ -111,8 +111,8 @@
             });
         },
         reloadAds: function () {
+            $('#header iframe').attr('src', $('#header iframe').attr('src'));
             $('#footer #pub iframe').attr('src', $('#footer #pub iframe').attr('src'));
-            $('#pub-footer iframe').attr('src', $('#pub-footer iframe').attr('src'));
             $.ads();
         },
         ads: function () {
@@ -126,14 +126,14 @@
                     adkey: '87b',
                     ad_size: '728x90',
                     slot: 'slot68173',
-                    _render_div_id: 'header'
+                    _render_div_id: 'pub-footer'
                 });
             } else {
                 LSM_Slot({
                     adkey: '826',
                     ad_size: '728x90',
                     slot: 'slot64668',
-                    _render_div_id: 'header'
+                    _render_div_id: 'pub-footer'
                 });
             }
         },
