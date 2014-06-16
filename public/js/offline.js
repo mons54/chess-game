@@ -33,6 +33,8 @@
 
         _init: function () {
 
+            $.reloadAds();
+
             var that = this;
 
             $('#header').css('display', 'block');
