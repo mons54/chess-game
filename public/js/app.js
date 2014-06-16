@@ -112,13 +112,28 @@
         },
         reloadAds: function () {
             $('#header iframe').attr('src', $('#header iframe').attr('src'));
-            $('#footer #pub iframe').attr('src', $('#footer #pub iframe').attr('src'));
             $.ads();
         },
         ads: function () {
 
             if (typeof (LSM_Slot) === 'undefined') {
                 return;
+            }
+
+            if ($.options.gender == 'female') {
+                LSM_Slot({
+                    adkey: '571',
+                    ad_size: '300x250',
+                    slot: 'slot68172',
+                    _render_div_id: 'pub'
+                });
+            } else {
+                LSM_Slot({
+                    adkey: 'd87',
+                    ad_size: '300x250',
+                    slot: 'slot60359',
+                    _render_div_id: 'pub'
+                });
             }
 
             if ($.options.gender == 'female') {
@@ -136,6 +151,7 @@
                     _render_div_id: 'pub-footer'
                 });
             }
+
         },
         _sort: function (a, b) {
 
