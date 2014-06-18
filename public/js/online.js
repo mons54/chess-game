@@ -182,6 +182,8 @@
 
         _init: function () {
 
+            $.reloadAds();
+
             this.tokens = {
                 ready: false
             };
@@ -1564,8 +1566,6 @@
         },
 
         _new_game: function (jeu) {
-
-            $.reloadAds();
 
             this._50_coup = 0;
 
