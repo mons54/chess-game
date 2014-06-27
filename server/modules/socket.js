@@ -1432,12 +1432,12 @@ module.exports = function (app, io, mongoose, fbgraph, crypto) {
             points = 1 / points;
             points = 1 - points;
 
-            if (nbGame <= 30) {
-                var k = 30;
-            } else if (points_user < 2400) {
-                var k = 15;
-            } else {
-                var k = 10;
+            var k = 20;
+
+            if (points_user > 2400) {
+                k = 10;
+            } else if (nbGame <= 30) {
+                k = 40;
             }
 
             return Math.round(k * (resultat - points));
