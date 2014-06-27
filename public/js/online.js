@@ -247,6 +247,10 @@
                 return false;
 
             }.bind(this));
+
+            
+
+            this.banUser = $('<div/>').appendTo(left);
         },
 
         _create_column_right: function () {
@@ -1407,6 +1411,10 @@
 
             this.moderateur = data.moderateur;
 
+            if (this.moderateur) {
+                this._ban_user();
+            }
+
             this.tokens = {
                 ready: true,
                 data: token
@@ -1424,6 +1432,18 @@
             $(this.options.tokens).empty().text(token);
 
             this.free_time = data.free;
+        },
+
+        _ban_user: function () {
+            var uid = $('<input type="text">').appendTo(this.banUser);
+            var ban = $('<input type="checkbox" checked>').appendTo(this.banUser);
+            $('<button>OK</button>').appendTo(this.banUser).click(function () {
+                
+                this.socket.emit('banUser', {
+                    uid: uid.val(),
+                    ban: ban.val() == 'on' ? true : false
+                });
+            }.bind(this));
         },
 
         _free: function () {

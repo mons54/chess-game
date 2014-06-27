@@ -602,6 +602,20 @@ module.exports = function (app, io, mongoose, fbgraph, crypto) {
             });
         });
 
+        socket.on('banUser', function (data) {
+            if (!data.uid || !socket.moderateur) {
+                return;
+            }
+
+            users.update({
+                uid: data.uid
+            }, {
+                $set: {
+                    ban: data.ban ? true : false
+                }
+            }, fn);
+        });
+
         socket.on('disconnect', function () {
 
             if (socket.uid && connections[socket.uid]) {
