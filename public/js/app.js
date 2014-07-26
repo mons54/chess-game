@@ -4,7 +4,7 @@
         options: {
             appId: '459780557396952',
             redirectUri: 'https://apps.facebook.com/the-chess-game/',
-            url: 'https://www.facebook.com/dialog/oauth?client_id=' + this.appId + '&redirect_uri=' + this.redirectUri,
+            url: 'https://www.facebook.com/dialog/oauth?client_id=459780557396952&redirect_uri=https://apps.facebook.com/the-chess-game',
             host: 'mons54.parthuisot.fr',
             uid: null,
             name: 'User',
@@ -22,7 +22,7 @@
         FB: {
             getLoginStatus: function (res) {
                 if (res.status !== 'connected') {
-                    top.location.href = url;
+                    top.location.href = $.options.url;
                     return;
                 }
 
