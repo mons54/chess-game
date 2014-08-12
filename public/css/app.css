@@ -10,7 +10,7 @@ body{
 	font-size:13px;
 }
 
-a { 
+a {
 	cursor:pointer;
 	font-weight:bold;
 	text-decoration: none;
@@ -57,44 +57,44 @@ body .fb-like {
  input[type=button]:hover {
  	cursor:pointer;
  }
- 
-.ui-draggable { 
+
+.ui-draggable {
 	cursor:move;
 }
 
-.left { 
+.left {
 	float:left;
 }
 
-.right { 
+.right {
 	float:right;
 }
 
-.clear { 
-	clear:both; 
+.clear {
+	clear:both;
 	float:none;
 }
 
-.center { 
+.center {
 	text-align:center;
 }
 
-.bg-brun, 
-.bg-brun a { 
-	background-color:#362f2d; 
+.bg-brun,
+.bg-brun a {
+	background-color:#362f2d;
 	color:#fff;
 }
 
-.bg-bleu, 
-.bg-bleu a { 
-	background-color:#005b7f; 
+.bg-bleu,
+.bg-bleu a {
+	background-color:#005b7f;
 	color:#fff;
 }
 
-.bg-gris, 
-.bg-gris a { 
-	background-color:#EDEFF4; 
-	color:#000; 
+.bg-gris,
+.bg-gris a {
+	background-color:#EDEFF4;
+	color:#000;
 }
 
 /********* HEADER *************/
@@ -406,38 +406,35 @@ footer {
 	border-radius: 10px;
 }
 
-#footer #pub {
-	float:right;
-	width:300px;
-	height:250px;
-}
-
-#footer #pub iframe {
-	width: 300px;
-	height: 250px;
-	padding: 0;
-	margin: 0;
-	border: 0;
-	overflow: hidden;
-}
-
-#footer .fb-like-box{
-	width:428px;
-	height:250px;
-}
-
 #footer .link {
-	margin-top:20px;
 	text-align:center;
 }
 
-#footer .link a{
+#footer .link a {
 	font-weight:normal;
 	padding:0 5px;
 }
 
-#footer .link a:hover{
+#footer .link a:hover {
 	text-decoration:underline
+}
+
+#footer #pub-footer {
+	position: relative;
+	width: 728px;
+	height: 90px;
+	margin: 10px auto;
+	background: #fff;
+	border-radius: 5px;
+}
+
+#footer #pub-footer iframe {
+	width: 728px;
+	height: 90px;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	overflow: hidden;
 }
 
 /********* MENU ********/
@@ -597,13 +594,13 @@ footer {
 
 #accueil table.games tr:nth-child(even),
 #accueil table.games tr:nth-child(even) a {
-	background-color:#362f2d; 
-	color:#fff; 
+	background-color:#362f2d;
+	color:#fff;
 }
 
 #accueil table.games tr:nth-child(odd),
 #accueil table.games tr:nth-child(odd) a {
-	background-color:#EDEFF4; 
+	background-color:#EDEFF4;
 	color:#000;
 }
 
@@ -643,7 +640,7 @@ footer {
 	padding:0 10px;
 	font-weight:bold;
 	font-size:13px;
-	border-radius:5px;	
+	border-radius:5px;
 }
 
 #accueil table.games tr .close{
@@ -734,7 +731,7 @@ footer {
 	position:relative;
 	border-bottom:1px solid #fff;
 }
-#accueil div.tchat .ct .close{	
+#accueil div.tchat .ct .close{
 	position:absolute;
 	right:0;
 	top:2px;
@@ -970,7 +967,7 @@ footer {
 	border-style:solid;
 	border-color:#362f2d;
 	background:url(../img/plateau.png?2) no-repeat;
-	
+
 }
 
 #jeu_blanc .case,
@@ -1662,21 +1659,21 @@ table.classement tr td.images img{padding-top:3px;}
 	border:0px;
 }
 
-/******** Pub *********/
+/******** AppNext *********/
 
-#pub-footer {
+#appnext {
 	position: relative;
-	width: 728px;
-	height: 90px;
+	width: 760px;
+	height: 72px;
 	margin: 10px auto;
 	background: #fff;
 	border: 5px solid #362f2d;
 	border-radius: 5px;
 }
 
-#pub-footer iframe {
-	width: 728px;
-	height: 90px;
+#appnext iframe {
+	width: 760px;
+	height: 72px;
 	padding: 0;
 	margin: 0;
 	border: 0;
