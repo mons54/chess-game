@@ -396,41 +396,63 @@ footer {
 	border-bottom: 3px solid #fff;
 }
 
-#footer {
+footer #footer {
 	position: relative;
 	width: 760px;
-	height: 300px;
-	margin: 20px auto;
+	height: 280px;
+	margin: 10px auto;
 	border: 5px solid #362f2d;
 	background: #fff;
 	border-radius: 10px;
 }
 
-#footer .link {
+footer #footer #pub {
+	float:right;
+	width:300px;
+	height:250px;
+}
+
+footer #footer #pub iframe {
+	width: 300px;
+	height: 250px;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	overflow: hidden;
+}
+
+footer #footer .fb-like-box{
+	width:428px;
+	height:250px;
+}
+
+footer #footer .link {
+	margin-top:10px;
 	text-align:center;
 }
 
-#footer .link a {
+footer #footer .link a{
 	font-weight:normal;
 	padding:0 5px;
 }
 
-#footer .link a:hover {
+footer #footer .link a:hover{
 	text-decoration:underline
 }
 
-#footer #pub-footer {
+footer #appnext {
 	position: relative;
-	width: 728px;
-	height: 90px;
+	width: 760px;
+	height: 72px;
 	margin: 10px auto;
 	background: #fff;
+	border: 5px solid #362f2d;
 	border-radius: 5px;
 }
 
-#footer #pub-footer iframe {
-	width: 728px;
-	height: 90px;
+footer #appnext iframe {
+	width: 760px;
+	height: 72px;
 	padding: 0;
 	margin: 0;
 	border: 0;
@@ -1659,21 +1681,21 @@ table.classement tr td.images img{padding-top:3px;}
 	border:0px;
 }
 
-/******** AppNext *********/
+/******** Pub *********/
 
-#appnext {
+#pub-footer {
 	position: relative;
-	width: 760px;
-	height: 72px;
+	width: 728px;
+	height: 90px;
 	margin: 10px auto;
 	background: #fff;
 	border: 5px solid #362f2d;
 	border-radius: 5px;
 }
 
-#appnext iframe {
-	width: 760px;
-	height: 72px;
+#pub-footer iframe {
+	width: 728px;
+	height: 90px;
 	padding: 0;
 	margin: 0;
 	border: 0;
