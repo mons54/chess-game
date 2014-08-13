@@ -440,25 +440,6 @@ footer #footer .link a:hover{
 	text-decoration:underline
 }
 
-footer #appnext {
-	position: relative;
-	width: 760px;
-	height: 72px;
-	margin: 10px auto;
-	background: #fff;
-	border: 5px solid #362f2d;
-	border-radius: 5px;
-}
-
-footer #appnext iframe {
-	width: 760px;
-	height: 72px;
-	padding: 0;
-	margin: 0;
-	border: 0;
-	overflow: hidden;
-}
-
 /********* MENU ********/
 
 #menu{
@@ -1696,6 +1677,25 @@ table.classement tr td.images img{padding-top:3px;}
 #pub-footer iframe {
 	width: 728px;
 	height: 90px;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	overflow: hidden;
+}
+
+#appnext {
+	position: relative;
+	width: 760px;
+	height: 72px;
+	margin: 10px auto;
+	background: #fff;
+	border: 5px solid #362f2d;
+	border-radius: 5px;
+}
+
+#appnext iframe {
+	width: 760px;
+	height: 72px;
 	padding: 0;
 	margin: 0;
 	border: 0;
