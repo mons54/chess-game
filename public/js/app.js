@@ -111,8 +111,7 @@
             });
         },
         reloadAds: function () {
-            $('#header iframe').attr('src', $('#header iframe').attr('src'));
-            $('#pub iframe').attr('src', $('#pub iframe').attr('src'));
+            $('#pub-footer iframe').attr('src', $('#pub-footer iframe').attr('src'));
             $.ads();
         },
         ads: function () {
@@ -121,21 +120,19 @@
                 return;
             }
 
-            if ($.options.gender == 'female') {
-                LSM_Slot({
-                    adkey: '87b',
-                    ad_size: '728x90',
-                    slot: 'slot68173',
-                    _render_div_id: 'pub-footer'
-                });
-            } else {
-                LSM_Slot({
-                    adkey: '826',
-                    ad_size: '728x90',
-                    slot: 'slot64668',
-                    _render_div_id: 'pub-footer'
-                });
-            }
+            LSM_Slot({
+                adkey: '826',
+                ad_size: '728x90',
+                slot: 'slot64668',
+                _render_div_id: 'header'
+            });
+
+            LSM_Slot({
+                adkey: '467',
+                ad_size: '300x250',
+                slot: 'slot61890',
+                _render_div_id: 'pub'
+            });
 
         },
         _sort: function (a, b) {
