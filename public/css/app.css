@@ -1667,7 +1667,7 @@ table.classement tr td.images img{padding-top:3px;}
 #pub-footer {
 	position: relative;
 	width: 728px;
-	height: 90px;
+	height: 72px;
 	margin: 10px auto;
 	background: #fff;
 	border: 5px solid #362f2d;
@@ -1676,7 +1676,7 @@ table.classement tr td.images img{padding-top:3px;}
 
 #pub-footer iframe {
 	width: 728px;
-	height: 90px;
+	height: 72px;
 	padding: 0;
 	margin: 0;
 	border: 0;

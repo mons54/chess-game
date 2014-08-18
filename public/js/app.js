@@ -111,7 +111,6 @@
             });
         },
         reloadAds: function () {
-            $('#pub-footer iframe').attr('src', $('#pub-footer iframe').attr('src'));
             $.ads();
         },
         ads: function () {
