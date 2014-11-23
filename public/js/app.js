@@ -20,13 +20,13 @@
             }
         },
         FB: {
-            getLoginStatus: function (res) {
+            login: function () {
+                FB.login($.FB.loginStatus);
+            },
+            loginStatus: function (res) {
                 if (res.status !== 'connected') {
-                    top.location.href = $.options.url;
-                    return;
+                    return $.FB.login();
                 }
-
-                $.options.uid = res.authResponse.userID;
 
                 FB.api('/me', $.FB.apiMe);
             },
@@ -35,6 +35,7 @@
                     return;
                 }
 
+                $.options.uid = res.id;
                 $.options.name = res.name.substr(0, 30);
                 $.options.lang = res.locale.substr(0, 2);
                 $.options.gender = res.gender;
@@ -54,7 +55,7 @@
 
                 $.options.friends.array.push($.options.uid);
 
-                $.getJSON('/translate/' + $.options.lang + '.json', $.start);
+                $.translate();
 
                 FB.api('/me/friends?fields=installed,id,name', $.FB.setFriends);
             },
@@ -80,6 +81,12 @@
                     return a.name > b.name ? 1 : -1;
                 }
             }
+        },
+        translate: function () {
+            $.getJSON('/translate/' + $.options.lang + '.json', $.start).fail(function() {
+                $.options.lang = 'en';
+                $.translate();
+            });
         },
         start: function (data) {
             $.options.text = data;
@@ -321,18 +328,17 @@ window.fbAsyncInit = function () {
 
     FB.init({
         appId: $.options.appId,
-        status: true,
-        cookie: true,
         xfbml: true,
-        version: 'v2.0'
+        version: 'v2.1'
     });
 
-    FB.getLoginStatus($.FB.getLoginStatus);
+    FB.getLoginStatus($.FB.loginStatus);
 };
 
-(function () {
-    var e = document.createElement('script');
-    e.async = true;
-    e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
-    document.getElementById('fb-root').appendChild(e);
-}());
+(function(d, s, id){
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) {return;}
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
