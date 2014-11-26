@@ -1,5 +1,19 @@
 module.exports = function (app, io, mongoose, fbgraph, crypto) {
 
+    var game = require(dirname + '/server/modules/game');
+
+    game.prototype.init();
+
+    game.prototype.create(1, {
+        uid: 1,
+        name: 'player1'
+    }, {
+        uid: 2,
+        name: 'player2'
+    });
+
+    game.prototype.move(1, 'a2', 'a3');
+
     var connections = {},
         created_game = {
             nb: 0,

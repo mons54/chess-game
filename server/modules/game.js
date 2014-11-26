@@ -3,104 +3,136 @@ var Game = function () {};
 module.exports = Game;
 
 Game.prototype.init = function () {
-    this.games = {}; 
+    this.games = {};
 };
 
-Game.prototype.move = function (id, uid, start, end) {
-
-    var game = this.games[id],
-        pieceStart,
-        pieceEnd;
+Game.prototype.move = function (id, start, end, promotion) {
     
-    if (!game) {
+    var game = this.games[id];
+
+    if (!game || game.finish) {
         return;
     }
 
-    pieceStart = game.pieces[start];
-    pieceEnd = game.pieces[end];
+    var pieceStart = game.pieces[start],
+        pieceEnd = game.pieces[end];
 
-    if (!this.isValidMove(uid, pieceStart, end)) {
+    if (!pieceStart) {
         return;
     }
 
-    if (this.isCapture()) {
+    var typeMove = this.getTypeMove(pieceStart, end);
+
+    if (!typeMove) {
+        return;
+    }
+
+    if (typeMove == 'capture') {
         if (!pieceEnd) {
-            this.inPassing();
+            this.deleteInPassing(game, end);
+        }
+
+        if (pieceStart.color == 'white') {
+            game.black.nbPieces -= 1;
         } else {
-            
+            game.white.nbPieces -= 1;
         }
     } else {
-        this.castling(game, piece, end);
+
+        if (this.isCastling(pieceStart, end)) {
+            this.castling(game, end);
+        }
+
+        if (this.isPawnPromotion(pieceStart, end)) {
+            pieceStart = this.getPawnPromotion(pieceStart.color, promotion);
+        }
     }
 
+    delete game.pieces[start];
+
+    pieceStart.moved = true;
+
+    game.pieces[end] = pieceStart;
+
+    console.log(game);
 };
 
-Game.prototype.isValidMove = function (uid, piece, end) {
+Game.prototype.castling = function (game, end) {
+    var letter = end.substr(0, 1),
+        number = end.substr(-1),
+        rook;
 
-    if (!piece || !this.isPlayerPiece(uid, piece) || (!this.isDeplace() && !this.isCapture())) {
+    if (letter == 'c') {
+        letter = 'd';
+        rook = game.pieces['a' + number];
+        delete game.pieces['a' + number];
+    } else {
+        letter = 'f';
+        rook = game.pieces['h' + number];
+        delete game.pieces['h' + number];
+    }
+    game.pieces[letter + number] = {
+        name: rook.name,
+        color: rook.color,
+        deplace: [],
+        capture: [],
+        moved: true
+    };
+}
+
+Game.prototype.isCastling = function (piece, end) {
+    if (piece.name != 'king' || piece.moved == true || !this.inArray(['c1', 'g1', 'c8', 'g8'], end)) {
         return false;
     }
-
     return true;
 };
 
-Game.prototype.isDeplace = function (piece, end) {
-    return piece.deplace.indexOf(end) != -1;
+Game.prototype.getPawnPromotion = function (name, color) {
+    if (!this.inArray(['queen', 'rook', 'bishop', 'knight'], name)) {
+        name = 'queen';
+    }
+    return {
+        name: name,
+        color: color,
+        deplace: [],
+        capture: [],
+        moved: true
+    };
 };
 
-Game.prototype.isCapture = function (piece, end) {
-    return piece.capture.indexOf(end) != -1;
+Game.prototype.isPawnPromotion = function (piece, end) {
+    var number = end.substr(-1);
+    if (piece.name == 'pawn' && ((piece.color == 'white' && number == '8') || (piece.color == 'black' && number == '1'))) {
+        return true;
+    }
+    return false;
 };
 
-Game.prototype.isPlayerPiece = function (uid, piece) {
-    return uid == game[piece.color].uid;
-};
+Game.prototype.deleteInPassing = function (game, end) { 
+    var letter = end.substr(0, 1),
+        number = end.substr(-1);
 
-Game.prototype.inPassing = function (game, position) {
-    
-    var letter = position.substr(0, 1),
-        number = position.substr(-1);
-
-    if (number == 3) {
+    if (number == '3') {
         delete game.pieces[letter + '4'];
     } else {
         delete game.pieces[letter + '5'];
     }
 };
 
-Game.prototype.castling = function (game, piece, position) {
-    
-    if (piece.name != 'king' || piece.moved || ['c1', 'g1', 'c8', 'g8'].indexOf(position) == -1) {
-        return;
+Game.prototype.getTypeMove = function (piece, end) {
+    if (this.inArray(piece.deplace, end)) {
+        return 'deplace';
+    } else if (this.inArray(piece.capture, end)) {
+        return 'capture';
     }
-
-    var letter = position.substr(0, 1),
-        number = position.substr(-1),
-        rook,
-        letterKing,
-        letterRook;
-
-    if (letter == 'c') {
-        letterKing = 'd';
-        letterRook = 'a';
-    } else {
-        letterKing = 'f';
-        letterRook = 'h';
-    }
-
-    rook = game.pieces[letterRook + number].name;
-
-    game.pieces[letterKing + number] = {
-        name: rook.name,
-        color: rook.color,
-        move: [],
-        moved: true
-    };
-
-    delete game.pieces[letterRook + number];
+    return false;
 };
 
-Game.prototype.newGame = function (id, white, black, time) {
+Game.prototype.inArray = function (array, index) {
+    return array.indexOf(index) != -1;
+};
+
+Game.prototype.create = function (id, white, black, time) {
 
     var timeTurn = 120,
         nbPieces = 16;
