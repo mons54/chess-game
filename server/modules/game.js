@@ -1,8 +1,10 @@
-var Game = function () {};
+var Game = function () {},
+    Engine = require(dirname + '/server/modules/engine');
 
 module.exports = Game;
 
 Game.prototype.init = function () {
+    // A voir pour déplacer dans socket.js
     this.games = {};
 };
 
@@ -53,6 +55,12 @@ Game.prototype.move = function (id, start, end, promotion) {
     pieceStart.moved = true;
 
     game.pieces[end] = pieceStart;
+
+    if (pieceStart.name == 'king') {
+        game[pieceStart.color].king.position = end;
+    }
+
+    Engine.prototype.init(game);
 
     console.log(game);
 };
