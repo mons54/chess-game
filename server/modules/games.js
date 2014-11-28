@@ -6,6 +6,8 @@ var Engine = require(dirname + '/server/modules/engine');
 
 Games.prototype.move = function (id, start, end, promotion) {
     
+    // ajouter une vérif si c'est au joueur de jouer (voir si son temps est dépassé)
+
     var game = this.games[id];
 
     if (!game || game.finish) {
@@ -13,7 +15,6 @@ Games.prototype.move = function (id, start, end, promotion) {
     }
 
     var engine = new Engine(game, start, end, promotion);
-
 };
 
 Games.prototype.create = function (id, white, black, time) {
@@ -27,6 +28,7 @@ Games.prototype.create = function (id, white, black, time) {
             name: white.name,
             time: time,
             timeTurn: timeTurn,
+            canDraw: false,
             king: {
                 position: 'e1',
                 moveForbidden: []
@@ -38,6 +40,7 @@ Games.prototype.create = function (id, white, black, time) {
             name: black.name,
             time: time,
             timeTurn: timeTurn,
+            canDraw: false,
             king: {
                 position: 'e8',
                 moveForbidden: []
@@ -48,6 +51,9 @@ Games.prototype.create = function (id, white, black, time) {
         timeTurn: timeTurn,
         finish: false,
         turn: 'white',
+        turn50: 0,
+        played: 0,
+        saved: {},
         pieces: {
             e1: {
                 name: 'king',

@@ -10,7 +10,7 @@ module.exports = function (app, io, mongoose, fbgraph, crypto) {
     }, {
         uid: 2,
         name: 'player2'
-    });
+    }, 5400);
 
     games.move(1, 'a2', 'a3');
 
