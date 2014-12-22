@@ -6,6 +6,7 @@
             redirectUri: 'https://apps.facebook.com/the-chess-game/',
             url: 'https://www.facebook.com/dialog/oauth?client_id=459780557396952&redirect_uri=https://apps.facebook.com/the-chess-game',
             host: 'mons54.parthuisot.fr',
+            scope: 'user_friends',
             uid: null,
             name: 'User',
             lang: 'en',
@@ -21,12 +22,20 @@
         },
         FB: {
             login: function () {
-                FB.login($.FB.loginStatus);
+                FB.login($.FB.loginStatus, {
+                    scope: $.options.scope 
+                });
             },
             loginStatus: function (res) {
                 if (res.status !== 'connected') {
                     return $.FB.login();
                 }
+
+                FB.api('/me/permissions?permission=' + $.options.scope, function (res) {
+                    if (!res.data || !res.data.length) {
+                        return $.FB.login();
+                    }
+                });
 
                 FB.api('/me', $.FB.apiMe);
             },
@@ -274,8 +283,8 @@
             FB.ui({
                 method: 'apprequests',
                 to: data,
-                title: this.options.text.title,
-                message: this.options.text.description,
+                title: $.options.text.title,
+                message: $.options.text.description,
 
             });
         },
@@ -283,12 +292,12 @@
 
             FB.ui({
                 method: 'feed',
-                redirect_uri: redirectUri,
-                link: redirectUri,
-                picture: 'https://chess-game.jit.su/img/mini-logo.png',
-                name: this.options.text.title,
+                redirect_uri: $.options.redirectUri,
+                link: $.options.redirectUri,
+                picture: $.getHost() + '/img/mini-logo.png',
+                name: $.options.text.title,
                 caption: data.blanc + ' vs ' + data.noir + ' - ' + data.result + ' - ' + data.win,
-                description: this.text.description
+                description: $.options.text.description
             });
         },
         partager_trophy: function (data) {
@@ -296,12 +305,12 @@
             FB.ui({
 
                 method: 'feed',
-                redirect_uri: redirectUri,
-                link: redirectUri,
-                picture: 'https://chess-game.jit.su/img/trophees/' + this.options.text.trophy.content[data]._class + '.png',
-                name: this.options.text.title,
-                caption: this.options.text.trophy.content[data].title,
-                description: this.options.text.trophy.content[data].description
+                redirect_uri: $.options.redirectUri,
+                link: $.options.redirectUri,
+                picture: $.getHost() + '/img/trophees/' + $.options.text.trophy.content[data]._class + '.png',
+                name: $.options.text.title,
+                caption: $.options.text.trophy.content[data].title,
+                description: $.options.text.trophy.content[data].description
 
             });
         },
@@ -319,6 +328,9 @@
             });
 
             return name;
+        },
+        getHost: function () {
+            return 'https://' + $.options.host;
         }
     });
 
@@ -329,7 +341,7 @@ window.fbAsyncInit = function () {
     FB.init({
         appId: $.options.appId,
         xfbml: true,
-        version: 'v2.1'
+        version: 'v2.2'
     });
 
     FB.getLoginStatus($.FB.loginStatus);

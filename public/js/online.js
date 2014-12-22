@@ -274,18 +274,9 @@
             $('<span class="sep-2">:</span>').appendTo(time);
             this.free_s = $('<span class="secondes"></span>').appendTo(time);
 
-            if (this.options.send_invite.nb < 30) {
-
-                this.options.send_invite.bt = $('<a class="invite invite-' + $.options.lang + '" href="#"></a>').appendTo(right).click(function () {
-
-                    if (this.all_friends) {
-                        this._invite_friends();
-                    }
-
-                    return false;
-
-                }.bind(this));
-            }
+            this.options.send_invite.bt = $('<a class="invite invite-' + $.options.lang + '" href="#"></a>').appendTo(right).click(function () {
+                $.sendInvite();
+            });
 
             this.conteneur = $('<div id="conteneur"></div>').appendTo(this.element);
         },
@@ -355,11 +346,7 @@
             var li = $('<li></li>').appendTo(ul);
 
             $('<a href="#">' + $.options.text.invite + '</a>').appendTo(li).click(function () {
-
-                if (this.all_friends) {
-                    this._invite_friends();
-                }
-
+                $.sendInvite();
                 return false;
 
             }.bind(this));
@@ -508,172 +495,6 @@
 
                 this.options.sound = true;
             }
-        },
-
-        _invite_friends: function () {
-
-            if (this.options.send_invite.nb < 30) {
-
-                var fade = $('#fade').css('display', 'block');
-                var fenetre = $('<div class="fenetre invite" ></div>').appendTo(this.contenu);
-
-                $('<div class="close"></div>').appendTo(fenetre).click(function () {
-
-                    $('#fade').css('display', 'none');
-                    $('.fenetre').remove();
-
-                });
-
-                var image = $('<div class="photo"></div>').appendTo(fenetre);
-                $('<img src="https://graph.facebook.com/' + this.uid + '/picture">').appendTo(image);
-
-                $('<h3>' + $.options.text.invite_friends.title + '</h3>').appendTo(fenetre);
-
-                $('<div class="clear"></div>').appendTo(fenetre);
-
-                $('<div class="infos">' + $.options.text.invite_friends.infos + '</div>').appendTo(fenetre);
-
-                var menu = $('<ul class="ul-invite"></ul>').appendTo(fenetre);
-
-                this.invite_checked = {
-                    nb: 0,
-                    data: {}
-                };
-
-                this.invite_all = $('<div class="ct"></div>').appendTo(fenetre);
-                this.invite_chess = $('<div class="ct"></div>').css('display', 'none').appendTo(fenetre);
-
-                $('<button>' + $.options.text.invite_friends.send + '</button>').appendTo(fenetre).click(function () {
-
-                    if (this.invite_checked.data) {
-
-                        var data = '';
-
-                        this.options.send_invite.nb += this.invite_checked.nb;
-
-                        for (var uid in this.invite_checked.data) {
-                            this.options.send_invite.data.push(uid);
-                            data += uid + ',';
-                        }
-
-                        if (this.options.send_invite.nb >= 30) {
-                            $(this.options.send_invite.bt).remove();
-                        }
-
-                        $.sendInvite(data);
-                    }
-
-                    $('#fade').css('display', 'none');
-                    $('.fenetre').remove();
-
-                }.bind(this));
-
-                var div = $('<div class="nb"></div>').appendTo(fenetre);
-
-                this.ct_nb = $('<strong>' + this.options.send_invite.nb + '</strong>').appendTo(div);
-                $('<span>/30</span>').appendTo(div);
-
-                this._all_friends(false, this.invite_all);
-                this._all_friends(true, this.invite_chess);
-
-                var li = $('<li></li>').appendTo(menu);
-
-                $('<a class="selected" href="#">' + $.options.text.invite_friends.all + '</a>').appendTo(li).click(function (e) {
-                    $('.ul-invite li a').removeClass('selected').addClass('normal');
-                    $(e.target).removeClass('normal').addClass('selected');
-                    $(this.invite_chess).css('display', 'none');
-                    $(this.invite_all).css('display', 'block');
-                    return false;
-                }.bind(this));
-
-                var li = $('<li></li>').appendTo(menu);
-
-                $('<a class="normal" href="#">' + $.options.text.title + '</a>').appendTo(li).click(function (e) {
-                    $('.ul-invite li a').removeClass('selected').addClass('normal');
-                    $(e.target).removeClass('normal').addClass('selected');
-                    $(this.invite_all).css('display', 'none');
-                    $(this.invite_chess).css('display', 'block');
-                    return false;
-                }.bind(this));
-            }
-        },
-
-        _all_friends: function (bol, div) {
-
-            $(div).empty().html();
-
-            this.table = $('<table></table>').appendTo(div);
-
-            var _i = 0;
-
-            for (var i in this.all_friends) {
-
-                if (!bol && !this.all_friends[i].installed) {
-                    this._friend(this.all_friends[i], _i);
-                    _i++;
-                } else if (bol && this.all_friends[i].installed) {
-                    this._friend(this.all_friends[i], _i);
-                    _i++;
-                }
-            }
-        },
-
-        _friend: function (data, i) {
-
-            if (i % 2 == 0) {
-                this.tr = $('<tr></tr>').appendTo(this.table);
-            }
-
-            var td = $('<td class="check"></td>').appendTo(this.tr);
-
-            var classes = 'disable',
-                checked = 'checked',
-                disabled = 'disabled';
-
-            if (!$._in_array(data.id, this.options.send_invite.data)) {
-                classes = 'checkable';
-                checked = '';
-                disabled = '';
-            }
-
-            $('<input type="checkbox" id="' + data.id + '" class="' + classes + '" ' + checked + '  ' + disabled + ' />').appendTo(td).click(function (e) {
-
-                var nb = this.options.send_invite.nb + this.invite_checked.nb;
-
-                if ($(e.target).is(':checked')) {
-
-                    if (nb < 30) {
-
-                        this.invite_checked.nb++;
-                        this.invite_checked.data[data.id] = {};
-
-                        nb++;
-
-                        $(this.ct_nb).empty().text(nb);
-                    }
-                } else {
-
-                    this.invite_checked.nb--;
-                    delete this.invite_checked.data[data.id];
-
-                    nb--;
-
-                    $(this.ct_nb).empty().text(nb);
-
-                    $('input.checkable:not(:checked)').removeAttr('disabled');
-                }
-
-                if (nb >= 30) {
-
-                    $('input.checkable:not(:checked)').attr('disabled', 'disabled');
-                } else {
-
-                    $('input.checkable:not(:checked)').removeAttr('disabled');
-                }
-
-            }.bind(this));
-
-            var name = $('<td class="name"><label for="' + data.id + '">' + data.name + '</label></td>').appendTo(this.tr);
         },
 
         _trophy: function () {
