@@ -26,6 +26,7 @@ body{
 
 #accueil ul.menu_game li a {
 	float: right;
+	white-space:nowrap;
 }
 
 #accueil ul.menu_game li a.connected {

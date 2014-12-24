@@ -6,7 +6,6 @@
             redirectUri: 'https://apps.facebook.com/the-chess-game/',
             url: 'https://www.facebook.com/dialog/oauth?client_id=459780557396952&redirect_uri=https://apps.facebook.com/the-chess-game',
             host: 'mons54.parthuisot.fr',
-            scope: 'user_friends',
             uid: null,
             name: 'User',
             lang: 'en',
@@ -23,7 +22,7 @@
         FB: {
             login: function () {
                 FB.login($.FB.loginStatus, {
-                    scope: $.options.scope 
+                    scope: 'user_friends'
                 });
             },
             loginStatus: function (res) {
@@ -31,7 +30,7 @@
                     return $.FB.login();
                 }
 
-                FB.api('/me/permissions?permission=' + $.options.scope, function (res) {
+                FB.api('/me/permissions?permission=user_friends', function (res) {
                     if (!res.data || !res.data.length) {
                         return $.FB.login();
                     }
