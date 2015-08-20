@@ -363,7 +363,7 @@
             var right = $('<div class="right"></div>').appendTo(profil);
 
             var image = $('<div class="left photo"></div>').appendTo(profil);
-            $('<img src="https://graph.facebook.com/' + this.uid + '/picture">').appendTo(image);
+            $('<img class="small-profile-picture" src="https://graph.facebook.com/' + this.uid + '/picture">').appendTo(image);
             var name = $('<div style="padding-bottom:5px"></div>').appendTo(profil);
 
             $('<a href="#">' + this.name + '</a>').appendTo(name).click(function () {
@@ -802,7 +802,7 @@
             if (uid) {
 
                 var challenger = $('<div class="challenger"></div>').appendTo(fenetre);
-                $('<img src="https://graph.facebook.com/' + uid + '/picture">').appendTo(challenger);
+                $('<img class="small-profile-picture" src="https://graph.facebook.com/' + uid + '/picture">').appendTo(challenger);
                 $('<div class="name">' + data.name + '</div>').appendTo(challenger);
                 $('<div>' + $.options.text.points + ': <strong>' + data.points + '</strong></div>').appendTo(challenger);
                 $('<div>' + $.options.text.ranking + ': <strong>' + data.classement + '</strong></div>').appendTo(challenger);
@@ -1115,7 +1115,7 @@
 
             var tr = $('<tr></tr>').appendTo(this.table_content);
 
-            $('<td class="images"><img src="https://graph.facebook.com/' + uid + '/picture"/></td>').appendTo(tr).click(function () {
+            $('<td class="images"><img class="small-profile-picture" src="https://graph.facebook.com/' + uid + '/picture"/></td>').appendTo(tr).click(function () {
                 this._open_profil(uid, data.name);
             }.bind(this));
 
@@ -1313,7 +1313,7 @@
             }.bind(this));
 
             var div = $('<div class="stats_joueur"></div>').appendTo(fenetre);
-            $("<div class='left'><img src='https://graph.facebook.com/" + uid + "/picture'></div>").appendTo(div);
+            $('<div class="left"><img class="small-profile-picture" src="https://graph.facebook.com/' + uid + '/picture"></div>').appendTo(div);
 
             var div = $('<div class="ct-stats"></div>').appendTo(div);
             $("<div class='name-stats'><strong> " + name + "</strong></div>").appendTo(div);
@@ -1368,7 +1368,7 @@
                 var date = date.toLocaleString();
                 var img = $('<div class="image"></div>').appendTo(div);
 
-                $('<img style="width:25px" src="https://graph.facebook.com/' + data.uid + '/picture">').appendTo(img).click(function () {
+                $('<img class="mini-profile-picture" src="https://graph.facebook.com/' + data.uid + '/picture">').appendTo(img).click(function () {
                     this._open_profil(data.uid, data.name);
                 }.bind(this));
 
@@ -1428,7 +1428,7 @@
             var div = $('<div class="profil_jeu"></div>').appendTo(this.contenu);
 
             this.options[couleur1].img = $('<div class="left"></div>').appendTo(div);
-            $('<img style="width:50px" src="https://graph.facebook.com/' + this.jeu[couleur1].uid + '/picture" />').appendTo(this.options[couleur1].img);
+            $('<img class="small-profile-picture" src="https://graph.facebook.com/' + this.jeu[couleur1].uid + '/picture" />').appendTo(this.options[couleur1].img);
 
             var profil_1 = {
                 uid: this.jeu[couleur1].uid,
@@ -1476,7 +1476,7 @@
             var div = $('<div class="profil_jeu"></div>').appendTo(this.contenu);
 
             this.options[couleur2].img = $('<div class="left"></div>').appendTo(div);
-            $('<img style="width:50px" src="https://graph.facebook.com/' + this.jeu[couleur2].uid + '/picture" />').appendTo(this.options[couleur2].img);
+            $('<img class="small-profile-picture" src="https://graph.facebook.com/' + this.jeu[couleur2].uid + '/picture" />').appendTo(this.options[couleur2].img);
 
             var profil_2 = {
                 uid: this.jeu[couleur2].uid,
@@ -3466,7 +3466,7 @@
 
             $('<td class="scores">' + user.points + '</td>').appendTo(tr);
 
-            $('<img src="https://graph.facebook.com/' + uid + '/picture" />').appendTo(image);
+            $('<img class="small-profile-picture" src="https://graph.facebook.com/' + uid + '/picture" />').appendTo(image);
 
             FB.api('/' + uid, function (response) {
                 $('<a href="#">' + response.name + '</a>').appendTo(nom).click(function () {

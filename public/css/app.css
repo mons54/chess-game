@@ -17,9 +17,24 @@ a {
 	color: #3b5998
 }
 
-h2{ font-size:20px; }
-h3{ position:relative; }
-button:hover{ cursor:pointer; }
+h2 { 
+	font-size: 20px; 
+}
+h3 { 
+	position: relative; 
+}
+button:hover { 
+	cursor:pointer; 
+}
+
+.small-profile-picture {
+	width: 50px;
+	height: 50px;
+}
+.mini-profile-picture {
+	width: 25px;
+	height: 25px;
+}
 
 .load {
     position:relative;
