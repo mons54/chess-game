@@ -1,5 +1,7 @@
 module.exports = function (app, express, connect, mongoose, io) {
 
+    var bodyParser = require('body-parser');
+
 	app.host = 'mons54.parthuisot.fr';
 
     app.facebook = {
@@ -34,7 +36,8 @@ module.exports = function (app, express, connect, mongoose, io) {
     app.static = dirname + '/public/';
 
     app.use(express.static(app.static));
-    app.use(require('body-parser')());
+    app.use(bodyParser.urlencoded());
+    app.use(bodyParser.json());
     app.set('views', app.static);
     app.engine('html', require('ejs').renderFile);
 
