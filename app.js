@@ -4,7 +4,7 @@ var express = require('express'),
     fbgraph = require('fbgraph'),
     crypto = require('crypto'),
     app = express(),
-    io = require('socket.io').listen(app.listen(process.env.PORT || 3000));
+    io = require('socket.io').listen(app.listen(3000));
 
 global.dirname = __dirname;
 
