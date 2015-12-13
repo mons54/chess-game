@@ -59,7 +59,7 @@ module.exports = function (app, io, mongoose, fbgraph, crypto) {
                         var user = new users({
                             uid: data.uid,
                             points: 1500,
-                            tokens: 17,
+                            tokens: 25,
                             trophy: 1,
                             parrainage: data.parrainage,
                         });
@@ -526,7 +526,7 @@ module.exports = function (app, io, mongoose, fbgraph, crypto) {
                         return;
                     }
 
-                    var token = data.tokens + 3;
+                    var token = data.tokens + 5;
 
                     users.update({
                         uid: uid
@@ -751,7 +751,7 @@ module.exports = function (app, io, mongoose, fbgraph, crypto) {
                         var token = 0;
 
                         if (!data.tokens && data.tokens != 0) {
-                            token += 17;
+                            token += 25;
                             users.update({
                                 uid: uid
                             }, {
@@ -767,7 +767,7 @@ module.exports = function (app, io, mongoose, fbgraph, crypto) {
 
                         if (!_data || !_data.time) {
 
-                            token += 3;
+                            token += 5;
                             time_free = time;
                             var free_token = new free_tokens({
                                 uid: uid
@@ -784,7 +784,7 @@ module.exports = function (app, io, mongoose, fbgraph, crypto) {
                         } else if (_data.time < (time - (24 * 3600))) {
 
                             time_free = time;
-                            token += 3;
+                            token += 5;
                             free_tokens.update({
                                 uid: uid
                             }, {
