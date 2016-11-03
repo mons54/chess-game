@@ -36,7 +36,7 @@
                     }
                 });
 
-                FB.api('/me', $.FB.apiMe);
+                FB.api('/me?fields=name,locale,gender', $.FB.apiMe);
             },
             apiMe: function (res) {
                 if (!res) {
@@ -335,12 +335,12 @@
 
 })(jQuery);
 
-window.fbAsyncInit = function () {
-
+window.fbAsyncInit = function() {
     FB.init({
-        appId: $.options.appId,
-        xfbml: true,
-        version: 'v2.2'
+        appId      : $.options.appId,
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v2.8'
     });
 
     FB.getLoginStatus($.FB.loginStatus);
