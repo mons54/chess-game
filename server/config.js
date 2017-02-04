@@ -36,7 +36,7 @@ module.exports = function (app, express, connect, mongoose, io) {
     app.static = dirname + '/public/';
 
     app.use(express.static(app.static));
-    app.use(bodyParser.urlencoded());
+    app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
     app.set('views', app.static);
     app.engine('html', require('ejs').renderFile);
