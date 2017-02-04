@@ -370,6 +370,37 @@ body .fb-like {
 	border-radius: 10px;
 }
 
+#left .chess-2 {
+    display: block;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 16px;
+    color: aliceblue;
+    background-color: #006E9A;
+    height: auto;
+    padding: 10px 0;
+    font-weight: bold;
+    border: 5px solid #362f2d;
+    border-radius: 10px;
+    width: 100px;
+}
+
+#left .chess-2 .text-play {
+	margin-top: 10px;
+    display: inline-block;
+}
+
+#left .chess-2 .action-play {
+	width: 0;
+    display: block;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 20px solid #FFEB3B;
+    margin-top: 10px;
+    margin-left: 40px;
+}
+
 #right .invite-ar { background-image: url(../img/invite/ar.png); }
 #right .invite-de { background-image: url(../img/invite/de.png); }
 #right .invite-es { background-image: url(../img/invite/es.png); }
