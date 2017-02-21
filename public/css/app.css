@@ -371,34 +371,60 @@ body .fb-like {
 }
 
 #left .chess-2 {
-    display: block;
-    margin-top: 20px;
-    text-align: center;
-    font-size: 16px;
-    color: aliceblue;
-    background-color: #006E9A;
-    height: auto;
-    padding: 10px 0;
-    font-weight: bold;
-    border: 5px solid #362f2d;
-    border-radius: 10px;
-    width: 100px;
+	background: linear-gradient(to right, black 0%,black 50%,#000000 50%,white 50%,white 100%);
+	display: block;
+	margin-top: 20px;
+	text-align: center;
+	font-size: 16px;
+	height: auto;
+	font-weight: bold;
+	border: 5px solid #362f2d;
+	border-radius: 10px;
+	width: 100px;
+	padding-bottom: 10px;
+}
+
+#left .chess-2 .chess-2-content {
+	background: url('../img/chess-2.png') no-repeat;
+	background-size: 100px;
+	background-position: 0 42px;
+	border-radius: 10px;
+}
+#left .chess-2 .text-name {
+	background-color: #00709c;
+	font-size: 14px;
+	height: 25px;
+	line-height: 25px;
+	color: #fff;
+	padding: 5px 0;
+	font-weight: normal;
+	display: inline-block;
+	width: 100%;
+	border-bottom: 5px solid #362f2d;
+	border-radius: 4px 4px 0 0;
 }
 
 #left .chess-2 .text-play {
-	margin-top: 10px;
-    display: inline-block;
+	background-color: #795548;
+	margin-top: 100px;
+	color: #fff;
+	padding: 5px 10px;
+	font-weight: normal;
+	font-size: 14px;
+	border-radius: 1px;
+	text-transform: uppercase;
+	display: inline-block;
 }
 
 #left .chess-2 .action-play {
 	width: 0;
-    display: block;
-    height: 0;
-    border-top: 15px solid transparent;
-    border-bottom: 15px solid transparent;
-    border-left: 20px solid #FFEB3B;
-    margin-top: 10px;
-    margin-left: 40px;
+	display: block;
+	height: 0;
+	border-top: 15px solid transparent;
+	border-bottom: 15px solid transparent;
+	border-left: 20px solid #4CAF50;
+	margin-top: 10px;
+	margin-left: 40px;
 }
 
 #right .invite-ar { background-image: url(../img/invite/ar.png); }

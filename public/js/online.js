@@ -248,8 +248,7 @@
 
             }.bind(this));
 
-            this.linkChess2 = $('<a target="_blank" class="chess-2" href="https://apps.facebook.com/1687859708170830">' + $.options.text.title + '<br>II<br><span class="action-play"></span><span class="text-play">' + $.options.text.play + '</span></a>').appendTo(left)
-
+            this.linkChess2 = $('<a target="_blank" class="chess-2" href="https://apps.facebook.com/1687859708170830"><div class="chess-2-content"><span class="text-name">' + $.options.text.title + ' II</span><span class="text-play">' + $.options.text.play + '</span></div></a>').appendTo(left);
             this.banUser = $('<div/>').appendTo(left);
         },
 
