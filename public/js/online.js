@@ -593,7 +593,7 @@
                     $('#fade').css('display', 'none');
                     $('.fenetre').remove();
                     this.adVideo();
-                });
+                }.bind(this));
             }
         },
 
@@ -677,8 +677,6 @@
 
         adVideo: function () {
 
-            $('#fade').one('click', this.adVideoHide);
-
             $('#ad-video').css('display', 'block');
 
             LSM_Slot({
@@ -696,7 +694,6 @@
         },
 
         adVideoHide: function () {
-            $('#fade').unbind('click');
             $('#ad-video').css('display', 'none');
         },
 

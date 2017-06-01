@@ -41,8 +41,7 @@ button span#play {
     z-index: 999;
     width: 100%;
     text-align: center;
-    top: 50%;
-    margin-top: -240px;
+    top: 180px;
     height: 480px;
 }
 
