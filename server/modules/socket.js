@@ -620,7 +620,7 @@ module.exports = function (app, io, mongoose, fbgraph, crypto) {
                     uid: socket.uid
                 }, {
                     $set: {
-                        tokens: parseInt(data.tokens) + 5
+                        tokens: parseInt(data.tokens) + 2
                     }
                 }, function (err) {
 

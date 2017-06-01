@@ -664,7 +664,7 @@
 
                     $('<th class="token"></th>').appendTo(tr);
 
-                    $('<th class="nb"><span class="total">5</span> ' + $.options.text.tokens + '</th>').appendTo(tr);
+                    $('<th class="nb"><span class="total">2</span> ' + $.options.text.tokens + '</th>').appendTo(tr);
                     var td = $('<th class="button"></th>').appendTo(tr);
 
                     $('<button><span id="play"></span></button>').appendTo(td).click(function () {
