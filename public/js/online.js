@@ -248,22 +248,12 @@
 
             }.bind(this));
 
-            this.linkChess2 = $('<a target="_blank" class="chess-2" href="https://apps.facebook.com/1687859708170830">' + $.options.text.title + '<br>II<br><span class="action-play"></span><span class="text-play">' + $.options.text.play + '</span></a>').appendTo(left)
-
             this.banUser = $('<div/>').appendTo(left);
         },
 
         _create_column_right: function () {
 
             var right = $('<div id="right"></div>').appendTo(this.element);
-
-            $('<a href="#" class="dealspot dealspot-' + $.options.lang + '"></div>').appendTo(right).click(function () {
-
-                this._sponsorpay();
-
-                return false;
-
-            }.bind(this));
 
             var free = $('<div class="free"></div>').appendTo(right),
                 time = $('<div class="time"></div>').appendTo(free);
@@ -277,6 +267,8 @@
             this.options.send_invite.bt = $('<a class="invite invite-' + $.options.lang + '" href="#"></a>').appendTo(right).click(function () {
                 $.sendInvite();
             });
+
+            this.linkChess2 = $('<a target="_blank" class="chess-2" href="https://apps.facebook.com/1687859708170830"><div class="chess-2-content"><span class="text-name">' + $.options.text.title + ' II</span><span class="text-play">' + $.options.text.play + '</span></div></a>').appendTo(right);
 
             this.conteneur = $('<div id="conteneur"></div>').appendTo(this.element);
         },
@@ -596,14 +588,16 @@
                 this._shop();
             });
 
-            $('<button class="go-shop">' + $.options.text.free_tokens + '</button>').appendTo(div).click(function () {
-                $('#fade').css('display', 'none');
-                $('.fenetre').remove();
-                this._shop('free');
-            });
+            if (typeof LSM_Slot === 'function') {
+                $('<button class="go-shop">' + $.options.text.free_tokens + '</button>').appendTo(div).click(function () {
+                    $('#fade').css('display', 'none');
+                    $('.fenetre').remove();
+                    this.adVideo();
+                }.bind(this));
+            }
         },
 
-        _shop: function (type) {
+        _shop: function () {
 
             var fade = $('#fade').css('display', 'block');
             var shop = $('<div id="shop" ></div>').appendTo(this.contenu);
@@ -617,39 +611,8 @@
 
             $('<h3>' + $.options.text.shop + '</h3>').appendTo(shop);
 
-            var menu = $('<ul class="ul-shop"></ul>').appendTo(shop);
-
             this.shop = $('<div></div>').appendTo(shop);
-
-            if (type == 'free') {
-
-                var buy = 'normal',
-                    free = 'selected';
-
-                this._free_tokens();
-            } else {
-
-                var buy = 'selected',
-                    free = 'normal';
-
-                this._buy_tokens();
-            }
-
-            var li = $('<li></li>').appendTo(menu);
-            $('<a class="' + buy + '" href="#">' + $.options.text.tokens + '</a>').appendTo(li).click(function (e) {
-                $('.ul-shop li a').removeClass('selected').addClass('normal');
-                $(e.target).removeClass('normal').addClass('selected');
-                this._buy_tokens();
-                return false;
-            }.bind(this));
-
-            var li = $('<li></li>').appendTo(menu);
-            $('<a class="' + free + '" href="#">' + $.options.text.free_tokens + '</a>').appendTo(li).click(function (e) {
-                $('.ul-shop li a').removeClass('selected').addClass('normal');
-                $(e.target).removeClass('normal').addClass('selected');
-                this._free_tokens();
-                return false;
-            }.bind(this));
+            this._buy_tokens();
         },
 
         _buy_tokens: function () {
@@ -696,9 +659,42 @@
                     this._tokens(tokens[i], i);
                 }
 
-                $('table.token tr:last').css('border-bottom', '0px');
+                if (typeof LSM_Slot === 'function') {
+                    var tr = $('<tr></tr>').appendTo(this.table);
+
+                    $('<th class="token"></th>').appendTo(tr);
+
+                    $('<th class="nb"><span class="total">5</span> ' + $.options.text.tokens + '</th>').appendTo(tr);
+                    var td = $('<th class="button"></th>').appendTo(tr);
+
+                    $('<button><span id="play"></span></button>').appendTo(td).click(function () {
+                        this.adVideo();
+                    }.bind(this));
+                }
 
             }.bind(this));
+        },
+
+        adVideo: function () {
+
+            $('#ad-video').css('display', 'block');
+
+            LSM_Slot({
+                adkey: '2a9',
+                ad_size: '640x480',
+                slot: 'slot170724',
+                _ad_type: 'vast_banner',
+                _render_div_id: 'ad-video',
+                _onhide: function () {
+                    this.socket.emit('adVideoCompleted');
+                    this.adVideoHide();
+                }.bind(this),
+                _onnobid: this.adVideoHide
+            });
+        },
+
+        adVideoHide: function () {
+            $('#ad-video').css('display', 'none');
         },
 
         _tokens: function (data, id) {
@@ -738,53 +734,6 @@
                     signed_request: response.signed_request
                 });
             }
-        },
-
-        _free_tokens: function () {
-
-            $(this.shop).empty().html();
-
-            var div = $('<div class="center"></div>').appendTo(this.shop);
-
-            $('<button class="sponsorpay"></button>').appendTo(div).click(function () {
-                this._sponsorpay();
-            }.bind(this));
-
-            $('<button class="tokenads"></button>').appendTo(div).click(function () {
-                this._tokenads();
-            }.bind(this));
-
-        },
-
-        _sponsorpay: function () {
-
-            var fade = $('#fade').css('display', 'block');
-            var sponsorpay = $('<div id="sponsorpay" ></div>').appendTo(this.contenu);
-
-            $('<div class="close"></div>').appendTo(sponsorpay)
-                .click(function () {
-
-                    $('#fade').css('display', 'none');
-                    $('#sponsorpay').remove();
-
-                });
-
-            $('<iframe src="https://iframe.sponsorpay.com/?appid=11841&uid=' + this.uid + '&currency=' + $.options.text.tokens + '&lang=' + $.options.lang + '&gender=' + ($.options.gender ? $.options.gender.substr(0, 1) : 'm') + '"></iframe>').appendTo(sponsorpay);
-        },
-
-        _tokenads: function () {
-
-            var fade = $('#fade').css('display', 'block');
-            var sponsorpay = $('<div id="sponsorpay" ></div>').appendTo(this.contenu);
-
-            $('<div class="close"></div>').appendTo(sponsorpay).click(function () {
-
-                $('#fade').css('display', 'none');
-                $('#sponsorpay').remove();
-
-            });
-
-            $('<iframe frameborder="0" marginwidth="0" marginheight="0" scrolling="auto" width="600" height="600" src="https://offers.tokenads.com/show?client_id=' + this.uid + '&app_id=4561&dpl=top&width=600&fixed_height=600"></iframe>').appendTo(sponsorpay);
         },
 
         _create_game: function (uid, data) {

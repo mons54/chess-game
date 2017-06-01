@@ -27,6 +27,24 @@ button:hover {
 	cursor:pointer; 
 }
 
+button span#play {
+	position: relative;
+    display: inline-block;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-left: 10px solid #fff;
+}
+
+#ad-video {
+	display: none;
+	position: absolute;
+    z-index: 999;
+    width: 100%;
+    text-align: center;
+    top: 180px;
+    height: 480px;
+}
+
 .small-profile-picture {
 	width: 50px;
 	height: 50px;
@@ -370,35 +388,61 @@ body .fb-like {
 	border-radius: 10px;
 }
 
-#left .chess-2 {
-    display: block;
-    margin-top: 20px;
-    text-align: center;
-    font-size: 16px;
-    color: aliceblue;
-    background-color: #006E9A;
-    height: auto;
-    padding: 10px 0;
-    font-weight: bold;
-    border: 5px solid #362f2d;
-    border-radius: 10px;
-    width: 100px;
+#right .chess-2 {
+	background: linear-gradient(to right, black 0%,black 50%,#000000 50%,white 50%,white 100%);
+	display: block;
+	margin-top: 20px;
+	text-align: center;
+	font-size: 16px;
+	height: auto;
+	font-weight: bold;
+	border: 5px solid #362f2d;
+	border-radius: 10px;
+	width: 100px;
+	padding-bottom: 10px;
 }
 
-#left .chess-2 .text-play {
-	margin-top: 10px;
-    display: inline-block;
+#right .chess-2 .chess-2-content {
+	background: url('../img/chess-2.png') no-repeat;
+	background-size: 100px;
+	background-position: 0 42px;
+	border-radius: 10px;
+}
+#right .chess-2 .text-name {
+	background-color: #795548;
+	font-size: 14px;
+	height: 25px;
+	line-height: 25px;
+	color: #fff;
+	padding: 5px 0;
+	font-weight: normal;
+	display: inline-block;
+	width: 100%;
+	border-bottom: 5px solid #362f2d;
+	border-radius: 4px 4px 0 0;
 }
 
-#left .chess-2 .action-play {
+#right .chess-2 .text-play {
+	background-color: #795548;
+	margin-top: 100px;
+	color: #fff;
+	padding: 5px 10px;
+	font-weight: normal;
+	font-size: 14px;
+	border-radius: 1px;
+	text-transform: uppercase;
+	display: inline-block;
+}
+
+#right .chess-2 .action-play {
 	width: 0;
-    display: block;
-    height: 0;
-    border-top: 15px solid transparent;
-    border-bottom: 15px solid transparent;
-    border-left: 20px solid #FFEB3B;
-    margin-top: 10px;
-    margin-left: 40px;
+	display: block;
+	height: 0;
+	border-top: 15px solid transparent;
+	border-bottom: 15px solid transparent;
+	border-left: 20px solid #4CAF50;
+	margin-top: 10px;
+	margin-left: 40px;
 }
 
 #right .invite-ar { background-image: url(../img/invite/ar.png); }
@@ -1367,7 +1411,7 @@ table.classement tr td.images img{padding-top:3px;}
 	background-color: #fff;
 	z-index: 99;
 	width: 400px;
-	height:350px;
+	height:370px;
 	border: 5px solid #362f2d;
 	top: 120px;
 	left: 45px;
@@ -1390,7 +1434,7 @@ table.classement tr td.images img{padding-top:3px;}
 
 #shop .infos{
 	position: absolute;
-	top:40px;
+	top:33px;
 	right:5px;
 	font-weight:bold;
 }
@@ -1445,7 +1489,7 @@ table.classement tr td.images img{padding-top:3px;}
 
 #shop table tr {
 	height:50px;
-	border-bottom:1px solid #DADADA;
+	border-top:1px solid #DADADA;
 }
 
 #shop table tr th{

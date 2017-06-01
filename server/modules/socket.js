@@ -602,6 +602,37 @@ module.exports = function (app, io, mongoose, fbgraph, crypto) {
             });
         });
 
+        socket.on('adVideoCompleted', function () {
+
+            if (!checkSocketUid()) {
+                return;
+            }
+
+            users.findOne({
+                uid: socket.uid
+            }, 'tokens', function (err, data) {
+
+                if (err || !data) {
+                    return;
+                }
+
+                users.update({
+                    uid: socket.uid
+                }, {
+                    $set: {
+                        tokens: parseInt(data.tokens) + 5
+                    }
+                }, function (err) {
+
+                    if (err) {
+                        return;
+                    }
+
+                    initUser();
+                });
+            });
+        });
+
         socket.on('banUser', function (data) {
             if (!data.uid || !socket.moderateur) {
                 return;
