@@ -756,8 +756,6 @@ module.exports = function (app, io, mongoose, fbgraph, crypto) {
 
                     socket.moderateur = data.moderateur ? true : false;
 
-                    checkTrophy(uid);
-
                     if (!data.parrainage && parrainage) {
                         users.update({
                             uid: uid
@@ -1225,83 +1223,6 @@ module.exports = function (app, io, mongoose, fbgraph, crypto) {
                         tokens: token
                     }
                 }, fn);
-            });
-        }
-
-        function checkTrophy(uid) {
-
-            games.count({
-                $or: [{
-                    blanc: uid
-                }, {
-                    noir: uid
-                }]
-            }, function (err, nb) {
-
-                if (err || !nb) return;
-
-                if (nb >= 1000) {
-
-                    setTrophy(uid, 4);
-                    setTrophy(uid, 3);
-                    setTrophy(uid, 2);
-                    setTrophy(uid, 1);
-
-                } else if (nb >= 500) {
-
-                    setTrophy(uid, 3);
-                    setTrophy(uid, 2);
-                    setTrophy(uid, 1);
-
-                } else if (nb >= 100) {
-
-                    setTrophy(uid, 2);
-                    setTrophy(uid, 1);
-
-                } else if (nb >= 1) {
-
-                    setTrophy(uid, 1);
-
-                }
-            });
-
-            games.count({
-                "$or": [{
-                    "$and": [{
-                        "noir": uid,
-                        "resultat": 2
-                    }]
-                }, {
-                    "$and": [{
-                        "blanc": uid,
-                        "resultat": 1
-                    }]
-                }]
-            }, function (err, nb) {
-
-                if (err || !nb) return;
-
-                if (nb >= 500) {
-
-                    setTrophy(uid, 9);
-                    setTrophy(uid, 8);
-                    setTrophy(uid, 7);
-                    setTrophy(uid, 6);
-
-                } else if (nb >= 250) {
-
-                    setTrophy(uid, 8);
-                    setTrophy(uid, 7);
-                    setTrophy(uid, 6);
-                } else if (nb >= 50) {
-
-                    setTrophy(uid, 7);
-                    setTrophy(uid, 6);
-                } else if (nb >= 1) {
-
-                    setTrophy(uid, 6);
-                }
-
             });
         }
 

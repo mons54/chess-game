@@ -4,7 +4,8 @@ var express = require('express'),
     fbgraph = require('fbgraph'),
     crypto = require('crypto'),
     app = express(),
-    io = require('socket.io').listen(app.listen(3000));
+    server = require('http').createServer(app),
+    io = require('socket.io')(server);
 
 global.dirname = __dirname;
 
@@ -18,3 +19,5 @@ require(dirname + '/server/routes/sponsorpay')(app, mongoose, crypto);
 require(dirname + '/server/routes/tokenads')(app, mongoose, crypto);
 
 require(dirname + '/server/router')(app);
+
+server.listen(3000);
