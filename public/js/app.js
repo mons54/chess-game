@@ -2,7 +2,7 @@
 
     $.extend({
         options: {
-            appId: '1709923609297773',
+            appId: '459780557396952',
             redirectUri: 'https://apps.facebook.com/the-chess-game/',
             url: 'https://www.facebook.com/dialog/oauth?client_id=459780557396952&redirect_uri=https://apps.facebook.com/the-chess-game',
             host: 'mons54.parthuisot.fr',
