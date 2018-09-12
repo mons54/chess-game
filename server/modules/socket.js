@@ -898,8 +898,8 @@ module.exports = function (app, io, mongoose, fbgraph, crypto) {
             if (io.sockets.adapter.rooms.home) {
                 for (var socketId in io.sockets.adapter.rooms.home.sockets) {
                     const socket = getSocket(socketId);
-                    if (!socket.uid || challengers.user[socket.uid]) {
-                        return;
+                    if (!socket || !socket.uid || challengers.user[socket.uid]) {
+                        continue;
                     }
                     challengers.user[socket.uid] = {
                         name: socket.name,
