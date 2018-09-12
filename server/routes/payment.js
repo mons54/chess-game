@@ -19,7 +19,7 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
 
     app.all('/payments', function (req, res) {
 
-        console.log(req, res)
+        console.log(0)
 
         var response = 'HTTP/1.0 400 Bad Request';
 
@@ -54,7 +54,7 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
         }
 
         fbgraph.post('/oauth/access_token?client_id=' + app.facebook.appId + '&client_secret=' + app.facebook.secret + '&grant_type=client_credentials', function (err, data) {
-                console.log(err, data)
+                console.log(1)
 
             if (!data.access_token) {
                 res.send(response);
@@ -62,7 +62,7 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
             }
 
             fbgraph.get('/' + paymentId + '?access_token=' + data.access_token, function (err, data) {
-                console.log(err, data)
+                console.log(2)
 
                 if (!data.id || !data.user || !data.actions) {
                     res.send(response);
@@ -92,7 +92,7 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
                 payments.find({
                     id: data.id
                 }, function (err, _data) {
-                console.log(err, _data)
+                console.log(3)
 
                     if (err) {
                         res.send(response);
@@ -102,7 +102,7 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
                         users.find({
                             uid: data.user.id
                         }, function (err, _data) {
-                console.log(err, _data)
+                console.log(4)
 
                             if (err || !_data[0] || !_data[0].tokens) {
                                 res.send(response);
@@ -118,7 +118,7 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
                                     tokens: token
                                 }
                             }, function (err) {
-                console.log(err)
+                console.log(5)
 
                                 if (err) {
                                     res.send(response);
@@ -133,7 +133,7 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
                                     status: 'completed',
                                     time: Math.round(new Date() / 1000),
                                 }).save(function (err) {
-                console.log(err)
+                console.log(6)
 
                                     if (err) {
                                         res.send(response);
