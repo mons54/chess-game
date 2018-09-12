@@ -19,8 +19,6 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
 
     app.all('/payments', function (req, res) {
 
-        console.log(0)
-
         var response = 'HTTP/1.0 400 Bad Request';
 
         if (!req.query) {
@@ -28,11 +26,16 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
             return;
         }
 
+        console.log(req.query['hub.mode'], req.query['hub.verify_token'])
+
         if (req.query['hub.mode'] == 'subscribe' && req.query['hub.verify_token'] == security_token) {
             response = req.query['hub.challenge'];
             res.send(response);
             return;
         }
+
+
+        console.log(req.query['x-hub-signature'], req.body.entry)
 
         if (!req.headers['x-hub-signature'] || !req.body.entry || !req.body.entry[0] || !req.body.entry[0].id) {
             res.send(response);
@@ -47,6 +50,9 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
         var hmac = crypto.createHmac('sha1', app.facebook.secret);
         hmac.update(query);
         var calculatedSecret = hmac.digest('hex');
+        
+        
+        console.log(signature, calculatedSecret)
 
         if (signature != calculatedSecret) {
             res.send(response);
