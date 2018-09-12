@@ -41,9 +41,7 @@ module.exports = function (app, express, connect, mongoose, io) {
     app.set('views', app.static);
     app.engine('html', require('ejs').renderFile);
 
-    mongoose.connect('mongodb://mons54:jsOL160884@ds011321.mlab.com:11321/chess', {
-        useNewUrlParser: true 
-    });
+    mongoose.connect('mongodb://127.0.0.1:27017/chess_new', { useNewUrlParser: true });
 
     //mongoose.connect('mongodb://127.0.0.1:27017/chess_new', { useNewUrlParser: true });
 
