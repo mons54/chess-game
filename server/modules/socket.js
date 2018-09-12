@@ -703,11 +703,11 @@ module.exports = function (app, io, mongoose, fbgraph, crypto) {
 
         function getSocket(id) {
             var socket = null;
-            io.sockets.sockets.forEach(function (value) {
-                if (id == value.id) {
-                    socket = value;
+            for (var socketId in io.sockets.sockets) {
+                if (id === socketId) {
+                    socket = io.sockets.connected[socketId];
                 }
-            });
+            }
             return socket;
         }
 
@@ -884,8 +884,7 @@ module.exports = function (app, io, mongoose, fbgraph, crypto) {
         }
 
         function connected() {
-
-            io.sockets.emit('Connected', io.sockets.sockets.length);
+            io.sockets.emit('Connected', Object.keys(io.sockets.sockets).length);
             listChallengers();
         }
 
@@ -896,17 +895,20 @@ module.exports = function (app, io, mongoose, fbgraph, crypto) {
                 nb: 0,
             };
 
-            io.sockets.sockets.forEach(function (socket) {
-                if (!socket.rooms || socket.rooms.indexOf('home') === -1 || !socket.uid || challengers.user[socket.uid]) {
-                    return;
+            if (io.sockets.adapter.rooms.home) {
+                for (var socketId in io.sockets.adapter.rooms.home.sockets) {
+                    const socket = getSocket(socketId);
+                    if (!socket.uid || challengers.user[socket.uid]) {
+                        return;
+                    }
+                    challengers.user[socket.uid] = {
+                        name: socket.name,
+                        classement: socket.classement,
+                        points: socket.points
+                    };
+                    challengers.nb++;
                 }
-                challengers.user[socket.uid] = {
-                    name: socket.name,
-                    classement: socket.classement,
-                    points: socket.points
-                };
-                challengers.nb++;
-            });
+            }
 
             io.sockets.to('home').emit('Challengers', challengers);
         }

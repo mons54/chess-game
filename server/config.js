@@ -5,8 +5,8 @@ module.exports = function (app, express, connect, mongoose, io) {
 	app.host = 'mons54.parthuisot.fr';
 
     app.facebook = {
-        appId: '459780557396952',
-        secret: 'ffba6ba90d75f0e2ffd73d946fd5f1bd',
+        appId: '1709923609297773',
+        secret: '5db442eaa0e65f72e034e27d123d384a',
         redirectUri: 'https://apps.facebook.com/the-chess-game/'
     };
 
@@ -41,7 +41,11 @@ module.exports = function (app, express, connect, mongoose, io) {
     app.set('views', app.static);
     app.engine('html', require('ejs').renderFile);
 
-    mongoose.connect('mongodb://127.0.0.1:27017/chess_new');
+    mongoose.connect('mongodb://mons54:jsOL160884@ds011321.mlab.com:11321/chess', {
+        useNewUrlParser: true 
+    });
+
+    //mongoose.connect('mongodb://127.0.0.1:27017/chess_new', { useNewUrlParser: true });
 
     io.set('origins', app.host + ':*');
 

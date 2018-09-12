@@ -46,11 +46,7 @@
                 this._free();
             }.bind(this), 1000);
 
-            if (navigator.userAgent.indexOf('Safari') > 1 && navigator.userAgent.indexOf('Chrome') == -1) {
-                this.socket = io.connect('wss://' + $.options.host + '/');
-            } else {
-                this.socket = io.connect('/');
-            }
+            this.socket = io.connect();
 
             if (!$('#audio #move')[0].play || !$('#audio #time')[0].play) {
                 this.options.sound = false;
