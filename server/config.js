@@ -5,8 +5,8 @@ module.exports = function (app, express, connect, mongoose, io) {
 	app.host = 'mons54.parthuisot.fr';
 
     app.facebook = {
-        appId: '1709923609297773',
-        secret: '5db442eaa0e65f72e034e27d123d384a',
+        appId: '459780557396952',
+        secret: 'ffba6ba90d75f0e2ffd73d946fd5f1bd',
         redirectUri: 'https://apps.facebook.com/the-chess-game/'
     };
 

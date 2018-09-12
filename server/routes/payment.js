@@ -1,6 +1,3 @@
-
-
-
 module.exports = function (app, mongoose, fbgraph, crypto) {
 
     var security_token = '911f3fd471bdb649c9beb94631edf75a';
@@ -24,23 +21,16 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
 
         var response = 'HTTP/1.0 400 Bad Request';
 
-        console.log(req.query)
-
         if (!req.query) {
             res.send(response);
             return;
         }
-
-        console.log(req.query['hub.mode'], req.query['hub.verify_token'])
 
         if (req.query['hub.mode'] == 'subscribe' && req.query['hub.verify_token'] == security_token) {
             response = req.query['hub.challenge'];
             res.send(response);
             return;
         }
-
-
-        console.log(req.headers['x-hub-signature'], req.body.entry)
 
         if (!req.headers['x-hub-signature'] || !req.body.entry || !req.body.entry[0] || !req.body.entry[0].id) {
             res.send(response);
@@ -52,14 +42,9 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
         var signature = req.headers['x-hub-signature'].substr(5),
             query = JSON.stringify(req.body);
 
-        console.log(query)
-
         var hmac = crypto.createHmac('sha1', app.facebook.secret);
         hmac.update(query);
         var calculatedSecret = hmac.digest('hex');
-
-        
-        console.log(signature, calculatedSecret)
 
         if (signature != calculatedSecret) {
             res.send(response);
@@ -67,7 +52,6 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
         }
 
         fbgraph.post('/oauth/access_token?client_id=' + app.facebook.appId + '&client_secret=' + app.facebook.secret + '&grant_type=client_credentials', function (err, data) {
-                console.log(1)
 
             if (!data.access_token) {
                 res.send(response);
@@ -75,7 +59,6 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
             }
 
             fbgraph.get('/' + paymentId + '?access_token=' + data.access_token, function (err, data) {
-                console.log(2)
 
                 if (!data.id || !data.user || !data.actions) {
                     res.send(response);
@@ -105,7 +88,6 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
                 payments.find({
                     id: data.id
                 }, function (err, _data) {
-                console.log(3)
 
                     if (err) {
                         res.send(response);
@@ -115,7 +97,6 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
                         users.find({
                             uid: data.user.id
                         }, function (err, _data) {
-                console.log(4)
 
                             if (err || !_data[0] || !_data[0].tokens) {
                                 res.send(response);
@@ -131,7 +112,6 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
                                     tokens: token
                                 }
                             }, function (err) {
-                console.log(5)
 
                                 if (err) {
                                     res.send(response);
@@ -146,7 +126,6 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
                                     status: 'completed',
                                     time: Math.round(new Date() / 1000),
                                 }).save(function (err) {
-                console.log(6)
 
                                     if (err) {
                                         res.send(response);
