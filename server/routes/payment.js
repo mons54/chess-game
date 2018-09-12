@@ -1,3 +1,6 @@
+
+
+
 module.exports = function (app, mongoose, fbgraph, crypto) {
 
     var security_token = '911f3fd471bdb649c9beb94631edf75a';
@@ -48,6 +51,8 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
 
         var signature = req.headers['x-hub-signature'].substr(5),
             query = JSON.stringify(req.body);
+
+        console.log(query)
 
         var hmac = crypto.createHmac('sha1', app.facebook.secret);
         hmac.update(query);
