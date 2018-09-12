@@ -37,7 +37,7 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
         }
 
 
-        console.log(req.query['x-hub-signature'], req.body.entry)
+        console.log(req.headers['x-hub-signature'], req.body.entry)
 
         if (!req.headers['x-hub-signature'] || !req.body.entry || !req.body.entry[0] || !req.body.entry[0].id) {
             res.send(response);
