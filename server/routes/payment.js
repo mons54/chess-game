@@ -21,6 +21,8 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
 
         var response = 'HTTP/1.0 400 Bad Request';
 
+        console.log(req.query)
+
         if (!req.query) {
             res.send(response);
             return;
@@ -50,7 +52,7 @@ module.exports = function (app, mongoose, fbgraph, crypto) {
         var hmac = crypto.createHmac('sha1', app.facebook.secret);
         hmac.update(query);
         var calculatedSecret = hmac.digest('hex');
-        
+
         
         console.log(signature, calculatedSecret)
 
