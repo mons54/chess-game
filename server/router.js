@@ -7,6 +7,7 @@ module.exports = function (app) {
             return;
         }
 
+        res.header("Access-Control-Allow-Origin", "*");
         res.render('index.html');
     });
 
@@ -15,8 +16,8 @@ module.exports = function (app) {
             res.status(404).send('Page not found!');
             return;
         }
-        
-        res.render('views/item.html', { 
+
+        res.render('views/item.html', {
             item: app.items[req.params.item],
             token: req.params.token,
             desc: req.params.desc,

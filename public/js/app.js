@@ -10,7 +10,6 @@
             name: 'User',
             lang: 'en',
             text: null,
-            gender: 'male',
             moderateur: false,
             parrainage: 0,
             allFriends: {},
@@ -36,7 +35,7 @@
                     }
                 });
 
-                FB.api('/me?fields=name,locale,gender', $.FB.apiMe);
+                FB.api('/me?fields=name', $.FB.apiMe);
             },
             apiMe: function (res) {
                 if (!res) {
@@ -45,8 +44,7 @@
 
                 $.options.uid = res.id;
                 $.options.name = res.name.substr(0, 30);
-                $.options.lang = res.locale.substr(0, 2);
-                $.options.gender = res.gender;
+                $.options.lang = (navigator.language || navigator.userLanguage).substr(0, 2);
 
                 if ($.options.lang == 'ar') {
                     $('<link rel="stylesheet" href="/css/app-ar.css">').appendTo('head');
