@@ -613,62 +613,54 @@
 
         _buy_tokens: function () {
 
-            FB.api('/me?fields=currency', function (response) {
+            $(this.shop).empty().html();
 
-                if (!response.currency) {
-                    return;
-                }
+            this.table = $('<table class="token"></table>').appendTo(this.shop);
 
-                $(this.shop).empty().html();
-
-                this.table = $('<table class="token"></table>').appendTo(this.shop);
-
-                var tokens = {
+            var tokens = {
                     5: {
                         token: 5000,
                         base: 1000,
-                        price: $._convert_price(response, 20),
+                        price: '$19.99'
                     },
                     4: {
                         token: 1500,
                         base: 500,
-                        price: $._convert_price(response, 10)
+                        price: '$9.99'
                     },
                     3: {
                         token: 500,
                         base: 250,
-                        price: $._convert_price(response, 5)
+                        price: '$4.99'
                     },
                     2: {
                         token: 150,
                         base: 100,
-                        price: $._convert_price(response, 2)
+                        price: '$1.99'
                     },
                     1: {
                         token: 50,
                         base: 50,
-                        price: $._convert_price(response, 1)
+                        price: '$0.99'
                     }
                 };
 
-                for (var i in tokens) {
-                    this._tokens(tokens[i], i);
-                }
+            for (var i in tokens) {
+                this._tokens(tokens[i], i);
+            }
 
-                if (typeof LSM_Slot === 'function') {
-                    var tr = $('<tr></tr>').appendTo(this.table);
+            if (typeof LSM_Slot === 'function') {
+                var tr = $('<tr></tr>').appendTo(this.table);
 
-                    $('<th class="token"></th>').appendTo(tr);
+                $('<th class="token"></th>').appendTo(tr);
 
-                    $('<th class="nb"><span class="total">2</span> ' + $.options.text.tokens + '</th>').appendTo(tr);
-                    var td = $('<th class="button"></th>').appendTo(tr);
+                $('<th class="nb"><span class="total">2</span> ' + $.options.text.tokens + '</th>').appendTo(tr);
+                var td = $('<th class="button"></th>').appendTo(tr);
 
-                    $('<button><span id="play"></span></button>').appendTo(td).click(function () {
-                        this.adVideo();
-                    }.bind(this));
-                }
-
-            }.bind(this));
+                $('<button><span id="play"></span></button>').appendTo(td).click(function () {
+                    this.adVideo();
+                }.bind(this));
+            }
         },
 
         adVideo: function () {
@@ -1204,7 +1196,7 @@
             var uid = $('<input type="text">').appendTo(this.banUser);
             var ban = $('<input type="checkbox" checked>').appendTo(this.banUser);
             $('<button>OK</button>').appendTo(this.banUser).click(function () {
-                
+
                 this.socket.emit('banUser', {
                     uid: uid.val(),
                     ban: ban.val() == 'on' ? true : false
@@ -3319,7 +3311,7 @@
             if (this.type_ranking == 'friends') {
                 this.socket.emit('Classement', {
                     page: page,
-                    friends: this.friends.array 
+                    friends: this.friends.array
                 });
             } else {
 

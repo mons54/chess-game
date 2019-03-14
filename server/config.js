@@ -13,23 +13,23 @@ module.exports = function (app, express, connect, mongoose, io) {
     app.items = {
         5: {
             tokens: 5000,
-            amount: 20
+            amount: 19.99
         },
         4: {
             tokens: 1500,
-            amount: 10
+            amount: 9.99
         },
         3: {
             tokens: 500,
-            amount: 5
+            amount: 4.99
         },
         2: {
             tokens: 150,
-            amount: 2
+            amount: 1.99
         },
         1: {
             tokens: 50,
-            amount: 1
+            amount: 0.99
         }
     };
 
